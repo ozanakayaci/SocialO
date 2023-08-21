@@ -16,7 +16,7 @@ namespace SocialO.Entities.Concrete
         public DateTime DateUpdated { get; set; }
 
         //User
-        public Guid UserId { get; set; }
+        public int UserId { get; set; }
         public User User { get; set; }
 
     }

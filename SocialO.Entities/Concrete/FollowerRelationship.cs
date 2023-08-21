@@ -12,11 +12,11 @@ namespace SocialO.Entities.Concrete
         public DateTime DateFollowed { get; set; }
 
         //Following
-        public Guid? FollowerId { get; set; }
+        public int? FollowerId { get; set; }
         public User? Follower { get; set; }
 
         //User
-        public Guid? UserId { get; set; }
+        public int? UserId { get; set; }
         public User? User { get; set; }
 
 

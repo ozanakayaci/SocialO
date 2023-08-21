@@ -13,11 +13,11 @@ namespace SocialO.Entities.Concrete
         public DateTime DateCommented { get; set; }
 
         //User        
-        public Guid UserId { get; set; }
+        public int UserId { get; set; }
         public User User { get; set; }
 
         //Post
-        public Guid PostId { get; set; }
+        public int PostId { get; set; }
         public Post Post { get; set; }
     }
 }

@@ -7,6 +7,6 @@ namespace SocialO.Entities.Abstract
 {
     public abstract class BaseEntity
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
     }
 }
