@@ -2,39 +2,34 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SocialO.Entities.Abstract;
 
 namespace SocialO.Entities.Concrete
 {
-    public class User
+    public class User : BaseEntity
     {
-        Guid UserId { get; set; }
-        string Username { get; set; }
-        string Email { get; set; }
-        string Password { get; set; }
-        DateTime DataRegistered { get; set; } = DateTime.Now;
-        string UserType { get; set; } = "User";
-        string AccountStatus { get; set; } = "Active";
+        public string Username { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public DateTime DataRegistered { get; set; }
+        public string UserType { get; set; }
+        public string AccountStatus { get; set; }
 
         //other entities 
-        // UserProfile
-        Guid? UserProfileId { get; set; }
-        UserProfile? UserProfile { get; set; }
+        // UserProfile       
+        public UserProfile? UserProfile { get; set; }
 
-        //FollowerRelationship
-        Guid? FollowerRelationshipId { get; set; }
-        ICollection<FollowerRelationship>? FollowerRelationships { get; set; }
+        //Follower
+        public ICollection<Follower>? Followers { get; set; }
 
         //Post
-        Guid? PostId { get; set; }
-        ICollection<Post>? Post { get; set; }
+        public ICollection<Post>? Posts { get; set; }
 
         //PostComment
-        Guid? PostCommentId { get; set; }
-        ICollection<PostComment>? PostComments { get; set; }
+        public ICollection<PostComment>? PostComments { get; set; }
 
         //PostFavorite
-        Guid? PostFavoriteId { get; set; }
-        ICollection<PostFavorite>? PostFavorites { get; set; }
+        public ICollection<PostFavorite>? PostFavorites { get; set; }
 
 
     }

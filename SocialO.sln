@@ -5,6 +5,8 @@ VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialO.Entities", "SocialO.Entities\SocialO.Entities.csproj", "{2DC7B3DD-BAAF-4C2D-B558-D41BB3011379}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialO.DAL", "SocialO.DAL\SocialO.DAL.csproj", "{13A12BEF-1664-48FB-AD1A-917D55F0D8DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{2DC7B3DD-BAAF-4C2D-B558-D41BB3011379}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2DC7B3DD-BAAF-4C2D-B558-D41BB3011379}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2DC7B3DD-BAAF-4C2D-B558-D41BB3011379}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13A12BEF-1664-48FB-AD1A-917D55F0D8DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13A12BEF-1664-48FB-AD1A-917D55F0D8DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13A12BEF-1664-48FB-AD1A-917D55F0D8DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13A12BEF-1664-48FB-AD1A-917D55F0D8DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

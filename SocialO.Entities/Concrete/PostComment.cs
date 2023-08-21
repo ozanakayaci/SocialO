@@ -2,21 +2,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SocialO.Entities.Abstract;
 
 namespace SocialO.Entities.Concrete
 {
-    public class PostComment
+    public class PostComment : BaseEntity
     {
-        Guid PostCommentId { get; set; }
-        string Comment { get; set; }
-        DateTime DateCommented { get; set; } = DateTime.Now;
 
-        //User
-        Guid UserId { get; set; }
-        User User { get; set; }
+        public string Comment { get; set; }
+        public DateTime DateCommented { get; set; }
+
+        //User        
+        public Guid UserId { get; set; }
+        public User User { get; set; }
 
         //Post
-        Guid PostId { get; set; }
-        Post Post { get; set; }
+        public Guid PostId { get; set; }
+        public Post Post { get; set; }
     }
 }
