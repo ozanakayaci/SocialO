@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace SocialO.DAL.Migrations
 {
     /// <inheritdoc />
@@ -15,11 +17,12 @@ namespace SocialO.DAL.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Username = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    DataRegistered = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 8, 21, 21, 1, 21, 403, DateTimeKind.Local).AddTicks(6912)),
+                    DataRegistered = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 8, 21, 21, 44, 28, 93, DateTimeKind.Local).AddTicks(6210)),
                     UserType = table.Column<string>(type: "nvarchar(max)", nullable: false, defaultValue: "User"),
                     AccountStatus = table.Column<string>(type: "nvarchar(max)", nullable: false, defaultValue: "Active")
                 },
@@ -32,10 +35,11 @@ namespace SocialO.DAL.Migrations
                 name: "FollowerRelationships",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DateFollowed = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 8, 21, 21, 1, 21, 397, DateTimeKind.Local).AddTicks(8226)),
-                    FollowerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DateFollowed = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 8, 21, 21, 44, 28, 82, DateTimeKind.Local).AddTicks(8514)),
+                    FollowerId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -58,10 +62,11 @@ namespace SocialO.DAL.Migrations
                 name: "Posts",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Content = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    DatePosted = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 8, 21, 21, 1, 21, 402, DateTimeKind.Local).AddTicks(4822)),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    DatePosted = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 8, 21, 21, 44, 28, 92, DateTimeKind.Local).AddTicks(6103)),
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -78,14 +83,15 @@ namespace SocialO.DAL.Migrations
                 name: "UserProfiles",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     FirstName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     Gender = table.Column<string>(type: "nvarchar(1)", maxLength: 1, nullable: true),
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
                     About = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    DateUpdated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 8, 21, 21, 1, 21, 404, DateTimeKind.Local).AddTicks(8756)),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    DateUpdated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 8, 21, 21, 44, 28, 94, DateTimeKind.Local).AddTicks(6854)),
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -102,11 +108,12 @@ namespace SocialO.DAL.Migrations
                 name: "PostComments",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Comment = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    DateCommented = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 8, 21, 21, 1, 21, 401, DateTimeKind.Local).AddTicks(9946)),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PostId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    DateCommented = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 8, 21, 21, 44, 28, 92, DateTimeKind.Local).AddTicks(3092)),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    PostId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -129,10 +136,11 @@ namespace SocialO.DAL.Migrations
                 name: "PostFavorites",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DateFavorited = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 8, 21, 21, 1, 21, 403, DateTimeKind.Local).AddTicks(2762)),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PostId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DateFavorited = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 8, 21, 21, 44, 28, 93, DateTimeKind.Local).AddTicks(2216)),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    PostId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -149,6 +157,27 @@ namespace SocialO.DAL.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "AccountStatus", "DataRegistered", "Email", "Password", "UserType", "Username" },
+                values: new object[,]
+                {
+                    { 1, "Active", new DateTime(2023, 8, 21, 21, 44, 28, 94, DateTimeKind.Local).AddTicks(2855), "admin@socialo.com", "admin", "Admin", "admin" },
+                    { 2, "Active", new DateTime(2023, 8, 21, 21, 44, 28, 94, DateTimeKind.Local).AddTicks(2866), "user1@socialo.com", "user1", "User", "user1" },
+                    { 3, "Active", new DateTime(2023, 8, 21, 21, 44, 28, 94, DateTimeKind.Local).AddTicks(2868), "user2@socialo.com", "user2", "User", "user2" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "FollowerRelationships",
+                columns: new[] { "Id", "DateFollowed", "FollowerId", "UserId" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2023, 8, 21, 21, 44, 28, 91, DateTimeKind.Local).AddTicks(9150), 3, 1 },
+                    { 2, new DateTime(2023, 8, 21, 21, 44, 28, 91, DateTimeKind.Local).AddTicks(9163), 3, 2 },
+                    { 3, new DateTime(2023, 8, 21, 21, 44, 28, 91, DateTimeKind.Local).AddTicks(9164), 2, 1 },
+                    { 4, new DateTime(2023, 8, 21, 21, 44, 28, 91, DateTimeKind.Local).AddTicks(9166), 1, 3 }
                 });
 
             migrationBuilder.CreateIndex(

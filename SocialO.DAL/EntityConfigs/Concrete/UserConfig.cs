@@ -34,6 +34,38 @@ namespace SocialO.DAL.EntityConfigs.Concrete
             builder.HasMany(p => p.PostFavorites).WithOne(p => p.User).HasForeignKey(p => p.UserId).OnDelete(DeleteBehavior.Restrict);
 
 
+            builder.HasData(
+                new User
+                {
+                    Id = 1,
+                    Username = "admin",
+                    Email = "admin@socialo.com",
+                    Password = "admin",
+                    DataRegistered = DateTime.Now,
+                    UserType = "Admin",
+                    AccountStatus = "Active"
+                }, new User
+                {
+                    Id = 2,
+                    Username = "user1",
+                    Email = "user1@socialo.com",
+                    Password = "user1",
+                    DataRegistered = DateTime.Now,
+                    UserType = "User",
+                    AccountStatus = "Active"
+                }, new User
+                {
+                    Id = 3,
+                    Username = "user2",
+                    Email = "user2@socialo.com",
+                    Password = "user2",
+                    DataRegistered = DateTime.Now,
+                    UserType = "User",
+                    AccountStatus = "Active"
+                }
+
+            );
+
 
 
 

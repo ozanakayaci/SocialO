@@ -12,7 +12,7 @@ using SocialO.DAL.DBContexts;
 namespace SocialO.DAL.Migrations
 {
     [DbContext(typeof(SqlDBContext))]
-    [Migration("20230821180121_dbInit")]
+    [Migration("20230821184428_dbInit")]
     partial class dbInit
     {
         /// <inheritdoc />
@@ -27,20 +27,22 @@ namespace SocialO.DAL.Migrations
 
             modelBuilder.Entity("SocialO.Entities.Concrete.FollowerRelationship", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("DateFollowed")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 8, 21, 21, 1, 21, 397, DateTimeKind.Local).AddTicks(8226));
+                        .HasDefaultValue(new DateTime(2023, 8, 21, 21, 44, 28, 82, DateTimeKind.Local).AddTicks(8514));
 
-                    b.Property<Guid?>("FollowerId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("FollowerId")
+                        .HasColumnType("int");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -49,13 +51,45 @@ namespace SocialO.DAL.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("FollowerRelationships");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DateFollowed = new DateTime(2023, 8, 21, 21, 44, 28, 91, DateTimeKind.Local).AddTicks(9150),
+                            FollowerId = 3,
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            DateFollowed = new DateTime(2023, 8, 21, 21, 44, 28, 91, DateTimeKind.Local).AddTicks(9163),
+                            FollowerId = 3,
+                            UserId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            DateFollowed = new DateTime(2023, 8, 21, 21, 44, 28, 91, DateTimeKind.Local).AddTicks(9164),
+                            FollowerId = 2,
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            DateFollowed = new DateTime(2023, 8, 21, 21, 44, 28, 91, DateTimeKind.Local).AddTicks(9166),
+                            FollowerId = 1,
+                            UserId = 3
+                        });
                 });
 
             modelBuilder.Entity("SocialO.Entities.Concrete.Post", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -65,10 +99,10 @@ namespace SocialO.DAL.Migrations
                     b.Property<DateTime>("DatePosted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 8, 21, 21, 1, 21, 402, DateTimeKind.Local).AddTicks(4822));
+                        .HasDefaultValue(new DateTime(2023, 8, 21, 21, 44, 28, 92, DateTimeKind.Local).AddTicks(6103));
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -79,9 +113,11 @@ namespace SocialO.DAL.Migrations
 
             modelBuilder.Entity("SocialO.Entities.Concrete.PostComment", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Comment")
                         .IsRequired()
@@ -91,13 +127,13 @@ namespace SocialO.DAL.Migrations
                     b.Property<DateTime>("DateCommented")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 8, 21, 21, 1, 21, 401, DateTimeKind.Local).AddTicks(9946));
+                        .HasDefaultValue(new DateTime(2023, 8, 21, 21, 44, 28, 92, DateTimeKind.Local).AddTicks(3092));
 
-                    b.Property<Guid>("PostId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -110,20 +146,22 @@ namespace SocialO.DAL.Migrations
 
             modelBuilder.Entity("SocialO.Entities.Concrete.PostFavorite", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("DateFavorited")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 8, 21, 21, 1, 21, 403, DateTimeKind.Local).AddTicks(2762));
+                        .HasDefaultValue(new DateTime(2023, 8, 21, 21, 44, 28, 93, DateTimeKind.Local).AddTicks(2216));
 
-                    b.Property<Guid>("PostId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -136,9 +174,11 @@ namespace SocialO.DAL.Migrations
 
             modelBuilder.Entity("SocialO.Entities.Concrete.User", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AccountStatus")
                         .IsRequired()
@@ -149,7 +189,7 @@ namespace SocialO.DAL.Migrations
                     b.Property<DateTime>("DataRegistered")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 8, 21, 21, 1, 21, 403, DateTimeKind.Local).AddTicks(6912));
+                        .HasDefaultValue(new DateTime(2023, 8, 21, 21, 44, 28, 93, DateTimeKind.Local).AddTicks(6210));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -178,13 +218,47 @@ namespace SocialO.DAL.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AccountStatus = "Active",
+                            DataRegistered = new DateTime(2023, 8, 21, 21, 44, 28, 94, DateTimeKind.Local).AddTicks(2855),
+                            Email = "admin@socialo.com",
+                            Password = "admin",
+                            UserType = "Admin",
+                            Username = "admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AccountStatus = "Active",
+                            DataRegistered = new DateTime(2023, 8, 21, 21, 44, 28, 94, DateTimeKind.Local).AddTicks(2866),
+                            Email = "user1@socialo.com",
+                            Password = "user1",
+                            UserType = "User",
+                            Username = "user1"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AccountStatus = "Active",
+                            DataRegistered = new DateTime(2023, 8, 21, 21, 44, 28, 94, DateTimeKind.Local).AddTicks(2868),
+                            Email = "user2@socialo.com",
+                            Password = "user2",
+                            UserType = "User",
+                            Username = "user2"
+                        });
                 });
 
             modelBuilder.Entity("SocialO.Entities.Concrete.UserProfile", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("About")
                         .HasMaxLength(50)
@@ -196,7 +270,7 @@ namespace SocialO.DAL.Migrations
                     b.Property<DateTime>("DateUpdated")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 8, 21, 21, 1, 21, 404, DateTimeKind.Local).AddTicks(8756));
+                        .HasDefaultValue(new DateTime(2023, 8, 21, 21, 44, 28, 94, DateTimeKind.Local).AddTicks(6854));
 
                     b.Property<string>("FirstName")
                         .HasMaxLength(20)
@@ -210,8 +284,8 @@ namespace SocialO.DAL.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
