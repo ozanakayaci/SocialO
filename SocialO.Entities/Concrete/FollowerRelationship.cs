@@ -6,10 +6,14 @@ using SocialO.Entities.Abstract;
 
 namespace SocialO.Entities.Concrete
 {
-    public class Follower : BaseEntity
+    public class FollowerRelationship : BaseEntity
     {
 
         public DateTime DateFollowed { get; set; }
+
+        //Following
+        public Guid? FollowerId { get; set; }
+        public User? Follower { get; set; }
 
         //User
         public Guid? UserId { get; set; }

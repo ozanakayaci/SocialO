@@ -27,13 +27,15 @@ namespace SocialO.DAL.EntityConfigs.Concrete
 
             builder.HasOne(p => p.UserProfile).WithOne(p => p.User).HasForeignKey<UserProfile>(p => p.UserId);
 
-            builder.HasMany(p => p.Followers).WithOne(p => p.User).HasForeignKey(p => p.UserId);
-
             builder.HasMany(p => p.Posts).WithOne(p => p.User).HasForeignKey(p => p.UserId);
 
             builder.HasMany(p => p.PostComments).WithOne(p => p.User).HasForeignKey(p => p.UserId).OnDelete(DeleteBehavior.Restrict);
 
             builder.HasMany(p => p.PostFavorites).WithOne(p => p.User).HasForeignKey(p => p.UserId).OnDelete(DeleteBehavior.Restrict);
+
+
+
+
 
         }
     }

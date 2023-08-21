@@ -19,7 +19,7 @@ namespace SocialO.DAL.Migrations
                     Username = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    DataRegistered = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 8, 21, 20, 19, 12, 504, DateTimeKind.Local).AddTicks(1909)),
+                    DataRegistered = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 8, 21, 21, 1, 21, 403, DateTimeKind.Local).AddTicks(6912)),
                     UserType = table.Column<string>(type: "nvarchar(max)", nullable: false, defaultValue: "User"),
                     AccountStatus = table.Column<string>(type: "nvarchar(max)", nullable: false, defaultValue: "Active")
                 },
@@ -33,17 +33,25 @@ namespace SocialO.DAL.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DateFollowed = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 8, 21, 20, 19, 12, 502, DateTimeKind.Local).AddTicks(999)),
+                    DateFollowed = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 8, 21, 21, 1, 21, 397, DateTimeKind.Local).AddTicks(8226)),
+                    FollowerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_FollowerRelationships", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_FollowerRelationships_Users_FollowerId",
+                        column: x => x.FollowerId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_FollowerRelationships_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -52,7 +60,7 @@ namespace SocialO.DAL.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    DatePosted = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 8, 21, 20, 19, 12, 502, DateTimeKind.Local).AddTicks(8580)),
+                    DatePosted = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 8, 21, 21, 1, 21, 402, DateTimeKind.Local).AddTicks(4822)),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -76,7 +84,7 @@ namespace SocialO.DAL.Migrations
                     Gender = table.Column<string>(type: "nvarchar(1)", maxLength: 1, nullable: true),
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
                     About = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    DateUpdated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 8, 21, 20, 19, 12, 505, DateTimeKind.Local).AddTicks(5981)),
+                    DateUpdated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 8, 21, 21, 1, 21, 404, DateTimeKind.Local).AddTicks(8756)),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -96,7 +104,7 @@ namespace SocialO.DAL.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    DateCommented = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 8, 21, 20, 19, 12, 502, DateTimeKind.Local).AddTicks(5147)),
+                    DateCommented = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 8, 21, 21, 1, 21, 401, DateTimeKind.Local).AddTicks(9946)),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PostId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
@@ -122,7 +130,7 @@ namespace SocialO.DAL.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DateFavorited = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 8, 21, 20, 19, 12, 503, DateTimeKind.Local).AddTicks(6866)),
+                    DateFavorited = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 8, 21, 21, 1, 21, 403, DateTimeKind.Local).AddTicks(2762)),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PostId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
@@ -142,6 +150,11 @@ namespace SocialO.DAL.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FollowerRelationships_FollowerId",
+                table: "FollowerRelationships",
+                column: "FollowerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FollowerRelationships_UserId",

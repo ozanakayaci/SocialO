@@ -13,7 +13,7 @@ namespace SocialO.DAL.DBContexts
 
         public DbSet<User> Users { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }
-        public DbSet<Follower> FollowerRelationships { get; set; }
+        public DbSet<FollowerRelationship> FollowerRelationships { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<PostComment> PostComments { get; set; }
         public DbSet<PostFavorite> PostFavorites { get; set; }

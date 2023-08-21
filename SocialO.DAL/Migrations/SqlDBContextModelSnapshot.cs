@@ -22,7 +22,7 @@ namespace SocialO.DAL.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("SocialO.Entities.Concrete.Follower", b =>
+            modelBuilder.Entity("SocialO.Entities.Concrete.FollowerRelationship", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -31,12 +31,17 @@ namespace SocialO.DAL.Migrations
                     b.Property<DateTime>("DateFollowed")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 8, 21, 20, 19, 12, 502, DateTimeKind.Local).AddTicks(999));
+                        .HasDefaultValue(new DateTime(2023, 8, 21, 21, 1, 21, 397, DateTimeKind.Local).AddTicks(8226));
+
+                    b.Property<Guid?>("FollowerId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FollowerId");
 
                     b.HasIndex("UserId");
 
@@ -57,7 +62,7 @@ namespace SocialO.DAL.Migrations
                     b.Property<DateTime>("DatePosted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 8, 21, 20, 19, 12, 502, DateTimeKind.Local).AddTicks(8580));
+                        .HasDefaultValue(new DateTime(2023, 8, 21, 21, 1, 21, 402, DateTimeKind.Local).AddTicks(4822));
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -83,7 +88,7 @@ namespace SocialO.DAL.Migrations
                     b.Property<DateTime>("DateCommented")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 8, 21, 20, 19, 12, 502, DateTimeKind.Local).AddTicks(5147));
+                        .HasDefaultValue(new DateTime(2023, 8, 21, 21, 1, 21, 401, DateTimeKind.Local).AddTicks(9946));
 
                     b.Property<Guid>("PostId")
                         .HasColumnType("uniqueidentifier");
@@ -109,7 +114,7 @@ namespace SocialO.DAL.Migrations
                     b.Property<DateTime>("DateFavorited")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 8, 21, 20, 19, 12, 503, DateTimeKind.Local).AddTicks(6866));
+                        .HasDefaultValue(new DateTime(2023, 8, 21, 21, 1, 21, 403, DateTimeKind.Local).AddTicks(2762));
 
                     b.Property<Guid>("PostId")
                         .HasColumnType("uniqueidentifier");
@@ -141,7 +146,7 @@ namespace SocialO.DAL.Migrations
                     b.Property<DateTime>("DataRegistered")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 8, 21, 20, 19, 12, 504, DateTimeKind.Local).AddTicks(1909));
+                        .HasDefaultValue(new DateTime(2023, 8, 21, 21, 1, 21, 403, DateTimeKind.Local).AddTicks(6912));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -188,7 +193,7 @@ namespace SocialO.DAL.Migrations
                     b.Property<DateTime>("DateUpdated")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 8, 21, 20, 19, 12, 505, DateTimeKind.Local).AddTicks(5981));
+                        .HasDefaultValue(new DateTime(2023, 8, 21, 21, 1, 21, 404, DateTimeKind.Local).AddTicks(8756));
 
                     b.Property<string>("FirstName")
                         .HasMaxLength(20)
@@ -213,11 +218,19 @@ namespace SocialO.DAL.Migrations
                     b.ToTable("UserProfiles");
                 });
 
-            modelBuilder.Entity("SocialO.Entities.Concrete.Follower", b =>
+            modelBuilder.Entity("SocialO.Entities.Concrete.FollowerRelationship", b =>
                 {
-                    b.HasOne("SocialO.Entities.Concrete.User", "User")
+                    b.HasOne("SocialO.Entities.Concrete.User", "Follower")
                         .WithMany("Followers")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("FollowerId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("SocialO.Entities.Concrete.User", "User")
+                        .WithMany("Following")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Follower");
 
                     b.Navigation("User");
                 });
@@ -292,6 +305,8 @@ namespace SocialO.DAL.Migrations
             modelBuilder.Entity("SocialO.Entities.Concrete.User", b =>
                 {
                     b.Navigation("Followers");
+
+                    b.Navigation("Following");
 
                     b.Navigation("PostComments");
 

@@ -19,8 +19,9 @@ namespace SocialO.Entities.Concrete
         // UserProfile       
         public UserProfile? UserProfile { get; set; }
 
-        //Follower
-        public ICollection<Follower>? Followers { get; set; }
+        //FollowerRelationship
+        public ICollection<FollowerRelationship>? Followers { get; set; }
+        public ICollection<FollowerRelationship>? Following { get; set; }
 
         //Post
         public ICollection<Post>? Posts { get; set; }
