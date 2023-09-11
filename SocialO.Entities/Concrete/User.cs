@@ -6,32 +6,36 @@ using SocialO.Entities.Abstract;
 
 namespace SocialO.Entities.Concrete
 {
-    public class User : BaseEntity
-    {
-        public string Username { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public DateTime DataRegistered { get; set; }
-        public string UserType { get; set; }
-        public string AccountStatus { get; set; }
+	public class User : BaseEntity
+	{
+		public string Username { get; set; }
+		public string Email { get; set; }
+		public string Password { get; set; }
+		public DateTime DataRegistered { get; set; }
+		public string UserType { get; set; }
+		public string AccountStatus { get; set; }
 
-        //other entities 
-        // UserProfile       
-        public UserProfile? UserProfile { get; set; }
+		public string? RefreshToken { get; set; }
 
-        //FollowerRelationship
-        public ICollection<FollowerRelationship>? Followers { get; set; }
-        public ICollection<FollowerRelationship>? Following { get; set; }
+		public DateTime? RefreshTokenEndDate { get; set; }
 
-        //Post
-        public ICollection<Post>? Posts { get; set; }
+		//other entities 
+		// UserProfile       
+		public UserProfile? UserProfile { get; set; }
 
-        //PostComment
-        public ICollection<PostComment>? PostComments { get; set; }
+		//FollowerRelationship
+		public ICollection<FollowerRelationship>? Followers { get; set; }
+		public ICollection<FollowerRelationship>? Following { get; set; }
 
-        //PostFavorite
-        public ICollection<PostFavorite>? PostFavorites { get; set; }
+		//Post
+		public ICollection<Post>? Posts { get; set; }
+
+		//PostComment
+		public ICollection<PostComment>? PostComments { get; set; }
+
+		//PostFavorite
+		public ICollection<PostFavorite>? PostFavorites { get; set; }
 
 
-    }
+	}
 }
