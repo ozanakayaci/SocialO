@@ -6,8 +6,6 @@ namespace SocialO.BL.Concrete
 {
 	public class PostManager : ManagerBase<Post>, IPostManager
 	{
-		public PostManager(IBaseRepository<Post> repository) : base(repository)
-		{
-		}
+		
 	}
 }

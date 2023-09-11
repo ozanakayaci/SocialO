@@ -7,7 +7,7 @@ using SocialO.Entities.Abstract;
 
 namespace SocialO.DAL.Repository.Abstract
 {
-        public interface IBaseRepository<T> where T : BaseEntity
+        public interface IBaseRepository<T> where T : class
         {
 
                 Task<int> InsertAsync(T entity);

@@ -5,8 +5,6 @@ namespace SocialO.BL.Concrete
 {
     public class PostFavoriteManager : ManagerBase<PostFavorite>, IPostFavoriteManager
     {
-        public PostFavoriteManager(DAL.Repository.Abstract.IBaseRepository<PostFavorite> repository) : base(repository)
-        {
-        }
+        
     }
 }

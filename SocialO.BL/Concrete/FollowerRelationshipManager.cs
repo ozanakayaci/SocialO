@@ -6,8 +6,6 @@ namespace SocialO.BL.Concrete
 {
     public class FollowerRelationshipManager : ManagerBase<FollowerRelationship>, IFollowerRelationshipManager
     {
-        public FollowerRelationshipManager(IBaseRepository<FollowerRelationship> repository) : base(repository)
-        {
-        }
+       
     }
 }

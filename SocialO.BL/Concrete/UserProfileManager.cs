@@ -6,8 +6,6 @@ namespace SocialO.BL.Concrete
 {
     public class UserProfileManager : ManagerBase<UserProfile>, IUserProfileManager
     {
-        public UserProfileManager(IBaseRepository<UserProfile> repository) : base(repository)
-        {
-        }
+        
     }
 }
