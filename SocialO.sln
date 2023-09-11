@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialO.DAL", "SocialO.DAL\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialO.BL", "SocialO.BL\SocialO.BL.csproj", "{45AA49F4-42FE-4A4C-8B98-CB9D83E9BEDD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialO.WebApi", "SocialO.WebApi\SocialO.WebApi.csproj", "{DC7404F1-60EA-4DCD-8F1B-9958A168A8D8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{45AA49F4-42FE-4A4C-8B98-CB9D83E9BEDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45AA49F4-42FE-4A4C-8B98-CB9D83E9BEDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45AA49F4-42FE-4A4C-8B98-CB9D83E9BEDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC7404F1-60EA-4DCD-8F1B-9958A168A8D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC7404F1-60EA-4DCD-8F1B-9958A168A8D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC7404F1-60EA-4DCD-8F1B-9958A168A8D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC7404F1-60EA-4DCD-8F1B-9958A168A8D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
