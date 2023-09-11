@@ -11,4 +11,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SocialO.Entities\SocialO.Entities.csproj" />
+    <ProjectReference Include="..\SocialO.DAL\SocialO.DAL.csproj" />
+    <ProjectReference Include="..\SocialO.BL\SocialO.BL.csproj" />
+  </ItemGroup>
+
 </Project>
