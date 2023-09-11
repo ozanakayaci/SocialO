@@ -2,7 +2,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SocialO.DAL.DBContexts;
@@ -12,37 +11,31 @@ using SocialO.DAL.DBContexts;
 namespace SocialO.DAL.Migrations
 {
     [DbContext(typeof(SqlDBContext))]
-    [Migration("20230821184428_dbInit")]
-    partial class dbInit
+    [Migration("20230911132952_sqlliteDb")]
+    partial class sqlliteDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.10")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
-
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            modelBuilder.HasAnnotation("ProductVersion", "7.0.10");
 
             modelBuilder.Entity("SocialO.Entities.Concrete.FollowerRelationship", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("DateFollowed")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 8, 21, 21, 44, 28, 82, DateTimeKind.Local).AddTicks(8514));
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue(new DateTime(2023, 9, 11, 16, 29, 52, 294, DateTimeKind.Local).AddTicks(8867));
 
                     b.Property<int?>("FollowerId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int?>("UserId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -56,28 +49,28 @@ namespace SocialO.DAL.Migrations
                         new
                         {
                             Id = 1,
-                            DateFollowed = new DateTime(2023, 8, 21, 21, 44, 28, 91, DateTimeKind.Local).AddTicks(9150),
+                            DateFollowed = new DateTime(2023, 9, 11, 16, 29, 52, 297, DateTimeKind.Local).AddTicks(2526),
                             FollowerId = 3,
                             UserId = 1
                         },
                         new
                         {
                             Id = 2,
-                            DateFollowed = new DateTime(2023, 8, 21, 21, 44, 28, 91, DateTimeKind.Local).AddTicks(9163),
+                            DateFollowed = new DateTime(2023, 9, 11, 16, 29, 52, 297, DateTimeKind.Local).AddTicks(2536),
                             FollowerId = 3,
                             UserId = 2
                         },
                         new
                         {
                             Id = 3,
-                            DateFollowed = new DateTime(2023, 8, 21, 21, 44, 28, 91, DateTimeKind.Local).AddTicks(9164),
+                            DateFollowed = new DateTime(2023, 9, 11, 16, 29, 52, 297, DateTimeKind.Local).AddTicks(2538),
                             FollowerId = 2,
                             UserId = 1
                         },
                         new
                         {
                             Id = 4,
-                            DateFollowed = new DateTime(2023, 8, 21, 21, 44, 28, 91, DateTimeKind.Local).AddTicks(9166),
+                            DateFollowed = new DateTime(2023, 9, 11, 16, 29, 52, 297, DateTimeKind.Local).AddTicks(2539),
                             FollowerId = 1,
                             UserId = 3
                         });
@@ -87,22 +80,20 @@ namespace SocialO.DAL.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("DatePosted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 8, 21, 21, 44, 28, 92, DateTimeKind.Local).AddTicks(6103));
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue(new DateTime(2023, 9, 11, 16, 29, 52, 297, DateTimeKind.Local).AddTicks(8113));
 
                     b.Property<int>("UserId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -115,25 +106,23 @@ namespace SocialO.DAL.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Comment")
                         .IsRequired()
                         .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("DateCommented")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 8, 21, 21, 44, 28, 92, DateTimeKind.Local).AddTicks(3092));
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue(new DateTime(2023, 9, 11, 16, 29, 52, 297, DateTimeKind.Local).AddTicks(5788));
 
                     b.Property<int>("PostId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("UserId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -148,20 +137,18 @@ namespace SocialO.DAL.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("DateFavorited")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 8, 21, 21, 44, 28, 93, DateTimeKind.Local).AddTicks(2216));
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue(new DateTime(2023, 9, 11, 16, 29, 52, 298, DateTimeKind.Local).AddTicks(4841));
 
                     b.Property<int>("PostId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("UserId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -176,41 +163,39 @@ namespace SocialO.DAL.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("AccountStatus")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("TEXT")
                         .HasDefaultValue("Active");
 
                     b.Property<DateTime>("DataRegistered")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 8, 21, 21, 44, 28, 93, DateTimeKind.Local).AddTicks(6210));
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue(new DateTime(2023, 9, 11, 16, 29, 52, 298, DateTimeKind.Local).AddTicks(7921));
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("UserType")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("TEXT")
                         .HasDefaultValue("User");
 
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -224,7 +209,7 @@ namespace SocialO.DAL.Migrations
                         {
                             Id = 1,
                             AccountStatus = "Active",
-                            DataRegistered = new DateTime(2023, 8, 21, 21, 44, 28, 94, DateTimeKind.Local).AddTicks(2855),
+                            DataRegistered = new DateTime(2023, 9, 11, 16, 29, 52, 299, DateTimeKind.Local).AddTicks(3230),
                             Email = "admin@socialo.com",
                             Password = "admin",
                             UserType = "Admin",
@@ -234,7 +219,7 @@ namespace SocialO.DAL.Migrations
                         {
                             Id = 2,
                             AccountStatus = "Active",
-                            DataRegistered = new DateTime(2023, 8, 21, 21, 44, 28, 94, DateTimeKind.Local).AddTicks(2866),
+                            DataRegistered = new DateTime(2023, 9, 11, 16, 29, 52, 299, DateTimeKind.Local).AddTicks(3236),
                             Email = "user1@socialo.com",
                             Password = "user1",
                             UserType = "User",
@@ -244,7 +229,7 @@ namespace SocialO.DAL.Migrations
                         {
                             Id = 3,
                             AccountStatus = "Active",
-                            DataRegistered = new DateTime(2023, 8, 21, 21, 44, 28, 94, DateTimeKind.Local).AddTicks(2868),
+                            DataRegistered = new DateTime(2023, 9, 11, 16, 29, 52, 299, DateTimeKind.Local).AddTicks(3238),
                             Email = "user2@socialo.com",
                             Password = "user2",
                             UserType = "User",
@@ -256,36 +241,34 @@ namespace SocialO.DAL.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("About")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("DateUpdated")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 8, 21, 21, 44, 28, 94, DateTimeKind.Local).AddTicks(6854));
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue(new DateTime(2023, 9, 11, 16, 29, 52, 299, DateTimeKind.Local).AddTicks(6190));
 
                     b.Property<string>("FirstName")
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("Gender")
+                    b.Property<char?>("Gender")
                         .HasMaxLength(1)
-                        .HasColumnType("nvarchar(1)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("LastName")
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("UserId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
