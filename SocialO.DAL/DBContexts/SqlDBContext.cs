@@ -14,9 +14,18 @@ namespace SocialO.DAL.DBContexts
 		public DbSet<PostComment> PostComments { get; set; }
 		public DbSet<PostFavorite> PostFavorites { get; set; }
 
+        public SqlDBContext()
+        {
+        }
+
+        public SqlDBContext(DbContextOptions<SqlDBContext> options)
+            : base(options)
+        {
+        }
 
 
-		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
 			optionsBuilder.UseSqlite(@"Data Source=SocialO.db");
 
