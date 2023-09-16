@@ -39,6 +39,8 @@ namespace SocialO.WebApi.Controllers
 			}
 			return null;
 		}
+
+		
 		[HttpGet("[action]")]
 		public async Task<Token> RefreshTokenLogin([FromForm] string refreshToken)
 		{
@@ -58,8 +60,16 @@ namespace SocialO.WebApi.Controllers
 		}
 
 		[HttpPost("[action]")]
-		public async Task<bool> Create([FromForm] User user)
+		public async Task<bool> Create([FromForm] UserRegister userRegister)
 		{
+			User user = new User
+			{
+				Username = userRegister.Username,
+				Email = userRegister.Email,
+				Password = userRegister.Password
+				
+			};
+			
 			int result = await context.InsertAsync(user);
 
 			return result > 0 ? true : false;
