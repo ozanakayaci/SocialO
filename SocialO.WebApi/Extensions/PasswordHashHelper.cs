@@ -5,7 +5,7 @@ namespace SocialO.WebApi.Extensions
 {
 	public class PasswordHashHelper
 	{
-		public void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+		public static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
 		{
 			using (var hmac = new HMACSHA512())
 			{
@@ -14,7 +14,7 @@ namespace SocialO.WebApi.Extensions
 			}
 		}
 
-		public bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
+		public static bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
 		{
 			using (var hmac = new HMACSHA512(storedSalt))
 			{
