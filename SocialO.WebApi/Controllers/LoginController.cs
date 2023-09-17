@@ -2,8 +2,9 @@
 using SocialO.BL.Abstract;
 using SocialO.BL.Concrete;
 using SocialO.Entities.Concrete;
+using SocialO.WebApi.Extensions;
 using SocialO.WebApi.Models;
-
+using System.Security.Cryptography;
 
 namespace SocialO.WebApi.Controllers
 {
@@ -16,19 +17,25 @@ namespace SocialO.WebApi.Controllers
 
 		public LoginController(IConfiguration configuration)
 		{
-			this.context = new UserManager();
-
 			this.configuration = configuration;
+			this.context = new UserManager();
 		}
 
 		[HttpPost("[action]")]
 		public async Task<Token> Login(UserLogin userLogin)
 		{
-			User user = await context.GetBy(p => p.Email == userLogin.Email && p.Password == userLogin.Password);
 
-			if (user != null)
+			
+
+			User user = await context.GetBy(p => p.Username == userLogin.Username);
+
+			if (user == null)
 			{
-				//Token Uretmem lazim
+				return null;
+			}
+
+			if (PasswordHashHelper.VerifyPasswordHash(userLogin.Password, user.PasswordHash, user.PasswordSalt))
+			{				
 				TokenManager tokenManager = new TokenManager(configuration);
 				Token token = await tokenManager.CreateAccessToken(user);
 
@@ -37,6 +44,7 @@ namespace SocialO.WebApi.Controllers
 				await context.UpdateAsync(user);
 				return token;
 			}
+
 			return null;
 		}
 
@@ -62,11 +70,15 @@ namespace SocialO.WebApi.Controllers
 		[HttpPost("[action]")]
 		public async Task<bool> Create([FromForm] UserRegister userRegister)
 		{
+
+			PasswordHashHelper.CreatePasswordHash(userRegister.Password, out var passwordHash, out var passwordSalt);
+
 			User user = new User
 			{
 				Username = userRegister.Username,
 				Email = userRegister.Email,
-				Password = userRegister.Password
+				PasswordSalt = passwordSalt,
+				PasswordHash = passwordHash,
 				
 			};
 			

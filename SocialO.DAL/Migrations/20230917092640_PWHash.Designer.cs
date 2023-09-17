@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SocialO.DAL.DBContexts;
 
@@ -10,9 +11,11 @@ using SocialO.DAL.DBContexts;
 namespace SocialO.DAL.Migrations
 {
     [DbContext(typeof(SqlDBContext))]
-    partial class SqlDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230917092640_PWHash")]
+    partial class PWHash
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.10");
@@ -26,7 +29,7 @@ namespace SocialO.DAL.Migrations
                     b.Property<DateTime>("DateFollowed")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2023, 9, 17, 14, 30, 12, 178, DateTimeKind.Local).AddTicks(7435));
+                        .HasDefaultValue(new DateTime(2023, 9, 17, 12, 26, 40, 581, DateTimeKind.Local).AddTicks(8933));
 
                     b.Property<int?>("FollowerId")
                         .HasColumnType("INTEGER");
@@ -57,7 +60,7 @@ namespace SocialO.DAL.Migrations
                     b.Property<DateTime>("DatePosted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2023, 9, 17, 14, 30, 12, 184, DateTimeKind.Local).AddTicks(8865));
+                        .HasDefaultValue(new DateTime(2023, 9, 17, 12, 26, 40, 589, DateTimeKind.Local).AddTicks(2703));
 
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
@@ -83,7 +86,7 @@ namespace SocialO.DAL.Migrations
                     b.Property<DateTime>("DateCommented")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2023, 9, 17, 14, 30, 12, 184, DateTimeKind.Local).AddTicks(3516));
+                        .HasDefaultValue(new DateTime(2023, 9, 17, 12, 26, 40, 588, DateTimeKind.Local).AddTicks(7408));
 
                     b.Property<int>("PostId")
                         .HasColumnType("INTEGER");
@@ -109,7 +112,7 @@ namespace SocialO.DAL.Migrations
                     b.Property<DateTime>("DateFavorited")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2023, 9, 17, 14, 30, 12, 185, DateTimeKind.Local).AddTicks(8180));
+                        .HasDefaultValue(new DateTime(2023, 9, 17, 12, 26, 40, 590, DateTimeKind.Local).AddTicks(3810));
 
                     b.Property<int>("PostId")
                         .HasColumnType("INTEGER");
@@ -141,20 +144,21 @@ namespace SocialO.DAL.Migrations
                     b.Property<DateTime>("DataRegistered")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2023, 9, 17, 14, 30, 12, 186, DateTimeKind.Local).AddTicks(4140));
+                        .HasDefaultValue(new DateTime(2023, 9, 17, 12, 26, 40, 590, DateTimeKind.Local).AddTicks(9954));
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
-                    b.Property<byte[]>("PasswordHash")
+                    b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("BLOB");
+                        .HasMaxLength(20)
+                        .HasColumnType("TEXT");
 
-                    b.Property<byte[]>("PasswordSalt")
+                    b.Property<string>("PasswordSalt")
                         .IsRequired()
-                        .HasColumnType("BLOB");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("RefreshToken")
                         .HasColumnType("TEXT");
@@ -197,7 +201,7 @@ namespace SocialO.DAL.Migrations
                     b.Property<DateTime>("DateUpdated")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2023, 9, 17, 14, 30, 12, 188, DateTimeKind.Local).AddTicks(681));
+                        .HasDefaultValue(new DateTime(2023, 9, 17, 12, 26, 40, 592, DateTimeKind.Local).AddTicks(8293));
 
                     b.Property<string>("FirstName")
                         .HasMaxLength(20)

@@ -22,42 +22,6 @@ namespace SocialO.DAL.EntityConfigs.Concrete
             builder.HasOne(p => p.User).WithMany(p => p.Following).HasForeignKey(p => p.UserId).OnDelete(DeleteBehavior.Restrict);
 
 
-
-            builder.HasData(
-              new FollowerRelationship
-              {
-                  Id = 1,
-                  DateFollowed = DateTime.Now,
-                  FollowerId = 3,
-                  UserId = 1
-
-              }, new FollowerRelationship
-              {
-                  Id = 2,
-                  DateFollowed = DateTime.Now,
-                  FollowerId = 3,
-                  UserId = 2
-
-              }, new FollowerRelationship
-              {
-                  Id = 3,
-                  DateFollowed = DateTime.Now,
-                  FollowerId = 2,
-                  UserId = 1
-
-              }, new FollowerRelationship
-              {
-                  Id = 4,
-                  DateFollowed = DateTime.Now,
-                  FollowerId = 1,
-                  UserId = 3
-
-              }
-
-          );
-
-
-
         }
     }
 }
