@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialO.Entities", "SocialO.Entities\SocialO.Entities.csproj", "{2DC7B3DD-BAAF-4C2D-B558-D41BB3011379}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialO.Entities", "SocialO.Entities\SocialO.Entities.csproj", "{2DC7B3DD-BAAF-4C2D-B558-D41BB3011379}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialO.DAL", "SocialO.DAL\SocialO.DAL.csproj", "{13A12BEF-1664-48FB-AD1A-917D55F0D8DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialO.DAL", "SocialO.DAL\SocialO.DAL.csproj", "{13A12BEF-1664-48FB-AD1A-917D55F0D8DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialO.BL", "SocialO.BL\SocialO.BL.csproj", "{45AA49F4-42FE-4A4C-8B98-CB9D83E9BEDD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialO.BL", "SocialO.BL\SocialO.BL.csproj", "{45AA49F4-42FE-4A4C-8B98-CB9D83E9BEDD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialO.WebApi", "SocialO.WebApi\SocialO.WebApi.csproj", "{DC7404F1-60EA-4DCD-8F1B-9958A168A8D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocialO.WebApi", "SocialO.WebApi\SocialO.WebApi.csproj", "{DC7404F1-60EA-4DCD-8F1B-9958A168A8D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialO.WebUI", "SocialO.WebUI\SocialO.WebUI.csproj", "{0B7E3E8F-92AB-4911-AD88-024DBF07D27E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{DC7404F1-60EA-4DCD-8F1B-9958A168A8D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC7404F1-60EA-4DCD-8F1B-9958A168A8D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC7404F1-60EA-4DCD-8F1B-9958A168A8D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B7E3E8F-92AB-4911-AD88-024DBF07D27E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B7E3E8F-92AB-4911-AD88-024DBF07D27E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B7E3E8F-92AB-4911-AD88-024DBF07D27E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B7E3E8F-92AB-4911-AD88-024DBF07D27E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
