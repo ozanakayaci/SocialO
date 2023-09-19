@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SocialO.DAL.DBContexts;
 using SocialO.Entities.Concrete;
@@ -29,7 +24,7 @@ namespace SocialO.WebApi.Controllers
           {
               return NotFound();
           }
-            return await _context.Users.ToListAsync();
+          return await _context.Users.ToListAsync();
         }
 
         // GET: api/Users/5
@@ -40,14 +35,14 @@ namespace SocialO.WebApi.Controllers
           {
               return NotFound();
           }
-            var user = await _context.Users.FindAsync(id);
+          var user = await _context.Users.FindAsync(id);
 
-            if (user == null)
-            {
-                return NotFound();
-            }
+          if (user == null)
+          {
+	          return NotFound();
+          }
 
-            return user;
+          return user;
         }
 
         // PUT: api/Users/5
@@ -82,7 +77,7 @@ namespace SocialO.WebApi.Controllers
         }
 
         // POST: api/Users
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // To protect from over-posting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
@@ -90,10 +85,10 @@ namespace SocialO.WebApi.Controllers
           {
               return Problem("Entity set 'SqlDBContext.Users'  is null.");
           }
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+          _context.Users.Add(user);
+          await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
+          return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
 
         // DELETE: api/Users/5
