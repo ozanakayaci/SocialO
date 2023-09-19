@@ -4,11 +4,11 @@ using SocialO.BL.Concrete;
 using SocialO.Entities.Concrete;
 using SocialO.WebApi.Extensions;
 using SocialO.WebApi.Models;
-using System.Security.Cryptography;
+using SocialO.WebApi.Models.UserModels;
 
 namespace SocialO.WebApi.Controllers
 {
-	[Route("api/[controller]")]
+    [Route("api/[controller]")]
 	[ApiController]
 	public class LoginController : ControllerBase
 	{
@@ -27,7 +27,7 @@ namespace SocialO.WebApi.Controllers
 
 			
 
-			User user = await context.GetBy(p => p.Username == userLogin.Username);
+			User user = await context.GetBy(p => (p.Username == userLogin.LoginString.ToLower()) || (p.Email == userLogin.LoginString.ToLower()));
 
 			if (user == null)
 			{
@@ -75,8 +75,8 @@ namespace SocialO.WebApi.Controllers
 
 			User user = new User
 			{
-				Username = userRegister.Username,
-				Email = userRegister.Email,
+				Username = userRegister.Username.ToLower(),
+				Email = userRegister.Email.ToLower(),
 				PasswordSalt = passwordSalt,
 				PasswordHash = passwordHash,
 				
