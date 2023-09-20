@@ -41,6 +41,7 @@ namespace SocialO.WebApi.Controllers
 
 				user.RefreshToken = token.RefreshToken;
 				user.RefreshTokenEndDate = token.Expiration.AddMinutes(5);
+				token.User = user;
 				await context.UpdateAsync(user);
 				return token;
 			}

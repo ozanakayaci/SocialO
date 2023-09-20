@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SocialO.DAL.DBContexts;
 using SocialO.WebApi.Extensions;
@@ -19,28 +20,35 @@ builder.Services.AddCors(options =>
                                                     .AllowAnyOrigin()));
 
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<SqlDBContext>(options => options.UseSqlite(@"Data Source=SocialO.db"));
 
 builder.Services.AddSocialOServices();
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-               .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
-               {
-                   ValidateAudience = true,
-                   ValidateIssuer = true,
-                   ValidateLifetime = true,
-                   ValidateIssuerSigningKey = true,
-                   ValidIssuer = builder.Configuration["Token:Issuer"],
-                   ValidAudience = builder.Configuration["Token:Audience"],
-                   IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"])),
-                   ClockSkew = TimeSpan.Zero
-               });
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+	options.RequireHttpsMetadata = false;
+	options.SaveToken = true;
+	options.TokenValidationParameters = new TokenValidationParameters()
+	{
+		ValidateAudience = true,
+		ValidateIssuer = true,
+		ValidateLifetime = true,
+		ValidateIssuerSigningKey = true,
+		ValidIssuer = builder.Configuration["Token:Issuer"],
+		ValidAudience = builder.Configuration["Token:Audience"],
+		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"])),
+		ClockSkew = TimeSpan.Zero
+	};
+});
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
 app.UseCors();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -50,7 +58,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-
+app.UseAuthentication();
 
 app.UseAuthorization();
 

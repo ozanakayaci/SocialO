@@ -1,21 +1,22 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import axios from "axios";
+import { Link, useLocation } from "react-router-dom";
+import Login from "../Login/Login";
 
 function Home() {
-  axios
-    .get("https://localhost:7298/WeatherForecast")
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("user");
+    window.location.href = "/";
+  };
+
+  const location = useLocation();
 
   return (
     <div>
-      <h1>Home</h1>
+      <Link to="/home">Home</Link>
       <Link to="/login">Login</Link>
+      <button onClick={handleLogout}>Logout</button>
+      {location.pathname != "/" && 5 == 5 && <Login></Login>}
     </div>
   );
 }

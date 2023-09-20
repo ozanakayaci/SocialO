@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SocialO.Entities.Concrete;
 
 namespace SocialO.WebApi.Models
 {
@@ -10,5 +11,7 @@ namespace SocialO.WebApi.Models
 		public string AccessToken { get; set; }
 		public string RefreshToken { get; set; }
 		public DateTime Expiration { get; internal set; }
+
+		public User User { get; set; }
 	}
 }
