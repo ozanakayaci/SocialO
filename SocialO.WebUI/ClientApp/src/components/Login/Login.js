@@ -30,8 +30,11 @@ function Login() {
         })
         .then((v) => {
           localStorage.setItem("accessToken", response["accessToken"]);
-          sessionStorage.setItem("token", JSON.stringify(response));
+          delete response["user"].passwordHash;
+          delete response["user"].passwordSalt;
           localStorage.setItem("user", JSON.stringify(response["user"]));
+          delete response["user"];
+          sessionStorage.setItem("token", JSON.stringify(response));
           window.location.href = "/";
         });
     } else {
@@ -41,7 +44,6 @@ function Login() {
 
   return (
     <div>
-      <div />
       <div>
         <div>
           <div component="h1" variant="h5">
