@@ -13,8 +13,6 @@ function Home() {
 
   return (
     <div>
-      <Link to="/home">Home</Link>
-      <Link to="/login">Login</Link>
       <button onClick={handleLogout}>Logout</button>
       {location.pathname != "/" && 5 == 5 && <Login></Login>}
     </div>
