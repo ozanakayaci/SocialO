@@ -4,6 +4,9 @@ import swal from "sweetalert2";
 
 import { Link } from "react-router-dom";
 
+import { useDispatch } from "react-redux";
+import { getUser } from "../../redux/socialo/socialoSlice";
+
 async function loginUser(credentials) {
   return axios
     .post("http://localhost:5211/api/Login/Login", credentials)
@@ -13,6 +16,8 @@ async function loginUser(credentials) {
 }
 
 function Login() {
+  const dispatch = useDispatch();
+
   const [loginString, setLoginString] = useState();
   const [password, setPassword] = useState();
 
@@ -22,7 +27,7 @@ function Login() {
       loginString,
       password,
     });
-    if ("accessToken" in response) {
+    if (response["accessToken"]) {
       swal
         .fire("Success", response.message, "success", {
           buttons: false,
@@ -32,13 +37,13 @@ function Login() {
           localStorage.setItem("accessToken", response["accessToken"]);
           delete response["user"].passwordHash;
           delete response["user"].passwordSalt;
-          localStorage.setItem("user", JSON.stringify(response["user"]));
+          dispatch(getUser(response["user"]));
           delete response["user"];
           sessionStorage.setItem("token", JSON.stringify(response));
           window.location.href = "/";
         });
     } else {
-      swal("Failed", response.message, "error");
+      swal.fire("Failed", response.message, "error");
     }
   };
 
