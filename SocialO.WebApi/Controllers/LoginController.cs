@@ -18,11 +18,32 @@ namespace SocialO.WebApi.Controllers
 		public LoginController(IConfiguration configuration)
 		{
 			this.configuration = configuration;
-			this.context = new UserManager();
+			context = new UserManager();
 		}
 
 		[HttpPost("[action]")]
-		public async Task<Token> Login(UserLogin userLogin)
+		public async Task<bool> SignUp([FromForm] UserRegister userRegister)
+		{
+
+			PasswordHashHelper.CreatePasswordHash(userRegister.Password, out var passwordHash, out var passwordSalt);
+
+			User user = new User
+			{
+				Username = userRegister.Username.ToLower(),
+				Email = userRegister.Email.ToLower(),
+				PasswordSalt = passwordSalt,
+				PasswordHash = passwordHash,
+
+			};
+
+			int result = await context.InsertAsync(user);
+
+			return result > 0 ? true : false;
+
+		}
+
+		[HttpPost("[action]")]
+		public async Task<Token> SignIn(UserLogin userLogin)
 		{
 
 			
@@ -68,26 +89,7 @@ namespace SocialO.WebApi.Controllers
 			return null;
 		}
 
-		[HttpPost("[action]")]
-		public async Task<bool> Create([FromForm] UserRegister userRegister)
-		{
-
-			PasswordHashHelper.CreatePasswordHash(userRegister.Password, out var passwordHash, out var passwordSalt);
-
-			User user = new User
-			{
-				Username = userRegister.Username.ToLower(),
-				Email = userRegister.Email.ToLower(),
-				PasswordSalt = passwordSalt,
-				PasswordHash = passwordHash,
-				
-			};
-			
-			int result = await context.InsertAsync(user);
-
-			return result > 0 ? true : false;
-
-		}
+		
 
 	}
 }

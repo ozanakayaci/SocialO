@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SocialO.DAL.DBContexts;
 using SocialO.WebApi.Extensions;
+using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,10 +15,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
-                        options.AddDefaultPolicy(builder =>
-                                                    builder.AllowAnyHeader()
-                                                    .AllowAnyMethod()
-                                                    .AllowAnyOrigin()));
+						options.AddDefaultPolicy(builder =>
+													builder.AllowAnyHeader()
+													.AllowAnyMethod()
+													.AllowAnyOrigin()));
 
 
 
@@ -40,6 +41,20 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"])),
 		ClockSkew = TimeSpan.Zero
 	};
+
+	options.Events = new JwtBearerEvents
+	{
+		OnTokenValidated = context =>
+		{
+			var claimsIdentity = context.Principal.Identity as ClaimsIdentity;
+			if (claimsIdentity != null)
+			{
+				// UserType claim'ini ekleyin
+				claimsIdentity.AddClaim(new Claim("UserType", "admin")); // UserType'ı dilediğiniz gibi ayarlayabilirsiniz
+			}
+			return Task.CompletedTask;
+		}
+	};
 });
 
 builder.Services.AddEndpointsApiExplorer();
@@ -52,8 +67,8 @@ app.UseCors();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+	app.UseSwagger();
+	app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
