@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SocialO.BL.Abstract;
+using SocialO.DAL.DBContexts;
 using SocialO.Entities.Concrete;
 
 namespace SocialO.WebApi.Controllers
@@ -10,11 +12,14 @@ namespace SocialO.WebApi.Controllers
 	{
 		private readonly IFollowerRelationshipManager _followerManager;
 		private readonly IUserManager _userManager;
+		private readonly SqlDBContext _context;
+
 
 		public FollowerRelationshipsController(IFollowerRelationshipManager followerManager, IUserManager userManager)
 		{
 			_followerManager = followerManager;
 			_userManager = userManager;
+			_context = new SqlDBContext();
 		}
 
 		// GET: api/FollowerRelationships
@@ -33,10 +38,12 @@ namespace SocialO.WebApi.Controllers
 		public async Task<ICollection<FollowerRelationship>> GetFollowers(int userId)
 		{
 
+			if (_context.FollowerRelationships == null)
+			{
+				return null;
+			}
 
-			var followers = await _followerManager.GetAllAsync(x => x.UserId == userId);
-
-
+			var followers = await _context.FollowerRelationships.Where(x=> x.UserId == userId).ToListAsync();
 
 			if (followers == null)
 			{
@@ -44,6 +51,9 @@ namespace SocialO.WebApi.Controllers
 			}
 
 			return followers;
+
+
+			
 		}
 
 
@@ -51,17 +61,18 @@ namespace SocialO.WebApi.Controllers
 		// POST: api/FollowerRelationships
 		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		[HttpPost]
-		public async Task<bool> FollowUnfollow(int followerId, int userId,bool isFollowed=false)
+		public async Task<bool> FollowUnfollow(int followerId, int userId)
 		{
 
 			var follower = _userManager.GetBy(p => p.Id == followerId).Result;
 			var followed = _userManager.GetBy(p => p.Id == userId).Result;
 
 			if (follower != null && followed != null)
-			{
-				if (isFollowed)
+			{ 
+				FollowerRelationship relation = await _followerManager.GetBy(p => (p.FollowerId == followerId && p.UserId == userId));
+
+				if (relation != null)
 				{
-					FollowerRelationship relation = await _followerManager.GetBy(p => (p.FollowerId == followerId && p.UserId == userId));
 
 					_followerManager.DeleteAsync(relation);
 
