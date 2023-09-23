@@ -2,11 +2,13 @@ import { useState } from "react";
 import axios from "axios";
 import swal from "sweetalert2";
 
+import "./Register.css";
+
 import { Link } from "react-router-dom";
 
 async function registerUser(credentials) {
   return axios
-    .post("http://localhost:5211/api/Login/Create", credentials, {
+    .post("http://localhost:5211/api/Login/SignUp", credentials, {
       headers: { "Content-Type": "multipart/form-data" },
     })
     .then((response) => {
@@ -22,59 +24,61 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await registerUser({
-      Username,
-      Email,
-      Password,
-      Repassword,
-    });
-    console.log(response);
-    if (response) {
-      swal
-        .fire("Success", response.message, "success", {
-          buttons: false,
-          timer: 2000,
-        })
-        .then((v) => {
+    try {
+      const response = await registerUser({
+        Username,
+        Email,
+        Password,
+        Repassword,
+      });
+
+      if (response.status === 200) {
+        // Başarılı kayıt
+        swal.fire("Success", response.data.message, "success");
+        setTimeout(() => {
           window.location.href = "/login";
-        });
-    } else {
-      swal("Failed", response.message, "error");
+        }, 2000);
+      } else {
+        // API'den gelen hata
+        swal.fire("Failed", response.data.message, "error");
+      }
+    } catch (error) {
+      // Hata oluştuğunda
+      swal.fire("Error", "Bir hata oluştu. Lütfen tekrar deneyin.", "error");
+      console.error("API isteği sırasında hata oluştu:", error);
     }
   };
 
   return (
-    <div>
-      <div />
+    <div className="popup-register">
       <div>
         <div>
-          <div component="h1" variant="h5">
-            Sign in
+          <div className="signIn">
+            Sign up to Social
+            <span>O</span>
           </div>
-          <form onSubmit={handleSubmit}>
+          <form className="register-form" onSubmit={handleSubmit}>
             <input
-              variant="outlined"
-              margin="normal"
-              required
-              id="username"
-              name="username"
-              label="username"
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="username"
-            />
-            <input
-              variant="outlined"
-              margin="normal"
+              className="register-input"
               required
               id="email"
               name="email"
               label="Email Address"
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="email"
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Username"
             />
             <input
-              variant="outlined"
-              margin="normal"
+              className="register-input"
+              required
+              id="email"
+              name="email"
+              label="email"
+              type="email"
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email"
+            />
+            <input
+              className="register-input"
               required
               id="password"
               name="password"
@@ -82,10 +86,9 @@ function Register() {
               type="password"
               onChange={(e) => setPassword(e.target.value)}
               placeholder="password"
-            />{" "}
+            />
             <input
-              variant="outlined"
-              margin="normal"
+              className="register-input"
               required
               id="repassword"
               name="repassword"
@@ -94,13 +97,20 @@ function Register() {
               onChange={(e) => setRePassword(e.target.value)}
               placeholder="rePassword"
             />
-            <button type="submit" variant="contained" color="primary">
-              Sign In
+            <button
+              className="register-button"
+              type="submit"
+              variant="contained"
+              color="primary"
+            >
+              Sign Up
             </button>
+            <Link className="register-button" to="/login">
+              Sign In
+            </Link>
           </form>
         </div>
       </div>
-      <Link to="/login">Login</Link>
     </div>
   );
 }

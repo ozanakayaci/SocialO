@@ -1,15 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import swal from "sweetalert2";
 
 import { Link } from "react-router-dom";
+
+//import Login.css
+import "./Login.css";
 
 import { useDispatch } from "react-redux";
 import { getUser } from "../../redux/socialo/socialoSlice";
 
 async function loginUser(credentials) {
   return axios
-    .post("http://localhost:5211/api/Login/Login", credentials)
+    .post("http://localhost:5211/api/Login/SignIn", credentials)
     .then((response) => {
       return response.data;
     });
@@ -40,7 +43,8 @@ function Login() {
           dispatch(getUser(response["user"]));
           delete response["user"];
           sessionStorage.setItem("token", JSON.stringify(response));
-          window.location.href = "/";
+
+          window.location.href = "/home";
         });
     } else {
       swal.fire("Failed", response.message, "error");
@@ -48,16 +52,16 @@ function Login() {
   };
 
   return (
-    <div>
+    <div className="popup-login">
       <div>
         <div>
-          <div component="h1" variant="h5">
-            Sign in
+          <div className="signIn">
+            Sign in to Social
+            <span>O</span>
           </div>
-          <form onSubmit={handleSubmit}>
+          <form className="login-form" onSubmit={handleSubmit}>
             <input
-              variant="outlined"
-              margin="normal"
+              className="login-input"
               required
               id="email"
               name="email"
@@ -65,8 +69,7 @@ function Login() {
               onChange={(e) => setLoginString(e.target.value)}
             />
             <input
-              variant="outlined"
-              margin="normal"
+              className="login-input"
               required
               id="password"
               name="password"
@@ -74,13 +77,20 @@ function Login() {
               type="password"
               onChange={(e) => setPassword(e.target.value)}
             />
-            <button type="submit" variant="contained" color="primary">
+            <button
+              className="login-button"
+              type="submit"
+              variant="contained"
+              color="primary"
+            >
               Sign In
             </button>
+            <Link className="login-button" to="/register">
+              Sign Up
+            </Link>
           </form>
         </div>
       </div>
-      <Link to="/register">Register</Link>
     </div>
   );
 }

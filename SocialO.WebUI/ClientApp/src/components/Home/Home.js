@@ -1,5 +1,9 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+
+import { useLocation } from "react-router-dom";
+
+import { useSelector } from "react-redux";
+
 import Login from "../Login/Login";
 
 function Home() {
@@ -11,10 +15,16 @@ function Home() {
 
   const location = useLocation();
 
+  const isAuthenticated = useSelector((state) => state.socialo.isAuthenticated);
+
   return (
     <div>
-      <button onClick={handleLogout}>Logout</button>
-      {location.pathname != "/" && 5 == 5 && <Login></Login>}
+      {location.pathname != "/" ||
+      (location.pathname != "/home" && !isAuthenticated) ? (
+        <Login></Login>
+      ) : (
+        <button onClick={handleLogout}>Logout</button>
+      )}
     </div>
   );
 }
