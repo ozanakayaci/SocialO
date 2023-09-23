@@ -27,7 +27,7 @@ builder.Services.AddCors(options =>
 
 
 
-builder.Services.AddDbContext<SqlDBContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<SqlDBContext>(options => options.UseSqlite("Data Source=SocialO.db"));
 
 builder.Services.AddSocialOServices();
 
