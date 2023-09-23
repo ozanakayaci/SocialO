@@ -14,7 +14,7 @@ namespace SocialO.Entities.Concrete
 
         //User
         public int AuthorId { get; set; }
-        public required User User { get; set; }
+        public  User User { get; set; }
 
         //PostComment
         public ICollection<PostComment>? PostComments { get; set; }
