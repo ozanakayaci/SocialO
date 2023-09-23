@@ -34,13 +34,13 @@ namespace SocialO.WebApi.Controllers
 
         // GET: api/Posts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Post>> GetPost(int id)
+        public async Task<ActionResult<User>> GetPost(int id)
         {
           if (_context.Posts == null)
           {
               return NotFound();
           }
-            var post = await _context.Posts.FindAsync(id);
+            var post = await _context.Users.Include(p => p.Posts).ThenInclude(p=>p.PostComments).Include(p=>p.Followers).FirstOrDefaultAsync(p => p.Id == id);
 
             if (post == null)
             {

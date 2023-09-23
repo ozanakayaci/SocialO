@@ -11,6 +11,7 @@ namespace SocialO.Entities.Concrete
 
         public string Content { get; set; }
         public DateTime DatePosted { get; set; }
+
         //User
         public int AuthorId { get; set; }
         public required User User { get; set; }
