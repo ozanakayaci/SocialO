@@ -21,6 +21,8 @@ namespace SocialO.WebApi.Controllers
 			context = new UserManager();
 		}
 
+
+		//Kullanıcı kayıt
 		[HttpPost("[action]")]
 		public async Task<bool> SignUp([FromForm] UserRegister userRegister)
 		{
@@ -42,6 +44,7 @@ namespace SocialO.WebApi.Controllers
 
 		}
 
+		//Kullanıcı giriş
 		[HttpPost("[action]")]
 		public async Task<Token> SignIn(UserLogin userLogin)
 		{
@@ -70,7 +73,8 @@ namespace SocialO.WebApi.Controllers
 			return null;
 		}
 
-		
+
+		//Kullanıcı giriş (RefreshToken ile)
 		[HttpGet("[action]")]
 		public async Task<Token> RefreshTokenLogin([FromForm] string refreshToken)
 		{
