@@ -20,16 +20,16 @@
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
     <Compile Remove="ClientApp\components\**" />
+    <Compile Remove="Controllers\**" />
     <Content Remove="$(SpaRoot)**" />
     <Content Remove="ClientApp\components\**" />
+    <Content Remove="Controllers\**" />
     <EmbeddedResource Remove="ClientApp\components\**" />
+    <EmbeddedResource Remove="Controllers\**" />
     <None Remove="$(SpaRoot)**" />
     <None Remove="ClientApp\components\**" />
+    <None Remove="Controllers\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

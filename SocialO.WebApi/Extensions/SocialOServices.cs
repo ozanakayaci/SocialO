@@ -10,9 +10,7 @@ namespace SocialO.WebApi.Extensions
 		public static IServiceCollection AddSocialOServices(this IServiceCollection services)
 		{
 
-			services.AddScoped<IFollowerRelationshipRepository, FollowerRelationshipRepository>();
-			services.AddScoped<IFollowerRelationshipManager, FollowerRelationshipManager>();
-
+			
 			services.AddScoped<IPostRepository, PostRepository>();
 			services.AddScoped<IPostManager, PostManager>();
 
@@ -27,6 +25,10 @@ namespace SocialO.WebApi.Extensions
 
 			services.AddScoped<IUserProfileRepository, UserProfileRepository>();
 			services.AddScoped<IUserProfileManager, UserProfileManager>();
+
+			services.AddScoped<IFollowerRelationshipRepository, FollowerRelationshipRepository>();
+			services.AddScoped<IFollowerRelationshipManager, FollowerRelationshipManager>();
+
 
 			return services;
 		}
