@@ -15,7 +15,7 @@ namespace SocialO.DAL.EntityConfigs.Concrete
         {
             base.Configure(builder);
 
-            builder.Property(p => p.DateFavorited).HasDefaultValue(DateTime.Now);
+            builder.Property(p => p.DateFavorited).HasDefaultValueSql("datetime('now')");
 
 
         }

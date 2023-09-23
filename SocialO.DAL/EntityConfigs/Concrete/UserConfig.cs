@@ -22,7 +22,7 @@ namespace SocialO.DAL.EntityConfigs.Concrete
             builder.Property(p => p.Email).IsRequired().HasMaxLength(50);
             builder.Property(p => p.PasswordSalt).IsRequired();
             builder.Property(p => p.PasswordHash).IsRequired();
-            builder.Property(p => p.DataRegistered).HasDefaultValue(DateTime.Now);
+            builder.Property(p => p.DataRegistered).HasDefaultValueSql("datetime('now')");
             builder.Property(p => p.UserType).HasDefaultValue("User");
             builder.Property(p => p.AccountStatus).HasDefaultValue("Active");
 

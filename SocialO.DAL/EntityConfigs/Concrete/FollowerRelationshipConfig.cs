@@ -15,7 +15,7 @@ namespace SocialO.DAL.EntityConfigs.Concrete
         {
             base.Configure(builder);
 
-            builder.Property(p => p.DateFollowed).HasDefaultValue(DateTime.Now);
+            builder.Property(p => p.DateFollowed).HasDefaultValueSql("datetime('now')");
 
             builder.HasOne(p => p.Follower).WithMany(p => p.Followers).HasForeignKey(p => p.FollowerId).OnDelete(DeleteBehavior.Restrict);
 

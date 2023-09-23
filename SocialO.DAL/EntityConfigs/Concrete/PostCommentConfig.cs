@@ -16,7 +16,7 @@ namespace SocialO.DAL.EntityConfigs.Concrete
             base.Configure(builder);
 
             builder.Property(p => p.Comment).IsRequired().HasMaxLength(500);
-            builder.Property(p => p.DateCommented).HasDefaultValue(DateTime.Now);
+            builder.Property(p => p.DateCommented).HasDefaultValueSql("datetime('now')");
 
 
         }

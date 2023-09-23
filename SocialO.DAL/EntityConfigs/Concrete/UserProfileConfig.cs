@@ -19,7 +19,7 @@ namespace SocialO.DAL.EntityConfigs.Concrete
 			builder.Property(p => p.LastName).HasMaxLength(20);
 			builder.Property(p => p.Gender).HasMaxLength(1);
 			builder.Property(p => p.About).HasMaxLength(50);
-			builder.Property(p => p.DateUpdated).HasDefaultValue(DateTime.Now);
+			builder.Property(p => p.DateUpdated).HasDefaultValueSql("datetime('now')");
 			builder.Property(p => p.DateOfBirth).HasColumnType("date");
 
 
