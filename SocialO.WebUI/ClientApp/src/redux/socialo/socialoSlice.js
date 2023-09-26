@@ -5,15 +5,24 @@ export const socialoSlice = createSlice({
   initialState: {
     isAuthenticated: false,
     user: null,
+    token: null,
   },
   reducers: {
-    getUser: (state, action) => {
+    loginSuccess: (state, action) => {
+      console.log(action.payload);
       state.isAuthenticated = true;
-      state.user = action.payload;
-      localStorage.setItem("user", JSON.stringify(action.payload));
+      state.user = action.payload.user;
+      state.token = action.payload.accessToken; // JWT token'ını saklayın
+      localStorage.setItem("user", JSON.stringify(action.payload.user));
+    },
+    logout: (state) => {
+      state.isAuthenticated = false;
+      state.user = null;
+      state.token = null; // Çıkış yapınca JWT token'ı sıfırlayın
+      localStorage.removeItem("user"); // Kullanıcıyı yerel depodan kaldırın
     },
   },
 });
 
-export const { getUser } = socialoSlice.actions;
+export const { loginSuccess, logout } = socialoSlice.actions;
 export default socialoSlice.reducer;

@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import "./Login.css";
 
 import { useDispatch } from "react-redux";
-import { getUser } from "../../redux/socialo/socialoSlice";
+import { loginSuccess } from "../../redux/socialo/socialoSlice";
 
 async function loginUser(credentials) {
   return axios
@@ -37,14 +37,7 @@ function Login() {
           timer: 2000,
         })
         .then((v) => {
-          localStorage.setItem("accessToken", response["accessToken"]);
-          delete response["user"].passwordHash;
-          delete response["user"].passwordSalt;
-          dispatch(getUser(response["user"]));
-          delete response["user"];
-          sessionStorage.setItem("token", JSON.stringify(response));
-
-          window.location.href = "/home";
+          dispatch(loginSuccess(response));
         });
     } else {
       swal.fire("Failed", response.message, "error");

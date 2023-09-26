@@ -2,11 +2,10 @@ import { Route, Routes } from "react-router-dom";
 
 import "./custom.css";
 
-import { Link } from "react-router-dom";
-
+import Navbar from "./components/Navbar/Navbar";
+import Home from "./components/Home/Home.js";
 import Login from "./components/Login/Login";
 import Register from "./components/Login/Register";
-import Home from "./components/Home/Home.js";
 import Profile from "./components/UserProfile/Profile.js";
 
 import "./App.css";
@@ -15,8 +14,7 @@ function App() {
   return (
     <div>
       <div>
-        <Link to="/home">Home</Link>
-        <Link to="/login">Login</Link>
+        <Navbar />
       </div>
 
       <Routes>

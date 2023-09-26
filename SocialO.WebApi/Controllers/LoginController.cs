@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SocialO.BL.Abstract;
 using SocialO.BL.Concrete;
+using SocialO.DAL.DBContexts;
 using SocialO.Entities.Concrete;
 using SocialO.WebApi.Extensions;
 using SocialO.WebApi.Models;
@@ -12,13 +14,15 @@ namespace SocialO.WebApi.Controllers
 	[ApiController]
 	public class LoginController : ControllerBase
 	{
-		private readonly IUserManager context;
+		private readonly IUserManager userManager;
 		private readonly IConfiguration configuration;
+		private readonly SqlDBContext context;
 
 		public LoginController(IConfiguration configuration)
 		{
 			this.configuration = configuration;
-			context = new UserManager();
+			userManager = new UserManager();
+			context = new SqlDBContext();
 		}
 
 
@@ -38,7 +42,7 @@ namespace SocialO.WebApi.Controllers
 
 			};
 
-			int result = await context.InsertAsync(user);
+			int result = await userManager.InsertAsync(user);
 
 			return result > 0 ? true : false;
 
@@ -51,7 +55,7 @@ namespace SocialO.WebApi.Controllers
 
 			
 
-			User user = await context.GetBy(p => (p.Username == userLogin.LoginString.ToLower()) || (p.Email == userLogin.LoginString.ToLower()));
+			User user = await userManager.GetBy(p => (p.Username == userLogin.LoginString.ToLower()) || (p.Email == userLogin.LoginString.ToLower()));
 
 			if (user == null)
 			{
@@ -66,7 +70,7 @@ namespace SocialO.WebApi.Controllers
 				user.RefreshToken = token.RefreshToken;
 				user.RefreshTokenEndDate = token.Expiration.AddMinutes(5);
 				token.User = user;
-				await context.UpdateAsync(user);
+				await userManager.UpdateAsync(user);
 				return token;
 			}
 
@@ -74,11 +78,10 @@ namespace SocialO.WebApi.Controllers
 		}
 
 
-		//Kullanıcı giriş (RefreshToken ile)
 		[HttpGet("[action]")]
-		public async Task<Token> RefreshTokenLogin([FromForm] string refreshToken)
+		public async Task<Token> RefreshTokenLogin( string refreshToken)
 		{
-			User user = await context.GetBy(x => x.RefreshToken == refreshToken);
+			User user = await context.Users.FirstOrDefaultAsync(x => x.RefreshToken == refreshToken);
 			if (user != null && user?.RefreshTokenEndDate > DateTime.Now)
 			{
 				TokenManager tokenHandler = new TokenManager(configuration);
@@ -86,13 +89,13 @@ namespace SocialO.WebApi.Controllers
 
 				user.RefreshToken = token.RefreshToken;
 				user.RefreshTokenEndDate = token.Expiration.AddMinutes(5);
-				await context.UpdateAsync(user);
+				await context.SaveChangesAsync();
 
 				return token;
 			}
 			return null;
 		}
 
-		
+
 	}
 }
