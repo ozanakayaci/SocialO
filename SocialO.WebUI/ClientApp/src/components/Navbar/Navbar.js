@@ -2,7 +2,20 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./Navbar.css"; // CSS dosyasını ekledik
 
+import { useDispatch } from "react-redux";
+import { logout } from "../../redux/socialo/socialoSlice";
+
 function Navbar() {
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("user");
+    dispatch(logout());
+
+    window.location.reload();
+  };
+
   return (
     <nav className="navbar">
       <div className="logo">
@@ -16,9 +29,8 @@ function Navbar() {
         <Link className="nav-link" to="/home">
           Home
         </Link>
-        <Link className="nav-link" to="/login">
-          Login
-        </Link>
+
+        <button onClick={handleLogout}>Logout</button>
       </div>
     </nav>
   );
