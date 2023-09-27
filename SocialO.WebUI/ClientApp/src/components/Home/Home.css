@@ -1,0 +1,68 @@
+.home-main {
+  display: flex;
+  justify-content: space-evenly;
+}
+.flow-main {
+  max-width: 600px;
+  width: 100%;
+}
+.flow {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+  padding: 10px;
+  border-left-width: 2px;
+  border-right-width: 2px;
+  border-left-style: solid;
+  border-right-style: solid;
+  border-color: #0099ff44;
+
+  background-color: #fff;
+}
+.card-c {
+  margin: 10px;
+  padding: 10px;
+  border-bottom: 1px solid #0099ff44;
+  background-color: #fff;
+  padding-left: 36px;
+  text-decoration: none;
+  color: black;
+}
+.card-c:hover {
+  box-shadow: 0 0 11px #0099ff44;
+}
+.c-header {
+  margin-bottom: 10px;
+}
+.c-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.c-footer {
+  display: flex;
+  justify-content: space-between;
+  max-width: 500px;
+}
+.c-footer a,
+.c-header a {
+  text-decoration: none;
+  color: black;
+}
+.c-name {
+  font-size: 20px;
+  font-weight: bold;
+}
+.c-header span {
+  padding: 1px;
+}
+.c-name:hover {
+  text-decoration: underline;
+}
+.comment:hover a {
+  color: rgb(46, 146, 146);
+}
+.favorite:hover a {
+  color: red;
+}

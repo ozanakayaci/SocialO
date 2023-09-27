@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const socialoSlice = createSlice({
   name: "socialo",
   initialState: {
-    isAuthenticated: false,
+    isAuthenticated: localStorage.getItem("user") ? true : false,
     user: null,
     token: null,
   },
