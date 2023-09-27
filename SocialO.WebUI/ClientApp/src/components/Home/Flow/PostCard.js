@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";
 
-function PostCard({ key, post }) {
+function PostCard({ post }) {
   const [timeElapsed, setTimeElapsed] = useState("");
 
   useEffect(() => {
     const now = new Date();
     const postedDate = new Date(post.datePosted);
+    console.log("now", now);
+    console.log("pD", postedDate);
 
     // İki tarih arasındaki farkı hesaplayın
     const timeDifference = now - postedDate;
@@ -33,11 +35,7 @@ function PostCard({ key, post }) {
   }, [post.datePosted]);
 
   return (
-    <Link
-      to={`/post/${post.authorUsername}/${post.postId}`}
-      key={key}
-      className="card-c"
-    >
+    <Link to={`/post/${post.authorUsername}/${post.postId}`} className="card-c">
       <div className="c-header">
         <span className="c-name">
           <Link to={`/${post.authorUsername}`}>{post.authorName} </Link>
@@ -51,17 +49,17 @@ function PostCard({ key, post }) {
       </div>
       <div className="c-footer">
         <div>
-          <i class="fa-regular fa-calendar"></i> <span>{timeElapsed}</span>
+          <i className="fa-regular fa-calendar"></i> <span>{timeElapsed}</span>
         </div>
 
         <div className="comment">
           <Link>
-            <i class="fa-regular fa-comments"></i> {post.commentCount}
+            <i className="fa-regular fa-comments"></i> {post.commentCount}
           </Link>
         </div>
         <div className="favorite">
           <Link to="">
-            <i class="fa-regular fa-heart"></i> {post.favoriteCount}
+            <i className="fa-regular fa-heart"></i> {post.favoriteCount}
           </Link>
         </div>
       </div>

@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Humanizer;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SocialO.BL.Abstract;
 using SocialO.BL.Concrete;
@@ -7,6 +11,7 @@ using SocialO.Entities.Concrete;
 using SocialO.WebApi.Extensions;
 using SocialO.WebApi.Models;
 using SocialO.WebApi.Models.UserModels;
+using System.Security.Claims;
 
 namespace SocialO.WebApi.Controllers
 {
@@ -16,11 +21,13 @@ namespace SocialO.WebApi.Controllers
 	{
 		private readonly IUserManager userManager;
 		private readonly IConfiguration configuration;
+		private readonly ILogger<LoginController> logger;
 		private readonly SqlDBContext context;
 
-		public LoginController(IConfiguration configuration)
+		public LoginController(IConfiguration configuration,ILogger<LoginController> logger)
 		{
 			this.configuration = configuration;
+			this.logger = logger;
 			userManager = new UserManager();
 			context = new SqlDBContext();
 		}
@@ -71,6 +78,25 @@ namespace SocialO.WebApi.Controllers
 				user.RefreshTokenEndDate = token.Expiration.AddHours(5);
 				token.User = user;
 				await userManager.UpdateAsync(user);
+				logger.LogCritical("Access Token:"+token.AccessToken);
+				logger.LogCritical("Refresh Token:" + token.RefreshToken);
+				logger.LogCritical("Email Token:" + token.User.Email);
+				List<Claim> claims = new List<Claim>{
+				new Claim(ClaimTypes.Email, user.Email),
+				new Claim(ClaimTypes.Name,user.Username),
+				new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
+				new Claim(ClaimTypes.Role,user.UserType),
+				};
+
+				var identity = new ClaimsIdentity(claims, JwtBearerDefaults.AuthenticationScheme);
+				var principle = new ClaimsPrincipal(identity);
+
+				await HttpContext.SignInAsync(principle, new AuthenticationProperties()
+				{
+					
+				});
+
+
 				return token;
 			}
 

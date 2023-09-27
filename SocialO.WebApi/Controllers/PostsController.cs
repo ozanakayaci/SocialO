@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SocialO.BL.Abstract;
 using SocialO.BL.Concrete;
@@ -10,6 +11,7 @@ namespace SocialO.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+	[Authorize]
     public class PostsController : ControllerBase
     {
 		private readonly IPostManager _postManager;
@@ -22,7 +24,7 @@ namespace SocialO.WebApi.Controllers
 		}
 
         // GET: api/Posts
-        [HttpGet]
+        [HttpGet("[action]")]
         public async Task<ActionResult<IEnumerable<Post>>> GetPosts()
         {
           if (_context.Posts == null)
