@@ -68,7 +68,7 @@ namespace SocialO.WebApi.Controllers
 				Token token = await tokenManager.CreateAccessToken(user);
 
 				user.RefreshToken = token.RefreshToken;
-				user.RefreshTokenEndDate = token.Expiration.AddMinutes(5);
+				user.RefreshTokenEndDate = token.Expiration.AddHours(5);
 				token.User = user;
 				await userManager.UpdateAsync(user);
 				return token;
@@ -78,8 +78,8 @@ namespace SocialO.WebApi.Controllers
 		}
 
 
-		[HttpGet("[action]")]
-		public async Task<Token> RefreshTokenLogin( string refreshToken)
+		[HttpPost("[action]")]
+		public async Task<Token> RefreshTokenLogin([FromForm] string refreshToken)
 		{
 			User user = await context.Users.FirstOrDefaultAsync(x => x.RefreshToken == refreshToken);
 			if (user != null && user?.RefreshTokenEndDate > DateTime.Now)
