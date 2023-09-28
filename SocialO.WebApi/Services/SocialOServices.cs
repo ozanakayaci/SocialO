@@ -2,10 +2,11 @@ using SocialO.BL.Abstract;
 using SocialO.BL.Concrete;
 using SocialO.DAL.Repository.Abstract;
 using SocialO.DAL.Repository.Concrete;
+using SocialO.WebApi.Services.Interfaces;
 
-namespace SocialO.WebApi.Extensions
+namespace SocialO.WebApi.Services
 {
-	public static class SocialOServices
+    public static class SocialOServices
 	{
 		public static IServiceCollection AddSocialOServices(this IServiceCollection services)
 		{
@@ -28,6 +29,9 @@ namespace SocialO.WebApi.Extensions
 
 			services.AddScoped<IFollowerRelationshipRepository, FollowerRelationshipRepository>();
 			services.AddScoped<IFollowerRelationshipManager, FollowerRelationshipManager>();
+
+			services.AddTransient<IAuthService, AuthService>();
+			services.AddTransient<ITokenService, TokenService>();
 
 
 			return services;

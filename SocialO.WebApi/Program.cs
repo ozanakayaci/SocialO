@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SocialO.DAL.DBContexts;
-using SocialO.WebApi.Extensions;
-using System.Security.Claims;
+using SocialO.WebApi.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,36 +29,27 @@ builder.Services.AddDbContext<SqlDBContext>(options => options.UseSqlite("Data S
 
 builder.Services.AddSocialOServices();
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-{
-	options.RequireHttpsMetadata = false;
-	options.SaveToken = true;
-	options.TokenValidationParameters = new TokenValidationParameters()
-	{
-		ValidateAudience = true,
-		ValidateIssuer = true,
-		ValidateLifetime = true,
-		ValidateIssuerSigningKey = true,
-		ValidIssuer = builder.Configuration["Token:Issuer"],
-		ValidAudience = builder.Configuration["Token:Audience"],
-		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"])),
-		ClockSkew = TimeSpan.Zero
-	};
 
-	options.Events = new JwtBearerEvents
-	{
-		OnTokenValidated = context =>
-		{
-			var claimsIdentity = context.Principal.Identity as ClaimsIdentity;
-			if (claimsIdentity != null)
+builder.Services.AddAuthentication(options =>
 			{
-				// UserType claim'ini ekleyin
-				claimsIdentity.AddClaim(new Claim("UserType", "admin")); // UserType'ı dilediğiniz gibi ayarlayabilirsiniz
-			}
-			return Task.CompletedTask;
-		}
-	};
-});
+				options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+				options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+				options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+			}).AddJwtBearer(p =>
+			{
+				p.TokenValidationParameters = new TokenValidationParameters
+				{
+					ValidIssuer = builder.Configuration["Token:Issuer"],
+					ValidAudience = builder.Configuration["Token:Audience"],
+					IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"])),
+					ValidateIssuer = true,
+					ValidateAudience = true,
+					ValidateLifetime = true,
+					ValidateIssuerSigningKey = true
+				};
+			});
+
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace SocialO.WebApi.Extensions
+namespace SocialO.WebApi.Services
 {
 	public class PasswordHashHelper
 	{

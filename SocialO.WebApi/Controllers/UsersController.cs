@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SocialO.BL.Concrete;
 using SocialO.DAL.DBContexts;
 using SocialO.Entities.Concrete;
-using SocialO.WebApi.Extensions;
-using SocialO.WebApi.Models.UserModels;
+using SocialO.WebApi.Models.UserModels.Register;
+using SocialO.WebApi.Services;
 
 namespace SocialO.WebApi.Controllers
 {

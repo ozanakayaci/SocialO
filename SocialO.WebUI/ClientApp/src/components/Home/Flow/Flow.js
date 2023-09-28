@@ -1,14 +1,23 @@
 import axios from "axios";
+
+import { redirect } from "react-router-dom";
+
 import { useState, useEffect } from "react";
+
 import PostCard from "./PostCard";
+
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../../../redux/socialo/socialoSlice";
 
 function Flow() {
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [userId, setUserId] = useState(
-    JSON.parse(localStorage.getItem("user")).id
-  );
+  const [userId, setUserId] = useState(1);
+
+  const isAuthenticated = useSelector((state) => state.socialo.isAuthenticated);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (userId) {
@@ -17,13 +26,19 @@ function Flow() {
           `http://localhost:5211/api/Posts/${userId}?page=${page}&pageSize=${pageSize}&isOwnPost=false`,
           {
             headers: {
-              "Content-Type": "text/plain",
+              Authorization: localStorage.getItem("token"),
             },
           }
         )
         .then((response) => {
           setPosts(response.data);
           console.log(response.data);
+        })
+        .catch((error) => {
+          if (error.response.status === 401) {
+            dispatch(logout());
+            redirect("/");
+          }
         });
     }
   }, [userId, page, pageSize]);

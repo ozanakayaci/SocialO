@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import swal from "sweetalert2";
 
-import { Link } from "react-router-dom";
+import { Link, redirect } from "react-router-dom";
 
 //import Login.css
 import "./Login.css";
@@ -12,7 +12,11 @@ import { loginSuccess } from "../../redux/socialo/socialoSlice";
 
 async function loginUser(credentials) {
   return axios
-    .post("http://localhost:5211/api/Login/SignIn", credentials)
+    .post("http://localhost:5211/api/Login/SignIn", credentials, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
     .then((response) => {
       return response.data;
     });
@@ -26,11 +30,13 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await loginUser({
-      loginString,
-      password,
-    });
-    if (response["accessToken"]) {
+    const response = await loginUser(
+      JSON.stringify({
+        username: loginString,
+        password: password,
+      })
+    );
+    if (response["authToken"]) {
       swal
         .fire("Success", response.message, "success", {
           buttons: false,
@@ -38,6 +44,7 @@ function Login() {
         })
         .then((v) => {
           dispatch(loginSuccess(response));
+          redirect("/home");
         });
     } else {
       swal.fire("Failed", response.message, "error");

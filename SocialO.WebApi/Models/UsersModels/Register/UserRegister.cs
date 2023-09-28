@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace SocialO.WebApi.Models.UserModels
+namespace SocialO.WebApi.Models.UserModels.Register
 {
     public class UserRegister
     {
