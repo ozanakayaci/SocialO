@@ -6,6 +6,7 @@ using SocialO.WebApi.Models;
 using SocialO.Entities.Concrete;
 using SocialO.WebApi.Services.Interfaces;
 using System.Security.Cryptography;
+using SocialO.WebApi.Models.UserModels.Login;
 
 namespace SocialO.WebApi.Services
 {
