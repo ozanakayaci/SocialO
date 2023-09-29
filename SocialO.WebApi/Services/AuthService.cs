@@ -1,10 +1,8 @@
-﻿using NuGet.Common;
-using SocialO.BL.Abstract;
+﻿using SocialO.BL.Abstract;
 using SocialO.BL.Concrete;
 using SocialO.Entities.Concrete;
-using SocialO.WebApi.Extensions;
-using SocialO.WebApi.Models;
 using SocialO.WebApi.Services.Interfaces;
+using SocialO.WebApi.Models.UserModels.Login;
 
 namespace SocialO.WebApi.Services;
 
