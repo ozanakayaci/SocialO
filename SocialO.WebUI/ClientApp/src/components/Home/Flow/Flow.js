@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import PostCard from "./PostCard";
 
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../../../redux/socialo/socialoSlice";
+import { logout, loginSuccess } from "../../../redux/socialo/socialoSlice";
 
 function Flow() {
   const [posts, setPosts] = useState([]);
@@ -36,8 +36,20 @@ function Flow() {
         })
         .catch((error) => {
           if (error.response.status === 401) {
-            dispatch(logout());
-            redirect("/");
+            let data = new FormData();
+            data.append("refreshToken", sessionStorage.getItem("refreshToken"));
+            axios
+              .post(
+                `http://localhost:5211/api/Login/RefreshTokenLogin`,
+                sessionStorage.getItem("refreshToken")
+              )
+              .then((response) => {
+                dispatch(loginSuccess(response.data));
+              })
+              .catch((error) => {
+                dispatch(logout());
+                redirect("/");
+              });
           }
         });
     }

@@ -8,6 +8,7 @@ import Login from "../Login/Login";
 
 import "./Home.css";
 import Flow from "./Flow/Flow";
+import Navbar from "../Navbar/Navbar";
 
 function Home() {
   const location = useLocation();

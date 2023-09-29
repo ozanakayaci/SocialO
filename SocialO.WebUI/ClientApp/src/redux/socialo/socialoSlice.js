@@ -13,6 +13,7 @@ export const socialoSlice = createSlice({
       state.isAuthenticated = action.payload.authenticateResult;
       state.token = action.payload.authToken; // JWT token'ını saklayın
       localStorage.setItem("token", `Bearer ${action.payload.authToken}`);
+      sessionStorage.setItem("refreshToken", action.payload.refreshToken);
     },
     logout: (state) => {
       state.isAuthenticated = false;

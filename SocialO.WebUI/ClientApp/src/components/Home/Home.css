@@ -5,18 +5,17 @@
 .flow-main {
   max-width: 600px;
   width: 100%;
+  border-left-width: 2px;
+  border-right-width: 2px;
+  border-left-style: solid;
+  border-right-style: solid;
+  border-color: #0099ff44;
 }
 .flow {
   display: flex;
   flex-direction: column;
   margin: 10px;
   padding: 10px;
-  border-left-width: 2px;
-  border-right-width: 2px;
-  border-left-style: solid;
-  border-right-style: solid;
-  border-color: #0099ff44;
-
   background-color: #fff;
 }
 .card-c {
@@ -32,6 +31,8 @@
   box-shadow: 0 0 11px #0099ff44;
 }
 .c-header {
+  display: flex;
+  align-items: center;
   margin-bottom: 10px;
 }
 .c-body {
@@ -49,7 +50,7 @@
 }
 .c-footer {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   max-width: 500px;
 }
 .c-footer a,
@@ -60,12 +61,16 @@
 .c-name {
   font-size: 20px;
   font-weight: bold;
+  margin-right: 2px;
 }
 .c-header span {
   padding: 1px;
 }
 .c-name:hover {
   text-decoration: underline;
+}
+.comment {
+  margin-right: 10px;
 }
 .comment:hover a {
   color: rgb(46, 146, 146);
