@@ -1,25 +1,59 @@
-/* Navbar.css */
-
 .navbar {
   display: flex;
-  flex-direction: column; /* Navbar'ı dikey hizaya getir */
-  background-color: #333; /* Navbar arka plan rengi */
-  color: white; /* Yazı rengi */
-  width: 200px; /* Navbar genişliği */
-  padding: 20px; /* İçerik etrafındaki boşluk */
+  justify-content: center;
+  position: sticky;
+  background: linear-gradient(
+    120deg,
+    rgba(43, 46, 74, 1) 0%,
+    #5cd2e6 45%,
+    #3085c3 75%,
+    rgb(53, 65, 83) 100%
+  );
+  top: 0px;
+  z-index: 2;
+  font-size: 12px;
+  width: 100%;
+  line-height: 65px;
+  letter-spacing: 1px;
+  font-family: "Source Sans Pro", sans-serif;
+  font-weight: 600;
 }
-
+.navbar-comp {
+  display: flex;
+  justify-content: space-between;
+  width: 660px;
+  align-items: center;
+}
+.category-buttons {
+  line-height: 65px;
+  display: flex;
+  width: 300px;
+}
+.navbar-button {
+  font-size: 1.5em;
+  font: "Source Sans Pro", sans-serif;
+  text-decoration: none;
+  color: white;
+}
+.category-buttons .navbar-button {
+  padding-left: 10px;
+  padding-right: 10px;
+}
 .logo {
-  text-align: center; /* Logo'yu ortala */
-  margin-bottom: 20px; /* Logo ile diğer linkler arasındaki boşluk */
+  letter-spacing: -2.2px;
+  font: "Kanit", sans-serif;
+  font-size: 3em;
+  font-style: italic;
+  width: 200px;
 }
-
-.nav-link {
-  text-decoration: none; /* Link altı çizgiyi kaldır */
-  color: white; /* Link rengi */
-  margin-bottom: 10px; /* Linkler arasındaki boşluk */
+.logo > span {
+  color: #f4e869;
 }
-
-.nav-link:hover {
-  text-decoration: underline; /* Hover durumunda link altı çizgi */
+.navbar-button:hover:not(.logo) {
+  color: #5cd2e6;
+  background-color: #fff9b9;
+  border-radius: 10px;
+}
+.logo:hover {
+  color: #f4e869;
 }
