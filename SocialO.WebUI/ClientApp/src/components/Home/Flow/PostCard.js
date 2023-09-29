@@ -45,7 +45,7 @@ function PostCard({ post }) {
         </span>
       </div>
       <div className="c-body">
-        <p>{post.content}</p>
+        <pre>{post.content}</pre>
       </div>
       <div className="c-footer">
         <div>

@@ -40,6 +40,13 @@
   align-items: center;
   margin-bottom: 10px;
 }
+.c-body pre {
+  font-weight: 400;
+  font-size: 15px;
+  white-space: break-spaces;
+  font-family: "TwitterChirp", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
+}
 .c-footer {
   display: flex;
   justify-content: space-between;
