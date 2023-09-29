@@ -20,38 +20,38 @@ namespace SocialO.WebApi.Controllers
         {
             _context = context;
 
-			_userManager = new UserManager();
-		}
+            _userManager = new UserManager();
+        }
 
         // GET: api/Users
         [HttpGet]
         [Authorize]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-          if (_context.Users == null)
-          {
-              return NotFound();
-          }
-          return await _context.Users.ToListAsync();
+            if (_context.Users == null)
+            {
+                return NotFound();
+            }
+            return await _context.Users.ToListAsync();
         }
 
         // GET: api/Users/5
         [HttpGet("{id}")]
-		[Authorize]
-		public async Task<ActionResult<User>> GetUser(int id)
+        [Authorize]
+        public async Task<ActionResult<User>> GetUser(int id)
         {
-          if (_context.Users == null)
-          {
-              return NotFound();
-          }
-          var user = await _context.Users.FindAsync(id);
+            if (_context.Users == null)
+            {
+                return NotFound();
+            }
+            var user = await _context.Users.FindAsync(id);
 
-          if (user == null)
-          {
-	          return NotFound();
-          }
+            if (user == null)
+            {
+                return NotFound();
+            }
 
-          return user;
+            return user;
         }
 
         // PUT: api/Users/5
@@ -90,14 +90,14 @@ namespace SocialO.WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
-          if (_context.Users == null)
-          {
-              return Problem("Entity set 'SqlDBContext.Users'  is null.");
-          }
-          _context.Users.Add(user);
-          await _context.SaveChangesAsync();
+            if (_context.Users == null)
+            {
+                return Problem("Entity set 'SqlDBContext.Users'  is null.");
+            }
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
 
-          return CreatedAtAction("GetUser", new { id = user.Id }, user);
+            return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
 
         // DELETE: api/Users/5
@@ -119,29 +119,29 @@ namespace SocialO.WebApi.Controllers
             return NoContent();
         }
 
-		[HttpPost("[action]")]
-		public async Task<bool> CreateUser([FromForm] UserRegister userRegister)
-		{
+        [HttpPost("[action]")]
+        public async Task<bool> CreateUser([FromForm] UserRegister userRegister)
+        {
+            PasswordHashHelper.CreatePasswordHash(
+                userRegister.Password,
+                out var passwordHash,
+                out var passwordSalt
+            );
 
-			PasswordHashHelper.CreatePasswordHash(userRegister.Password, out var passwordHash, out var passwordSalt);
+            User user = new User
+            {
+                Username = userRegister.Username.ToLower(),
+                Email = userRegister.Email.ToLower(),
+                PasswordSalt = passwordSalt,
+                PasswordHash = passwordHash,
+            };
 
-			User user = new User
-			{
-				Username = userRegister.Username.ToLower(),
-				Email = userRegister.Email.ToLower(),
-				PasswordSalt = passwordSalt,
-				PasswordHash = passwordHash,
+            int result = await _userManager.InsertAsync(user);
 
-			};
+            return result > 0 ? true : false;
+        }
 
-			int result = await _userManager.InsertAsync(user);
-
-			return result > 0 ? true : false;
-
-		}
-
-
-		private bool UserExists(int id)
+        private bool UserExists(int id)
         {
             return (_context.Users?.Any(e => e.Id == id)).GetValueOrDefault();
         }
