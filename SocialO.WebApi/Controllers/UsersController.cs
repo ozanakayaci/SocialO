@@ -5,6 +5,7 @@ using SocialO.BL.Concrete;
 using SocialO.DAL.DBContexts;
 using SocialO.Entities.Concrete;
 using SocialO.WebApi.Models.UserModels.Register;
+using SocialO.WebApi.Models.UsersModels.Profile;
 using SocialO.WebApi.Services;
 
 namespace SocialO.WebApi.Controllers
@@ -25,7 +26,7 @@ namespace SocialO.WebApi.Controllers
 
         // GET: api/Users
         [HttpGet]
-        [Authorize]
+        
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
             if (_context.Users == null)
@@ -36,22 +37,41 @@ namespace SocialO.WebApi.Controllers
         }
 
         // GET: api/Users/5
-        [HttpGet("{id}")]
-        [Authorize]
-        public async Task<ActionResult<User>> GetUser(int id)
+        [HttpGet("{username}")]
+        
+        public async Task<ActionResult<UserProfileDto>> GetUser(string username)
         {
-            if (_context.Users == null)
-            {
-                return NotFound();
-            }
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users.Where(u=> u.Username == username)
+				.Include(u => u.UserProfile)
+				.Include(u => u.Posts)
+				.Include(u => u.Followers)
+				.Include(u => u.Following)
+				.Include(u => u.PostFavorites)
+				.FirstOrDefaultAsync();
 
             if (user == null)
             {
-                return NotFound();
-            }
+				return NotFound();
+			}
+            var dto = new UserProfileDto {
+                Id = user.Id,
+                Username = username,
+                FirstName = user.UserProfile.FirstName,
+                LastName = user.UserProfile.LastName,
+                Gender = (char)user.UserProfile.Gender,
+                About = user.UserProfile.About,
+                DateOfBirth = user.UserProfile.DateOfBirth,
+                DateRegistered = user.DataRegistered,
+                PostCount = user.Posts.Count,
+                FollowerCount = user.Followers.Count,
+                FollowingCount = user.Following.Count,
+                FavoriteCount = user.PostFavorites.Count
 
-            return user;
+
+            };
+
+
+            return dto;
         }
 
         // PUT: api/Users/5

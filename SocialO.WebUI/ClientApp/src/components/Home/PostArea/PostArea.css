@@ -1,0 +1,21 @@
+.post-submit {
+  background-color: #5cd2e6;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin: 5px 0;
+  cursor: pointer;
+  font-size: 1.2em;
+  font-weight: bold;
+  float: right;
+}
+input {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: vertical;
+}

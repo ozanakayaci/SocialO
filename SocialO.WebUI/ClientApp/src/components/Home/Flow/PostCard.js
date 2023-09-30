@@ -9,10 +9,13 @@ function PostCard({ post }) {
     <Link to={`/post/${post.authorUsername}/${post.postId}`} className="card-c">
       <div className="c-header">
         <span className="c-name">
-          <Link to={`/${post.authorUsername}`}>{post.authorName} </Link>
+          <Link to={`/profile/${post.authorUsername}`}>{post.authorName} </Link>
         </span>
         <span>
-          <Link to={`/${post.authorUsername}`}> @{post.authorUsername}</Link>
+          <Link to={`/profile/${post.authorUsername}`}>
+            {" "}
+            @{post.authorUsername}
+          </Link>
         </span>
       </div>
       <div className="c-body">

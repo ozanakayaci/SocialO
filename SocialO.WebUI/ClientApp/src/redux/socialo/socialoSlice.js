@@ -5,11 +5,10 @@ export const socialoSlice = createSlice({
   initialState: {
     isAuthenticated: localStorage.getItem("token") ? true : false,
     user: null,
-    token: null,
+    token: localStorage.getItem("token") ? true : null,
   },
   reducers: {
     loginSuccess: (state, action) => {
-      console.log(action.payload);
       state.isAuthenticated = action.payload.authenticateResult;
       state.token = action.payload.authToken; // JWT token'ını saklayın
       localStorage.setItem("token", `Bearer ${action.payload.authToken}`);

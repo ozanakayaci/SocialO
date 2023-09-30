@@ -11,7 +11,7 @@ namespace SocialO.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    
     public class PostsController : ControllerBase
     {
         private readonly IPostManager _postManager;
@@ -34,9 +34,27 @@ namespace SocialO.WebApi.Controllers
             return await _context.Posts.ToListAsync();
         }
 
+        // GET: api/Posts/5
+        [HttpGet("[action]/{postId}")]
+        public async Task<ActionResult<Post>> GetPost(int postId)
+        {
+			if (_context.Posts == null)
+            {
+				return NotFound();
+			}
+			var post = await _context.Posts.FindAsync(postId);
+
+			if (post == null)
+            {
+				return NotFound();
+			}
+
+			return post;
+		}
+
+
         //takip edilen kullanıcıların attığı postları getiriyor
-        [HttpGet("{followerId}")]
-        [Authorize]
+        [HttpGet("{followerId}")]        
 		public async Task<ActionResult<IEnumerable<GetPostDto>>> GetPostsByFollower(
             int followerId,
             int page = 1,
@@ -77,7 +95,7 @@ namespace SocialO.WebApi.Controllers
                     return Ok(ownPosts);
                 }
                 var posts = await _context.Posts
-                    .Where(p => p.User.Following.Any(f => f.FollowerId == followerId))
+                    .Where(p => p.User.Following.Any(f => f.FollowerId == followerId ))
                     .OrderByDescending(p => p.DatePosted)
                     .Skip((page - 1) * pageSize)
                     .Take(pageSize)
@@ -147,6 +165,10 @@ namespace SocialO.WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult<bool>> PostPost(PostPostDto postDto)
         {
+            if(postDto.Content == null || postDto.Content == "")
+            {
+				return BadRequest();
+			}
             Post post = new Post { Content = postDto.Content, AuthorId = postDto.AuthorId, };
 
             int result = await _postManager.InsertAsync(post);

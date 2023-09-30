@@ -7,7 +7,7 @@ import { Link, redirect } from "react-router-dom";
 //import Login.css
 import "./Login.css";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../../redux/socialo/socialoSlice";
 
 async function loginUser(credentials) {
@@ -25,8 +25,16 @@ async function loginUser(credentials) {
 function Login() {
   const dispatch = useDispatch();
 
+  const isAuthenticated = useSelector((state) => state.socialo.isAuthenticated);
+
   const [loginString, setLoginString] = useState();
   const [password, setPassword] = useState();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      redirect("/");
+    }
+  }, [isAuthenticated]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

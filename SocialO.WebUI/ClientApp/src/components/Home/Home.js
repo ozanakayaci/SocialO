@@ -9,6 +9,7 @@ import Login from "../Login/Login";
 import "./Home.css";
 import Flow from "./Flow/Flow";
 import Navbar from "../Navbar/Navbar";
+import PostArea from "./PostArea/PostArea";
 
 function Home() {
   const location = useLocation();
@@ -22,6 +23,9 @@ function Home() {
         <Login></Login>
       ) : (
         <div className="home-main">
+          <div>
+            <PostArea />
+          </div>
           <div className="flow-main">
             <Flow />
           </div>

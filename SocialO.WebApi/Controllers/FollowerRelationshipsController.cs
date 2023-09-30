@@ -33,7 +33,7 @@ namespace SocialO.WebApi.Controllers
 
         // GET: api/FollowerRelationships/5
         [HttpGet("{userId}")]
-        public async Task<ICollection<FollowerRelationship>> GetFollowers(int userId)
+        public async Task<ActionResult<ICollection<FollowerRelationship>>> GetFollowers(int userId)
         {
             if (_context.FollowerRelationships == null)
             {
