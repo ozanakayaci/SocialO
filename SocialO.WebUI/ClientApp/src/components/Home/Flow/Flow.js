@@ -13,9 +13,8 @@ function Flow() {
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [userId, setUserId] = useState(5);
 
-  const isAuthenticated = useSelector((state) => state.socialo.isAuthenticated);
+  const userId = useSelector((state) => state.socialo.userId);
 
   const dispatch = useDispatch();
 

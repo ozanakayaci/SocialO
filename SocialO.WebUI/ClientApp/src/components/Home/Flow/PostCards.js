@@ -1,10 +1,6 @@
-import { useEffect, useState } from "react";
-
 import { Link } from "react-router-dom";
 
 function PostCards({ post }) {
-  const [timeElapsed, setTimeElapsed] = useState("");
-
   return (
     <Link to={`/post/${post.postId}`} className="card-c">
       <div className="c-header">
