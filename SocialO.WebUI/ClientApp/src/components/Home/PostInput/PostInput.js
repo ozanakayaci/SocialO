@@ -2,13 +2,13 @@ import React from "react";
 import axios from "axios";
 import swal from "sweetalert2";
 
-import "./PostArea.css";
+import "./PostInput.css";
 
 import { useState } from "react";
 
 async function sendPost(credentials) {
   return axios
-    .post("https://localhost:7298/api/Posts", credentials, {
+    .post("http://localhost:5211/api/Posts", credentials, {
       headers: {
         "Content-Type": "application/json",
         Authorization: localStorage.getItem("token"),
@@ -22,7 +22,7 @@ async function sendPost(credentials) {
     });
 }
 
-function PostArea() {
+function PostInput() {
   const [postText, setPostText] = useState("");
 
   const handleSubmit = async (e) => {
@@ -56,4 +56,4 @@ function PostArea() {
   );
 }
 
-export default PostArea;
+export default PostInput;

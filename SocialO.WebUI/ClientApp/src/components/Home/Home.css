@@ -52,7 +52,6 @@
 .c-footer {
   display: flex;
   justify-content: flex-end;
-  max-width: 500px;
 }
 .c-footer a,
 .c-header a {

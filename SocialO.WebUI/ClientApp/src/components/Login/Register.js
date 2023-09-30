@@ -12,7 +12,10 @@ async function registerUser(credentials) {
       headers: { "Content-Type": "multipart/form-data" },
     })
     .then((response) => {
-      return response.data;
+      return response;
+    })
+    .catch((error) => {
+      swal.fire("Failed", error.message, "error");
     });
 }
 
@@ -31,7 +34,6 @@ function Register() {
         Password,
         Repassword,
       });
-
       if (response.status === 200) {
         // Başarılı kayıt
         swal.fire("Success", response.data.message, "success");

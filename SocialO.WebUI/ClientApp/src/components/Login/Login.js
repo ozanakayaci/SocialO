@@ -32,7 +32,7 @@ function Login() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      redirect("/");
+      window.location.href = "/home";
     }
   }, [isAuthenticated]);
 
@@ -52,7 +52,7 @@ function Login() {
         })
         .then((v) => {
           dispatch(loginSuccess(response));
-          redirect("/home");
+          window.location.href = "/home";
         });
     } else {
       swal.fire("Failed", response.message, "error");
@@ -85,12 +85,7 @@ function Login() {
               type="password"
               onChange={(e) => setPassword(e.target.value)}
             />
-            <button
-              className="login-button"
-              type="submit"
-              variant="contained"
-              color="primary"
-            >
+            <button className="login-button" type="submit">
               Sign In
             </button>
             <Link className="login-button" to="/register">

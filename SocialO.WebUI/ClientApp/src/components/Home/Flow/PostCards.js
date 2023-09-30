@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";
 
-function PostCard({ post }) {
+function PostCards({ post }) {
   const [timeElapsed, setTimeElapsed] = useState("");
 
   return (
@@ -37,4 +37,4 @@ function PostCard({ post }) {
   );
 }
 
-export default PostCard;
+export default PostCards;

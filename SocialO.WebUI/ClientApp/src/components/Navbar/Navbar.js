@@ -10,10 +10,11 @@ import "./Navbar.css";
 import Search from "./Search/Search";
 
 //react router
-import { Link, redirect } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Navbar() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const isAuthenticated = useSelector((state) => state.socialo.isAuthenticated);
 
@@ -22,7 +23,7 @@ function Navbar() {
     localStorage.removeItem("user");
     dispatch(logout());
 
-    redirect("/");
+    navigate("/login");
   };
 
   return (

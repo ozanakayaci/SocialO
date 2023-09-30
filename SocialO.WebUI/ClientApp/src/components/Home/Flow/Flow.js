@@ -4,7 +4,7 @@ import { redirect } from "react-router-dom";
 
 import { useState, useEffect } from "react";
 
-import PostCard from "./PostCard";
+import PostCards from "./PostCards";
 
 import { useSelector, useDispatch } from "react-redux";
 import { logout, loginSuccess } from "../../../redux/socialo/socialoSlice";
@@ -57,7 +57,7 @@ function Flow() {
   return (
     <div className="flow">
       {posts.map((post) => (
-        <PostCard key={post.postId} post={post} />
+        <PostCards key={post.postId} post={post} />
       ))}
     </div>
   );

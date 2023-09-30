@@ -11,7 +11,7 @@ namespace SocialO.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    
+    [Authorize]
     public class PostsController : ControllerBase
     {
         private readonly IPostManager _postManager;
@@ -36,26 +36,43 @@ namespace SocialO.WebApi.Controllers
 
         // GET: api/Posts/5
         [HttpGet("[action]/{postId}")]
-        public async Task<ActionResult<Post>> GetPost(int postId)
+        public async Task<ActionResult<GetPostDto>> GetPost(int postId)
         {
-			if (_context.Posts == null)
+            if (_context.Posts == null)
             {
-				return NotFound();
-			}
-			var post = await _context.Posts.FindAsync(postId);
+                return NotFound();
+            }
 
-			if (post == null)
+            //post id si postId olan postu getiriyoruz GetPostDto ya map ediyoruz
+            var post = await _context.Posts
+                .Where(p => p.Id == postId)
+                .Select(
+                    p =>
+                        new GetPostDto
+                        {
+                            AuthorName = p.User.UserProfile.FirstName,
+                            AuthorUsername = p.User.Username,
+                            PostId = p.Id,
+                            Content = p.Content,
+                            DatePosted = p.DatePosted,
+                            AuthorId = p.AuthorId,
+                            CommentCount = p.PostComments.Count,
+                            FavoriteCount = p.PostFavorites.Count
+                        }
+                )
+                .FirstOrDefaultAsync();
+
+            if (post == null)
             {
-				return NotFound();
-			}
+                return NotFound();
+            }
 
-			return post;
-		}
-
+            return post;
+        }
 
         //takip edilen kullanıcıların attığı postları getiriyor
-        [HttpGet("{followerId}")]        
-		public async Task<ActionResult<IEnumerable<GetPostDto>>> GetPostsByFollower(
+        [HttpGet("{followerId}")]
+        public async Task<ActionResult<IEnumerable<GetPostDto>>> GetPostsByFollower(
             int followerId,
             int page = 1,
             int pageSize = 10,
@@ -95,7 +112,7 @@ namespace SocialO.WebApi.Controllers
                     return Ok(ownPosts);
                 }
                 var posts = await _context.Posts
-                    .Where(p => p.User.Following.Any(f => f.FollowerId == followerId ))
+                    .Where(p => p.User.Following.Any(f => f.FollowerId == followerId))
                     .OrderByDescending(p => p.DatePosted)
                     .Skip((page - 1) * pageSize)
                     .Take(pageSize)
@@ -163,12 +180,12 @@ namespace SocialO.WebApi.Controllers
         // POST: api/Posts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<bool>> PostPost(PostPostDto postDto)
+        public async Task<ActionResult<bool>> PostPost( PostPostDto postDto)
         {
-            if(postDto.Content == null || postDto.Content == "")
+            if (postDto.Content == null || postDto.Content == "")
             {
-				return BadRequest();
-			}
+                return BadRequest();
+            }
             Post post = new Post { Content = postDto.Content, AuthorId = postDto.AuthorId, };
 
             int result = await _postManager.InsertAsync(post);
