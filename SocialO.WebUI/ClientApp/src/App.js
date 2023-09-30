@@ -20,25 +20,33 @@ function App() {
   const isAuthenticated = useSelector((state) => state.socialo.isAuthenticated);
   const location = useLocation();
 
-  let { userId, username } = useParams();
-
-  const [post, setPost] = useState();
+  const [post, setPost] = useState({
+    postId: null,
+    authorUsername: null,
+    authorName: null,
+    content: null,
+    commentCount: null,
+    favoriteCount: null,
+  });
 
   useEffect(() => {
-    if (location.pathname == "/profile/:username/:userId") {
+    console.log(location.pathname);
+    console.log(`/post/${PostId}}`);
+    if (location.pathname == `/post/${PostId}}`) {
+      console.log("axios");
       axios
-        .get(
-          `https://localhost:7298/api/Posts/${location.pathname.split("/")[3]}`
-        )
+        .get(`https://localhost:7298/api/Posts/GetPost/${PostId}}`)
         .then((response) => {
+          console.log(response.data);
           setPost(response.data);
         })
         .catch((error) => {
-          console.log(error);
+          console.log("error");
         });
     }
   }, [location.pathname]);
 
+  let { PostId } = useParams();
   return (
     <div className="App">
       {isAuthenticated && !(location.pathname == "/login") && <Navbar />}
@@ -50,12 +58,10 @@ function App() {
           <Route path="/profile" />
           <Route path="/login" element={<Login />} />
           <Route path="/profile" element={<Profile />}>
-            <Route path="/profile/:username" element={<Profile />}>
-              <Route
-                path="/profile/:username/:userId"
-                element={<PostCard post={post} />}
-              />
-            </Route>
+            <Route path="/profile/:username" element={<Profile />} />
+          </Route>
+          <Route path="/post">
+            <Route path=":PostId" element={<PostCard post={post} />} />
           </Route>
         </Routes>
       </div>

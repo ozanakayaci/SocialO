@@ -6,7 +6,7 @@ function PostCard({ post }) {
   const [timeElapsed, setTimeElapsed] = useState("");
 
   return (
-    <Link to={`/post/${post.authorUsername}/${post.postId}`} className="card-c">
+    <Link to={`/post/${post.postId}`} className="card-c">
       <div className="c-header">
         <span className="c-name">
           <Link to={`/profile/${post.authorUsername}`}>{post.authorName} </Link>
