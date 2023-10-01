@@ -22,14 +22,16 @@ namespace SocialO.WebApi.Controllers
     public class LoginController : ControllerBase
     {
         private readonly IUserManager userManager;
-        private readonly IConfiguration configuration;
+        private readonly IFollowerRelationshipManager followerRelationshipManager;
         private readonly SqlDBContext context;
+        private readonly IConfiguration configuration;
 
         public LoginController(IConfiguration configuration)
         {
-            this.configuration = configuration;
             userManager = new UserManager();
+            followerRelationshipManager = new FollowerRelationshipManager();
             context = new SqlDBContext();
+            this.configuration = configuration;
         }
 
         //Kullanıcı kayıt
@@ -41,7 +43,7 @@ namespace SocialO.WebApi.Controllers
                 out var passwordHash,
                 out var passwordSalt
             );
-
+            
             User user = new User
             {
                 Username = userRegister.Username.ToLower(),
@@ -50,9 +52,20 @@ namespace SocialO.WebApi.Controllers
                 PasswordHash = passwordHash,
             };
 
-            int result = await userManager.InsertAsync(user);
+            int result1 = await userManager.InsertAsync(user);
 
-            return result > 0 ? true : false;
+            FollowerRelationship relationship = new FollowerRelationship
+            {
+	            FollowerId = user.Id,
+	            UserId = user.Id
+            };
+
+            int result2 = await followerRelationshipManager.InsertAsync(relationship);
+
+
+
+
+            return result1   > 0 ? true : false;
         }
 
         //Kullanıcı giriş
