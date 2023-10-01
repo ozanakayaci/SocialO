@@ -1,12 +1,14 @@
-import React from "react";
-import axios from "axios";
-import swal from "sweetalert2";
-
-import "./PostInput.css";
-
 import { useState } from "react";
 
+import axios from "axios";
+
+import swal from "sweetalert2";
+
 import { useSelector } from "react-redux";
+
+import { useNavigate } from "react-router-dom";
+
+import "./PostInput.css";
 
 async function sendPost(credentials) {
   return axios
@@ -25,6 +27,8 @@ async function sendPost(credentials) {
 }
 
 function PostInput() {
+  const navigate = useNavigate();
+
   const [postText, setPostText] = useState("");
 
   const userId = useSelector((state) => state.socialo.userId);
@@ -49,6 +53,7 @@ function PostInput() {
           );
           if (response) {
             swal.fire("Success", "Post sent successfully", "success");
+            navigate("/");
           }
           setPostText("");
         }
@@ -57,10 +62,18 @@ function PostInput() {
 
   return (
     <div>
-      <div className="form-field" onSubmit={handleSubmit}>
-        <input required></input>
-        <label>Post </label>
-      </div>
+      <form onSubmit={handleSubmit}>
+        <input
+          rows="3"
+          minLength="1"
+          maxLength="200"
+          onChange={(e) => setPostText(e.target.value)}
+          value={postText}
+        ></input>
+        <button className="post-submit" type="submit">
+          Post
+        </button>
+      </form>
     </div>
   );
 }

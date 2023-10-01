@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams, redirect } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import axios from "axios";
@@ -7,6 +7,8 @@ import axios from "axios";
 import { loginSuccess, logout } from "../../../redux/socialo/socialoSlice";
 
 function Post() {
+  const navigate = useNavigate();
+
   const [post, setPost] = useState({});
   const { PostId } = useParams();
 
@@ -36,7 +38,7 @@ function Post() {
             })
             .catch((error) => {
               dispatch(logout());
-              redirect("/");
+              navigate("/");
             });
         }
       });
