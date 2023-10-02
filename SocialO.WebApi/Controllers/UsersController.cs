@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SocialO.BL.Concrete;
+using SocialO.BL.Models.UserModels;
 using SocialO.DAL.DBContexts;
 using SocialO.Entities.Concrete;
 using SocialO.WebApi.Models.UserModels.Register;
-using SocialO.WebApi.Models.UsersModels.Profile;
 using SocialO.WebApi.Services;
 
 namespace SocialO.WebApi.Controllers
@@ -39,39 +38,11 @@ namespace SocialO.WebApi.Controllers
         // GET: api/Users/5
         [HttpGet("{username}")]
         
-        public async Task<ActionResult<UserProfileDto>> GetUser(string username)
+        public async Task<ActionResult<UserProfileModel>> GetUser(string username)
         {
-            var user = await _context.Users.Where(u=> u.Username == username)
-				.Include(u => u.UserProfile)
-				.Include(u => u.Posts)
-				.Include(u => u.Followers)
-				.Include(u => u.Following)
-				.Include(u => u.PostFavorites)
-				.FirstOrDefaultAsync();
-
-            if (user == null)
-            {
-				return NotFound();
-			}
-            var dto = new UserProfileDto {
-                Id = user.Id,
-                Username = username,
-                FirstName = user.UserProfile.FirstName,
-                LastName = user.UserProfile.LastName,
-                Gender = (char)user.UserProfile.Gender,
-                About = user.UserProfile.About,
-                DateOfBirth = user.UserProfile.DateOfBirth,
-                DateRegistered = user.DataRegistered,
-                PostCount = user.Posts.Count,
-                FollowerCount = user.Followers.Count,
-                FollowingCount = user.Following.Count,
-                FavoriteCount = user.PostFavorites.Count
-
-
-            };
-
-
-            return dto;
+	        var model = await _userManager.GetUserByUsername(username);
+            
+            return model;
         }
 
         // PUT: api/Users/5

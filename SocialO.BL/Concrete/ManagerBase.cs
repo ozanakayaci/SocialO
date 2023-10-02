@@ -8,7 +8,7 @@ namespace SocialO.BL.Concrete
 {
     public class ManagerBase<T> : IManagerBase<T> where T : class
     {
-        private readonly IBaseRepository<T> repository;
+        public IBaseRepository<T> repository;
 
         public ManagerBase()
         {

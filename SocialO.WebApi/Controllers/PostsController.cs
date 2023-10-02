@@ -11,7 +11,6 @@ namespace SocialO.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class PostsController : ControllerBase
     {
         private readonly IPostManager _postManager;
@@ -25,13 +24,16 @@ namespace SocialO.WebApi.Controllers
 
         // GET: api/Posts
         [HttpGet("[action]")]
-        public async Task<ActionResult<IEnumerable<Post>>> GetPosts()
+        public async Task<ActionResult<ICollection<Post>>> GetPosts()
         {
-            if (_context.Posts == null)
+            if (_postManager.GetAllAsync() == null)
             {
                 return NotFound();
             }
-            return await _context.Posts.ToListAsync();
+
+            var result = await _postManager.GetAllAsync();
+
+            return new ActionResult<ICollection<Post>>(result);
         }
 
         // GET: api/Posts/5
@@ -42,6 +44,20 @@ namespace SocialO.WebApi.Controllers
             {
                 return NotFound();
             }
+
+            var test = await _postManager.GetAllInclude(x => x.Id == postId);
+
+            GetPostDto postDto = new GetPostDto
+            {
+	            AuthorName = test.User.UserProfile.FirstName,
+	            AuthorUsername = test.User.Username,
+	            PostId = test.Id,
+	            Content = test.Content,
+	            DatePosted = test.DatePosted,
+	            AuthorId = test.AuthorId,
+	            CommentCount = test.PostComments.Count,
+	            FavoriteCount = test.PostFavorites.Count
+			};
 
             //post id si postId olan postu getiriyoruz GetPostDto ya map ediyoruz
             var post = await _context.Posts

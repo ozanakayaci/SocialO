@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using SocialO.DAL.DBContexts;
 using SocialO.Entities.Abstract;
 
 namespace SocialO.DAL.Repository.Abstract
 {
         public interface IBaseRepository<T> where T : class
         {
-
-                Task<int> InsertAsync(T entity);
+				public SqlDBContext dbContext { get; set; }
+				Task<int> InsertAsync(T entity);
                 Task<int> UpdateAsync(T entity);
                 Task<int> DeleteAsync(T entity);
 
