@@ -5,6 +5,7 @@ using SocialO.BL.Abstract;
 using SocialO.BL.Concrete;
 using SocialO.DAL.DBContexts;
 using SocialO.Entities.Concrete;
+using SocialO.BL.Models.PostModels;
 using SocialO.WebApi.Models.Posts;
 
 namespace SocialO.WebApi.Controllers
@@ -45,38 +46,9 @@ namespace SocialO.WebApi.Controllers
                 return NotFound();
             }
 
-            var test = await _postManager.GetAllInclude(x => x.Id == postId);
-
-            GetPostDto postDto = new GetPostDto
-            {
-	            AuthorName = test.User.UserProfile.FirstName,
-	            AuthorUsername = test.User.Username,
-	            PostId = test.Id,
-	            Content = test.Content,
-	            DatePosted = test.DatePosted,
-	            AuthorId = test.AuthorId,
-	            CommentCount = test.PostComments.Count,
-	            FavoriteCount = test.PostFavorites.Count
-			};
-
-            //post id si postId olan postu getiriyoruz GetPostDto ya map ediyoruz
-            var post = await _context.Posts
-                .Where(p => p.Id == postId)
-                .Select(
-                    p =>
-                        new GetPostDto
-                        {
-                            AuthorName = p.User.UserProfile.FirstName,
-                            AuthorUsername = p.User.Username,
-                            PostId = p.Id,
-                            Content = p.Content,
-                            DatePosted = p.DatePosted,
-                            AuthorId = p.AuthorId,
-                            CommentCount = p.PostComments.Count,
-                            FavoriteCount = p.PostFavorites.Count
-                        }
-                )
-                .FirstOrDefaultAsync();
+            var post = await _postManager.GetPostById(postId);
+          
+            
 
             if (post == null)
             {
@@ -97,58 +69,10 @@ namespace SocialO.WebApi.Controllers
         {
             try
             {
-                if (isOwnPost)
-                {
-                    var ownPosts = await _context.Posts
-                        .Where(p => p.User.Following.Any(f => f.UserId == followerId))
-                        .OrderByDescending(p => p.DatePosted)
-                        .Skip((page - 1) * pageSize)
-                        .Take(pageSize)
-                        .Select(
-                            p =>
-                                new GetPostDto
-                                {
-                                    AuthorName = p.User.UserProfile.FirstName,
-                                    AuthorUsername = p.User.Username,
-                                    PostId = p.Id,
-                                    Content = p.Content,
-                                    DatePosted = p.DatePosted,
-                                    AuthorId = p.AuthorId,
-                                    CommentCount = p.PostComments.Count,
-                                    FavoriteCount = p.PostFavorites.Count
-                                }
-                        )
-                        .ToListAsync();
+	            var posts = await _postManager.GetAllPostById(followerId, page, pageSize, isOwnPost);
 
-                    if (ownPosts == null || ownPosts.Count == 0)
-                    {
-                        return NotFound();
-                    }
-
-                    return Ok(ownPosts);
-                }
-                var posts = await _context.Posts
-                    .Where(p => p.User.Following.Any(f => f.FollowerId == followerId))
-                    .OrderByDescending(p => p.DatePosted)
-                    .Skip((page - 1) * pageSize)
-                    .Take(pageSize)
-                    .Select(
-                        p =>
-                            new GetPostDto
-                            {
-                                AuthorName = p.User.UserProfile.FirstName,
-                                AuthorUsername = p.User.Username,
-                                PostId = p.Id,
-                                Content = p.Content,
-                                DatePosted = p.DatePosted,
-                                AuthorId = p.AuthorId,
-                                CommentCount = p.PostComments.Count,
-                                FavoriteCount = p.PostFavorites.Count
-                            }
-                    )
-                    .ToListAsync();
-
-                if (posts == null || posts.Count == 0)
+                
+                if (posts == null || posts.Count() == 0)
                 {
                     return NotFound();
                 }

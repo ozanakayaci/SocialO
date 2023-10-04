@@ -1,4 +1,4 @@
-﻿namespace SocialO.WebApi.Models.Posts;
+﻿namespace SocialO.BL.Models.PostModels;
 
 public class GetPostDto
 {
