@@ -23,7 +23,7 @@ namespace SocialO.DAL.Repository.Concrete
 
         public virtual async Task<int> InsertAsync(T entity)
         {
-            // Set metodu dbContex icerisndeki gelen T tipi ne ise ona konumlanir.
+            
             await dbContext.Set<T>().AddAsync(entity);
             return await dbContext.SaveChangesAsync();
         }
