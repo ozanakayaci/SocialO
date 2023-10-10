@@ -7,7 +7,7 @@ function Navbar() {
       <header className="h-16 w-full flex flex-row  items-center justify-around relative  text-white">
         {/* Logo */}
         <div>
-          <Link to="/home">
+          <Link to="/">
             <img
               className="mx-auto h-10 w-auto  hover:scale-110 transition duration-300 ease-in-out"
               src="../../public/logo.png"
@@ -32,7 +32,7 @@ function Navbar() {
           {/* Profile */}
           <Link
             to="/profile"
-            className="h-10 w-10 flex items-center justify-center rounded-lg cursor-pointer text-b fill-blue-500 hover:fill-blacklue-500 text-g hover:text-gray-950 hover:bg-white  hover:duration-300 hover:ease-linear hover:scale-125 transition duration-300 ease-in-out focus:bg-white"
+            className="h-10 w-10 flex items-center justify-center rounded-lg cursor-pointer fill-blue-500 hover:fill-black text-blue-500 hover:text-gray-950 hover:bg-white  hover:duration-300 hover:ease-linear hover:scale-125 transition duration-300 ease-in-out focus:bg-white"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -58,8 +58,11 @@ function Navbar() {
           {/* Configuration */}
         </div>
         {/* Settings */}
-        <Link to="/settings" className="hidden md:flex">
-          <div className="h-10 w-10 flex items-center justify-center rounded-lg cursor-pointer fill-blue-500 hover:fill-black text-blue-500 hover:text-gray-950 hover:bg-white  hover:duration-300 hover:ease-linear hover:scale-125 transition duration-300 ease-in-out focus:bg-white">
+        <Link
+          to="/settings"
+          className="hidden md:flex w-24 flex justify-center"
+        >
+          <div className=" h-10 w- flex items-center justify-center rounded-lg cursor-pointer fill-blue-500 hover:fill-black text-blue-500 hover:text-gray-950 hover:bg-white  hover:duration-300 hover:ease-linear hover:scale-125 transition duration-300 ease-in-out focus:bg-white">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6 "
