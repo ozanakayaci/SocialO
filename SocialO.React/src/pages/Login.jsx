@@ -10,6 +10,9 @@ import axios from "axios";
 
 import { toast } from "react-toastify";
 
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../redux/socialo/socialoSlice";
+
 const loginValidation = yup.object({
   usename: yup
     .string()
@@ -42,6 +45,7 @@ async function loginUser(credentials) {
 }
 
 function Login() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogin = async (values) => {
@@ -52,10 +56,22 @@ function Login() {
       })
     );
     if (response["authToken"]) {
+      dispatch(loginSuccess(response));
+
+      toast("Login successful..", {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       navigate("/home");
     } else {
       toast.error(response.response.data.message, {
-        position: "top-left",
+        position: "bottom-center",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -123,8 +139,6 @@ function Login() {
                   />
                 </div>
               </div>
-
-              
 
               <div>
                 <Button

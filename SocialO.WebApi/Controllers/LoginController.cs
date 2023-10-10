@@ -85,7 +85,8 @@ namespace SocialO.WebApi.Controllers
 
             return result1   > 0 ? true : false;
         }
-
+        
+        //username, email var mı
         [HttpGet("[action]")]
         public async Task<ActionResult<bool>> Available(string input)
         {
