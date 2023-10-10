@@ -24,14 +24,14 @@ namespace SocialO.WebApi.Controllers
             _context = new SqlDBContext();
         }
 
-        // GET: api/FollowerRelationships
+        // GET: All followerRelationships
         [HttpGet]
         public async Task<ICollection<FollowerRelationship>> GetFollowerRelationships()
         {
             return await _followerManager.GetAllAsync();
         }
 
-        // GET: api/FollowerRelationships/5
+        // GET: user followers
         [HttpGet("{userId}")]
         public async Task<ActionResult<ICollection<FollowerRelationship>>> GetFollowers(int userId)
         {
@@ -52,15 +52,14 @@ namespace SocialO.WebApi.Controllers
             return followers;
         }
 
-        // POST: api/FollowerRelationships
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // POST: FollowUnfollow
         [HttpPost]
-        public async Task<bool> FollowUnfollow(int followerId, int userId)
+        public async Task<ActionResult> FollowUnfollow(int followerId, int userId)
         {
             var follower = _userManager.GetBy(p => p.Id == followerId).Result;
             var followed = _userManager.GetBy(p => p.Id == userId).Result;
 
-            if (follower != null && followed != null)
+            if ((follower != null && followed != null) && followed.Id != followed.Id)
             {
                 FollowerRelationship relation = await _followerManager.GetBy(
                     p => (p.FollowerId == followerId && p.UserId == userId)
@@ -70,7 +69,7 @@ namespace SocialO.WebApi.Controllers
                 {
                     _followerManager.DeleteAsync(relation);
 
-                    return true;
+                    return Ok();
                 }
 
                 FollowerRelationship followerRelationship = new FollowerRelationship
@@ -81,10 +80,10 @@ namespace SocialO.WebApi.Controllers
 
                 int result = await _followerManager.InsertAsync(followerRelationship);
 
-                return result > 0 ? true : false;
+                return result > 0 ? Ok() : NotFound();
             }
 
-            return false;
+            return NotFound();
         }
     }
 }

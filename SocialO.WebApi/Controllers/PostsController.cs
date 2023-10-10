@@ -47,8 +47,6 @@ namespace SocialO.WebApi.Controllers
             }
 
             var post = await _postManager.GetPostById(postId);
-          
-            
 
             if (post == null)
             {
@@ -69,9 +67,13 @@ namespace SocialO.WebApi.Controllers
         {
             try
             {
-	            var posts = await _postManager.GetAllPostById(followerId, page, pageSize, isOwnPost);
+                var posts = await _postManager.GetAllPostById(
+                    followerId,
+                    page,
+                    pageSize,
+                    isOwnPost
+                );
 
-                
                 if (posts == null || posts.Count() == 0)
                 {
                     return NotFound();
@@ -120,7 +122,7 @@ namespace SocialO.WebApi.Controllers
         // POST: api/Posts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<bool>> PostPost( PostPostDto postDto)
+        public async Task<ActionResult<bool>> PostPost(PostPostDto postDto)
         {
             if (postDto.Content == null || postDto.Content == "")
             {
@@ -137,18 +139,14 @@ namespace SocialO.WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePost(int id)
         {
-            if (_context.Posts == null)
-            {
-                return NotFound();
-            }
-            var post = await _context.Posts.FindAsync(id);
+            var post = _postManager.GetByIdAsync(id).Result;
+
             if (post == null)
             {
                 return NotFound();
             }
 
-            _context.Posts.Remove(post);
-            await _context.SaveChangesAsync();
+            _postManager.DeleteAsync(post);
 
             return NoContent();
         }

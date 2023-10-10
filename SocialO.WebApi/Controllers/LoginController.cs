@@ -36,9 +36,27 @@ namespace SocialO.WebApi.Controllers
 
         //Kullanıcı kayıt
         [HttpPost("[action]")]
-        public async Task<bool> SignUp([FromForm] UserRegister userRegister)
+        public async Task<ActionResult<bool>> SignUp([FromBody] UserRegister userRegister)
         {
-            PasswordHashHelper.CreatePasswordHash(
+            bool usernameExist = userManager.GetBy(x => x.Username == userRegister.Username).Result != null ;
+            bool emailExist = userManager.GetBy(x => x.Email == userRegister.Email).Result != null;
+
+            if (usernameExist)
+            {
+	            return Conflict(new { message = "That username has been taken. " });
+			}
+			if (emailExist)
+            {
+	            return Conflict(new { message = "Email has already been taken." });
+			}
+
+			if (userRegister.Password != userRegister.Repassword)
+			{
+				return BadRequest(new { message = "Passwords do not match." });
+			}
+
+			//pasword hash
+			PasswordHashHelper.CreatePasswordHash(
                 userRegister.Password,
                 out var passwordHash,
                 out var passwordSalt
@@ -68,8 +86,29 @@ namespace SocialO.WebApi.Controllers
             return result1   > 0 ? true : false;
         }
 
-        //Kullanıcı giriş
-        [HttpPost("[action]")]
+        [HttpGet("[action]")]
+        public async Task<ActionResult<bool>> Available(string input)
+        {
+			bool usernameExist = userManager.GetBy(x => x.Username == input).Result != null;
+			bool emailExist = userManager.GetBy(x => x.Email == input).Result != null;
+
+
+			if (usernameExist)
+			{
+				return false;
+			}
+			if (emailExist)
+			{
+				return false;
+			}
+
+
+
+			return true;
+        }
+
+		//Kullanıcı giriş
+		[HttpPost("[action]")]
         public async Task<ActionResult<UserLoginResponse>> SignIn(
             [FromBody] UserLoginRequest request
         )
@@ -145,12 +184,14 @@ namespace SocialO.WebApi.Controllers
                 user.RefreshToken = generatedTokenInformation.RefreshToken;
                 user.RefreshTokenEndDate = generatedTokenInformation.TokenExpireDate.AddHours(5);
                 await userManager.UpdateAsync(user);
+
+                return response;
             }
 
-            var result = response;
 
-            return result;
-        }
+
+			return BadRequest(new { message = "Username or password is wrong!" });
+		}
 
         [HttpPost("[action]")]
         public async Task<ActionResult<UserLoginResponse>> RefreshTokenLogin([FromForm] string refreshToken)

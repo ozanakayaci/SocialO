@@ -5,7 +5,6 @@ namespace SocialO.WebApi.Models.UserModels.Register
     public class UserRegister
     {
         [Required(AllowEmptyStrings = false)]
-        [RegularExpression(".*[a-zA]+.*", ErrorMessage = "Lutfen harf giriniz")]
         public string Username { get; set; }
 
         [Required(AllowEmptyStrings = false)]
