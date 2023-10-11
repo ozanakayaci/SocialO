@@ -1,3 +1,4 @@
+import Flow from "../components/Flow";
 import Navbar from "../components/Navbar";
 import PostModal from "../components/PostModal";
 
@@ -11,6 +12,7 @@ function Home() {
         <PostModal />
       </div>
       {/* Flow */}
+      <Flow />
     </>
   );
 }
