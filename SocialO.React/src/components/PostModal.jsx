@@ -16,7 +16,7 @@ function PostModal() {
     <>
       <Avatar
         alt="Remy Sharp"
-        src="/static/images/avatar/1.jpg"
+        src="https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg"
         className="mr-2"
       />
       <div
@@ -45,13 +45,13 @@ function PostModal() {
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
-        className="flex justify-center align-middle flex-row items-center mx-auto w-full md:max-w-md border-b-2 pb-2 border-gray-300"
+        className="flex justify-center flex-row items-center mx-auto w-full md:max-w-md border-b-2 pb-2 border-gray-300"
       >
         <div className="absolute w-full border-0 rounded-2xl bg-white p-5 mx-2">
           <div className="flex flex-row items-center">
             <Avatar
               alt="Remy Sharp"
-              src="/static/images/avatar/1.jpg"
+              src="https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg"
               className="mr-2"
               sx={{ width: 30, height: 30 }}
             />
@@ -109,7 +109,7 @@ function PostModal() {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left  shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
