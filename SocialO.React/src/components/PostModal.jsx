@@ -6,7 +6,7 @@ function PostModal() {
   const [open, setOpen] = useState(false);
 
   function handlePost() {
-    console.log("post sendde");
+    
   }
 
   const handleOpen = () => setOpen(true);

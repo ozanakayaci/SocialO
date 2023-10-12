@@ -11,6 +11,7 @@ using SocialO.WebApi.Models.Posts;
 namespace SocialO.WebApi.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class PostsController : ControllerBase
     {

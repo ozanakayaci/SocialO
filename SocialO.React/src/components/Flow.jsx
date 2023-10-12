@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
 
-import { logout, loginSuccess } from "../redux/socialo/socialoSlice";
+import { logout, login } from "../redux/socialo/socialoSlice";
 import PostCard from "./PostCard";
 
 function Flow() {
@@ -22,6 +22,7 @@ function Flow() {
   const [isOwnPost] = useState(false);
 
   useEffect(() => {
+    userId === null && navigate("/login");
     axios
       .get(
         `http://localhost:5211/api/Posts/${userId}?page=${page}&pageSize=${pageSize}&isOwnPost=${isOwnPost}`,
@@ -38,13 +39,14 @@ function Flow() {
         if (error.response.status === 401) {
           let data = new FormData();
           data.append("refreshToken", sessionStorage.getItem("refreshToken"));
+          console.log("unauthorize");
           axios
             .post(
               `http://localhost:5211/api/Login/RefreshTokenLogin`,
               sessionStorage.getItem("refreshToken")
             )
             .then((response) => {
-              dispatch(loginSuccess(response.data));
+              dispatch(login(response.data));
             })
             .catch(() => {
               dispatch(logout());
@@ -52,7 +54,7 @@ function Flow() {
             });
         }
       });
-  }, [userId, page, pageSize, isOwnPost, dispatch, navigate]);
+  }, []);
 
   return (
     <div className="flex flex-col mt-14 items-center">

@@ -19,6 +19,7 @@ if (initialState.token) {
     decodedToken[
       "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
     ];
+  localStorage.setItem("userId", initialState.userId);
 } else {
   initialState.token = sessionStorage.getItem("token")
     ? sessionStorage.getItem("token")
@@ -52,27 +53,51 @@ export const socialoSlice = createSlice({
       state.token = action.payload.authToken; // JWT token'ını saklayın
       localStorage.setItem("token", `Bearer ${action.payload.authToken}`);
       sessionStorage.setItem("refreshToken", action.payload.refreshToken);
+
+      if (state.token) {
+        const decodedToken = jwt_decode(state.token);
+        state.userId =
+          decodedToken[
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+          ];
+        localStorage.setItem("userId", state.userId);
+      } else {
+        state.token = sessionStorage.getItem("token")
+          ? sessionStorage.getItem("token")
+          : null;
+      }
     },
     logout: (state) => {
       state.isAuthenticated = false;
       state.refreshToken = null;
       state.token = null; // Çıkış yapınca JWT token'ı sıfırlayın
       localStorage.removeItem("token"); // JWT token'ını yerel depodan kaldırın
+      localStorage.removeItem("userId");
+      sessionStorage.removeItem("refreshToken");
     },
   },
   extraReducers: {
     [login.fulfilled]: (state, action) => {
       state.pending = false;
-      console.log(action);
       state.isAuthenticated = action.payload.authenticateResult;
       state.token = action.payload.authToken; // JWT token'ını saklayın
       localStorage.setItem("token", `Bearer ${action.payload.authToken}`);
-      console.log(localStorage.getItem("token"));
       sessionStorage.setItem("refreshToken", action.payload.refreshToken);
+      if (state.token) {
+        const decodedToken = jwt_decode(state.token);
+        state.userId =
+          decodedToken[
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+          ];
+        localStorage.setItem("userId", state.userId);
+      } else {
+        state.token = sessionStorage.getItem("token")
+          ? sessionStorage.getItem("token")
+          : null;
+      }
     },
-    [login.rejected]: (state, action) => {
+    [login.rejected]: (state) => {
       state.pending = false;
-      console.log("rejected");
     },
     [login.pending]: (state) => {
       state.pending = true;
