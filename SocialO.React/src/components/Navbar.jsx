@@ -128,7 +128,7 @@ function Navbar() {
         </div>
       </header>
       {/* Bottom Nav */}
-      <nav className="h-16 w-full flex flex-row  items-center justify-around fixed mt-auto bottom-0 text-white md:hidden">
+      <nav className="h-16 w-full flex flex-row bg-white items-center justify-around fixed mt-auto bottom-0 text-white md:hidden">
         {/* Home */}
         <Link
           to="/home"
