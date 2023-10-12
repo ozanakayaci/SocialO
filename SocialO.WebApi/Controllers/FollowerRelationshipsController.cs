@@ -59,7 +59,7 @@ namespace SocialO.WebApi.Controllers
             var follower = _userManager.GetBy(p => p.Id == followerId).Result;
             var followed = _userManager.GetBy(p => p.Id == userId).Result;
 
-            if ((follower != null && followed != null) && followed.Id != followed.Id)
+            if ((follower != null && followed != null) && follower.Id != followed.Id)
             {
                 FollowerRelationship relation = await _followerManager.GetBy(
                     p => (p.FollowerId == followerId && p.UserId == userId)

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 export default function ErrorPage() {
   const navigate = useNavigate();
 
-  const [time, setTime] = useState(10);
+  const [time, setTime] = useState(5);
 
   useEffect(() => {
     const countdownInterval = setInterval(() => {

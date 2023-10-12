@@ -132,7 +132,24 @@ namespace SocialO.WebApi.Controllers
             return result > 0 ? true : false;
         }
 
-        private bool UserExists(int id)
+        [HttpGet("[action]")]
+        public async Task<ActionResult<IEnumerable<User>>> SearchByName(string searchedString)
+        {
+	        var users = await _userManager.GetUsersBySearch(searchedString);
+
+	        if (users == null)
+	        {
+		        return NotFound();
+	        }
+
+	        IEnumerable<UserCardModel> results = users.Where(x => x.Username.Contains(searchedString)).ToList();
+
+
+
+	        return Ok(results);
+        }
+
+		private bool UserExists(int id)
         {
             return (_context.Users?.Any(e => e.Id == id)).GetValueOrDefault();
         }

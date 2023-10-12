@@ -59,5 +59,28 @@ namespace SocialO.BL.Concrete
             }
 
         }
+
+        public async Task<IEnumerable<UserCardModel>> GetUsersBySearch(string searchedString)
+        {
+	        var users = await base.repository.dbContext.Users
+		        .Where(x => x.Username.Contains(searchedString))
+		        .Include(u => u.UserProfile).ToListAsync();
+
+	        var model = new List<UserCardModel>();
+
+	        foreach (var user in users)
+	        {
+		        UserCardModel userModel = new UserCardModel
+				{
+			        Id = user.Id,
+			        Username = user.Username,
+					About = user.UserProfile?.About,
+				};
+
+		        model.Add(userModel);
+	        }
+
+			return model;
+        }
     }
 }

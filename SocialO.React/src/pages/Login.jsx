@@ -6,12 +6,10 @@ import { Formik, Form } from "formik";
 
 import * as yup from "yup";
 
-import axios from "axios";
-
 import { toast } from "react-toastify";
 
 import { useDispatch } from "react-redux";
-import { loginSuccess } from "../redux/socialo/socialoSlice";
+import { login } from "../redux/socialo/socialoSlice";
 
 const loginValidation = yup.object({
   usename: yup
@@ -29,35 +27,20 @@ const loginValidation = yup.object({
   password: yup.string().required("Password is Required").min(8),
 });
 
-async function loginUser(credentials) {
-  return await axios
-    .post("http://localhost:5211/api/Login/SignIn", credentials, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-    .then((response) => {
-      return response.data;
-    })
-    .catch((error) => {
-      return error;
-    });
-}
-
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogin = async (values) => {
-    const response = await loginUser(
-      JSON.stringify({
-        username: values.usename,
-        password: values.password,
-      })
+    const response = await dispatch(
+      login(
+        JSON.stringify({
+          username: values.usename,
+          password: values.password,
+        })
+      )
     );
-    if (response["authToken"]) {
-      dispatch(loginSuccess(response));
-
+    if (response.payload["authToken"] !== undefined) {
       toast("Login successful..", {
         position: "bottom-center",
         autoClose: 5000,
@@ -70,7 +53,7 @@ function Login() {
       });
       navigate("/home");
     } else {
-      toast.error(response.response.data.message, {
+      toast.error(response.payload.response.data.message, {
         position: "bottom-center",
         autoClose: 5000,
         hideProgressBar: false,

@@ -15,13 +15,16 @@ namespace SocialO.WebApi.Controllers
     public class PostsController : ControllerBase
     {
         private readonly IPostManager _postManager;
-        private readonly SqlDBContext _context;
+        private readonly IUserManager _userManager;
+		private readonly SqlDBContext _context;
+
 
         public PostsController(SqlDBContext context)
         {
             _context = context;
             _postManager = new PostManager();
-        }
+            _userManager = new UserManager();
+		}
 
         // GET: api/Posts
         [HttpGet("[action]")]
@@ -67,6 +70,14 @@ namespace SocialO.WebApi.Controllers
         {
             try
             {
+
+	            var user = _userManager.GetByIdAsync(followerId);
+
+	            if (user == null)
+	            {
+		            return NotFound();
+	            }
+
                 var posts = await _postManager.GetAllPostById(
                     followerId,
                     page,
@@ -74,9 +85,9 @@ namespace SocialO.WebApi.Controllers
                     isOwnPost
                 );
 
-                if (posts == null || posts.Count() == 0)
+                if ( posts.Count() == 0)
                 {
-                    return NotFound();
+                    return NotFound(new { message = "Gösterilecek gönderi bulunamadı" });
                 }
 
                 return Ok(posts);

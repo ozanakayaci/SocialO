@@ -13,8 +13,10 @@ function Flow() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const userId = useSelector((state) => state.socialo.userId);
+
+  const [message] = useState("Something went wrong");
   const [posts, setPosts] = useState([]);
-  const [userId] = useState(1);
   const [page] = useState(1);
   const [pageSize] = useState(10);
   const [isOwnPost] = useState(false);
@@ -50,10 +52,12 @@ function Flow() {
             });
         }
       });
-  }, [userId, page, pageSize]);
+  }, [userId, page, pageSize, isOwnPost, dispatch, navigate]);
 
   return (
     <div className="flex flex-col mt-14 items-center">
+      {posts.length < 1 && <div className="text-red-500">{message}</div>}
+
       {posts.map((post) => (
         <PostCard key={post.postId} post={post} />
       ))}

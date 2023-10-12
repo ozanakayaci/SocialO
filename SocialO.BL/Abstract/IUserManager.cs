@@ -6,5 +6,6 @@ namespace SocialO.BL.Abstract
     public interface IUserManager : IManagerBase<User>
     {
         Task<UserProfileModel> GetUserByUsername(string username);
+        Task<IEnumerable<UserCardModel>> GetUsersBySearch(string searchedString);
     }
 }
