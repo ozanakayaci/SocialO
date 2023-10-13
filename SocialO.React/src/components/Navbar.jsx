@@ -16,9 +16,9 @@ function Navbar() {
   };
 
   return (
-    <div className="bg-white relative flex overflow-hidden">
+    <div className="bg-white relative flex overflow-hidden z-50">
       {/* Navbar */}
-      <header className="h-16 w-full flex flex-row  items-center justify-around relative  text-white">
+      <header className="h-16 w-full flex flex-row fixed bg-white items-center justify-around text-white">
         {/* Logo */}
         <div>
           <Link to="/">
