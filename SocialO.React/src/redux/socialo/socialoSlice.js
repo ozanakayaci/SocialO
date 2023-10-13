@@ -6,6 +6,7 @@ import jwt_decode from "jwt-decode";
 const initialState = {
   isAuthenticated: localStorage.getItem("token") ? true : false,
   userId: null,
+  userName: null,
   token: localStorage.getItem("token") ? localStorage.getItem("token") : null,
   refreshToken: sessionStorage.getItem("refreshToken")
     ? sessionStorage.getItem("refreshToken")
@@ -19,28 +20,35 @@ if (initialState.token) {
     decodedToken[
       "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
     ];
+  initialState.userName =
+    decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
   localStorage.setItem("userId", initialState.userId);
 } else {
-  initialState.token = sessionStorage.getItem("token")
-    ? sessionStorage.getItem("token")
+  initialState.token = localStorage.getItem("token")
+    ? localStorage.getItem("token")
     : null;
 }
 //login logout işlemleri için
 export const login = createAsyncThunk(
   "socialo/login",
   async (credentials, thunAPI) => {
-    return await axios
-      .post("http://localhost:5211/api/Login/SignIn", credentials, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((res) => {
-        return res.data;
-      })
-      .catch((err) => {
-        return thunAPI.rejectWithValue(err);
-      });
+    console.log("credentials", credentials);
+    if (!credentials.authToken) {
+      return await axios
+        .post("http://localhost:5211/api/Login/SignIn", credentials, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          return res.data;
+        })
+        .catch((err) => {
+          return thunAPI.rejectWithValue(err);
+        });
+    }
+    console.log("geçti");
+    return credentials;
   }
 );
 
@@ -60,6 +68,10 @@ export const socialoSlice = createSlice({
           decodedToken[
             "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
           ];
+        state.userName =
+          decodedToken[
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
+          ];
         localStorage.setItem("userId", state.userId);
       } else {
         state.token = sessionStorage.getItem("token")
@@ -72,6 +84,8 @@ export const socialoSlice = createSlice({
       state.refreshToken = null;
       state.token = null; // Çıkış yapınca JWT token'ı sıfırlayın
       localStorage.removeItem("token"); // JWT token'ını yerel depodan kaldırın
+      state.userId = null;
+      state.userName = null;
       localStorage.removeItem("userId");
       sessionStorage.removeItem("refreshToken");
     },
@@ -88,6 +102,10 @@ export const socialoSlice = createSlice({
         state.userId =
           decodedToken[
             "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+          ];
+        state.userName =
+          decodedToken[
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
           ];
         localStorage.setItem("userId", state.userId);
       } else {
