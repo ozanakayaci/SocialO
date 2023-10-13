@@ -1,38 +1,93 @@
+import { Avatar } from "@mui/material";
+import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 function PostCard({ post }) {
+  const [formattedTime, setFormattedTime] = useState("");
+
+  useEffect(() => {
+    const postDate = new Date(
+      `${post.datePosted.toString().split(" ")[0]}.000Z`
+    );
+    const currentDate = new Date();
+
+    const timeDifference = currentDate - postDate;
+    const minutesDifference = Math.floor(timeDifference / (1000 * 60));
+    const hoursDifference = Math.floor(minutesDifference / 60);
+    const daysDifference = Math.floor(hoursDifference / 24);
+    const weeksDifference = Math.floor(daysDifference / 7);
+    const monthsDifference = Math.floor(daysDifference / 30);
+
+    let formattedDifference = "";
+    if (monthsDifference > 0) {
+      formattedDifference = `${monthsDifference} month${
+        monthsDifference > 1 ? "s" : ""
+      } ago`;
+    } else if (weeksDifference > 0) {
+      formattedDifference = `${weeksDifference} week${
+        weeksDifference > 1 ? "s" : ""
+      } ago`;
+    } else if (daysDifference > 0) {
+      formattedDifference = `${daysDifference} day${
+        daysDifference > 1 ? "s" : ""
+      } ago`;
+    } else if (hoursDifference > 0) {
+      formattedDifference = `${hoursDifference} hour${
+        hoursDifference > 1 ? "s" : ""
+      } ago`;
+    } else {
+      formattedDifference = `${minutesDifference} minute${
+        minutesDifference > 1 ? "s" : ""
+      } ago`;
+    }
+
+    setFormattedTime(formattedDifference);
+  }, [post.datePosted]);
+
   return (
-    <div className="w-full  flex  max-w-screen-sm items-center justify-center my-2">
+    <Link
+      to={`/${post.authorUsername}/post/${post.postId}`}
+      className="w-full  flex  sm:max-w-screen-sm  items-center justify-center mt-3"
+    >
       <div className="w-full rounded-md bg-gradient-to-r from-blue-500  to-white pb-1">
-        <div className="h-full w-full bg-white p-5">
+        <div className="h-full w-full bg-white hover:bg-gray-100 p-5">
           {/*horizantil margin is just for display*/}
           <div className="flex items-start px-4 py-4">
-            <img
-              className="w-12 h-12 rounded-full object-cover mr-4 shadow"
-              src="https://images.unsplash.com/photo-1542156822-6924d1a71ace?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-              alt="avatar"
-            />
-            <div className="w-full">
-              <div className="flex items-center justify-between">
-                <Link to={`/profile/:${post.authorId}`}>
-                  <h2 className="text-lg font-semibold text-gray-900 -mt-1">
-                    {post.authorName}
-                  </h2>
-                </Link>
-                <small className="text-sm text-gray-700">22h ago</small>
+            <Avatar className="w-12 h-12 rounded-full object-cover mr-4 shadow">
+              {post.authorUsername[0].toUpperCase()}
+            </Avatar>
+            <div className="w-full ">
+              <div className="flex justify-between items-center">
+                <div className="flex flex-row items-center ">
+                  <Link
+                    to={`/${post.authorUsername}`}
+                    className="hover:underline text-2xl"
+                  >
+                    <h2 className="font-semibold text-gray-900 -mt-1 text-ellipsis line-clamp-1">
+                      {post.authorName}
+                    </h2>
+                  </Link>
+                  <div className="ml-1 text-ellipsis line-clamp-1">
+                    @{post.authorName}
+                  </div>
+                </div>
+                <small className="text-sm text-gray-700 text-ellipsis line-clamp-1  hidden sm:flex">
+                  {formattedTime}
+                </small>
               </div>
 
-              <p className="mt-3 text-gray-700 text-sm w-full">
+              <p className="mt-3 text-gray-700 text-base  pb-2  w-full">
                 {post.content}
               </p>
             </div>
           </div>
-          <div className="mt-4 flex items-center">
-            <div className="flex mr-2 text-gray-700 text-sm mr-3">
+          <div className="mt-4 flex flex-row-reverse items-center  p-4">
+            <div className="flex  mr-2 text-gray-700 text-sm mr-3">
               <svg
                 fill="none"
                 viewBox="0 0 24 24"
-                className="w-4 h-4 mr-1"
+                className="w-5 h-5 mr-1"
                 stroke="currentColor"
               >
                 <path
@@ -44,11 +99,11 @@ function PostCard({ post }) {
               </svg>
               <span>{post.favoriteCount}</span>
             </div>
-            <div className="flex mr-2 text-gray-700 text-sm mr-8">
+            <div className="flex justify-center mr-2 text-gray-700 text-sm mr-8">
               <svg
                 fill="none"
                 viewBox="0 0 24 24"
-                className="w-4 h-4 mr-1"
+                className="w-5 h-5 mr-1"
                 stroke="currentColor"
               >
                 <path
@@ -63,8 +118,12 @@ function PostCard({ post }) {
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
+
+PostCard.propTypes = {
+  post: PropTypes.object,
+};
 
 export default PostCard;
