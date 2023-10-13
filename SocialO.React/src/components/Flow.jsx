@@ -9,23 +9,30 @@ import axios from "axios";
 import { logout, login } from "../redux/socialo/socialoSlice";
 import PostCard from "./PostCard";
 
-function Flow() {
+import PropTypes from "prop-types";
+
+function Flow({ OwnPost, profileId }) {
+  console.log("flow");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const userId = useSelector((state) => state.socialo.userId);
 
+  const [test, setTest] = useState(0);
   const [message] = useState("Something went wrong");
   const [posts, setPosts] = useState([]);
   const [page] = useState(1);
   const [pageSize] = useState(10);
-  const [isOwnPost] = useState(false);
+  const [isOwnPost] = useState(OwnPost || false);
 
   useEffect(() => {
+    //redux'a taşıyacağız
     userId === null && navigate("/login");
     axios
       .get(
-        `http://localhost:5211/api/Posts/${userId}?page=${page}&pageSize=${pageSize}&isOwnPost=${isOwnPost}`,
+        `http://localhost:5211/api/Posts/${
+          isOwnPost ? profileId : userId
+        }?page=${page}&pageSize=${pageSize}&isOwnPost=${isOwnPost}`,
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -34,19 +41,23 @@ function Flow() {
       )
       .then((response) => {
         setPosts(response.data);
+        console.log(response.data);
+        setTest(1);
       })
       .catch((error) => {
         if (error.response.status === 401) {
           let data = new FormData();
           data.append("refreshToken", sessionStorage.getItem("refreshToken"));
-          console.log("unauthorize");
+
           axios
             .post(
-              `http://localhost:5211/api/Login/RefreshTokenLogin`,
-              sessionStorage.getItem("refreshToken")
+              `http://localhost:5211/api/Login/${sessionStorage.getItem(
+                "refreshToken"
+              )}`
             )
             .then((response) => {
               dispatch(login(response.data));
+              setTest(2);
             })
             .catch(() => {
               dispatch(logout());
@@ -54,7 +65,7 @@ function Flow() {
             });
         }
       });
-  }, []);
+  }, [test, profileId]);
 
   return (
     <div className="flex flex-col mt-14 items-center">
@@ -66,5 +77,10 @@ function Flow() {
     </div>
   );
 }
+
+Flow.propTypes = {
+  OwnPost: PropTypes.bool,
+  profileId: PropTypes.number,
+};
 
 export default Flow;
