@@ -78,7 +78,7 @@ function Flow({ OwnPost, profileId }) {
   }, [test, profileId]);
 
   return (
-    <div className="flex flex-col mt-14 items-center sm:min-w-full  ">
+    <div className="flex flex-col mt-14 items-center min-w-full  ">
       {posts.length < 1 && <div className="text-red-500">{message}</div>}
 
       {posts.map((post) => (
