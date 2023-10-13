@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 
 import "./App.css";
 
@@ -23,8 +23,8 @@ function App() {
           <>
             <Route path="/" element={<Register />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="*" element={<ErrorPage />} />
+            <Route path="/login" exact element={<Login />} />
+            <Route path="/*" element={<Navigate to="/" />} />
           </>
         ) : (
           <>
