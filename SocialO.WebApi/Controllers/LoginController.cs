@@ -194,12 +194,15 @@ namespace SocialO.WebApi.Controllers
 			return BadRequest(new { message = "Username or password is wrong!" });
 		}
 
-        [HttpPost("[action]")]
-        public async Task<ActionResult<UserLoginResponse>> RefreshTokenLogin([FromForm] string refreshToken)
+        [HttpPost("{refreshToken}")]
+        public async Task<ActionResult<UserLoginResponse>> RefreshTokenLogin( string refreshToken)
         {
-            User user = await context.Users.FirstOrDefaultAsync(
-                x => x.RefreshToken == refreshToken
-            );
+
+			string decodedRefreshToken = Uri.UnescapeDataString(refreshToken);
+
+			User user = await context.Users.FirstOrDefaultAsync(
+                x => x.RefreshToken == decodedRefreshToken
+			);
             if (user != null && user?.RefreshTokenEndDate > DateTime.Now)
             {
                 UserLoginResponse response = new();
@@ -251,7 +254,7 @@ namespace SocialO.WebApi.Controllers
                 response.RefreshToken = generatedTokenInformation.RefreshToken;
 
                 user.RefreshToken = generatedTokenInformation.RefreshToken;
-                user.RefreshTokenEndDate = generatedTokenInformation.TokenExpireDate.AddHours(5);
+                user.RefreshTokenEndDate = generatedTokenInformation.TokenExpireDate.AddDays(2);
                 await userManager.UpdateAsync(user);
 
                 return response;
