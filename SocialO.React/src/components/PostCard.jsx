@@ -48,12 +48,17 @@ function PostCard({ post }) {
   return (
     <Link
       to={`/${post.authorUsername}/post/${post.postId}`}
-      className="w-full  flex  sm:max-w-screen-sm  items-center justify-center mt-3"
+      className="w-full flex sm:max-w-screen-sm items-center justify-center mt-3"
     >
-      <div className="w-full rounded-md bg-gradient-to-r from-blue-500  to-white pb-1">
-        <div className="h-full w-full bg-white hover:bg-gray-100 p-5">
+      <div className="w-full rounded-md bg-gradient-to-r from-blue-500  to-white pb-1 ">
+        <div
+          className="h-full w-full bg-white  p-5
+          hover:bg-gradient-to-t from-blue-100 to-white
+          rounded-sm
+        "
+        >
           {/*horizantil margin is just for display*/}
-          <div className="flex items-start px-4 py-4">
+          <div className="flex items-start px-4 py-4 ">
             <Avatar className="w-12 h-12 rounded-full object-cover mr-4 shadow">
               {post.authorUsername[0].toUpperCase()}
             </Avatar>
@@ -65,11 +70,11 @@ function PostCard({ post }) {
                     className="hover:underline text-2xl"
                   >
                     <h2 className="font-semibold text-gray-900 -mt-1 text-ellipsis line-clamp-1">
-                      {post.authorName}
+                      {post.authorName ? post.authorName : post.authorUsername}
                     </h2>
                   </Link>
                   <div className="ml-1 text-ellipsis line-clamp-1">
-                    @{post.authorName}
+                    @{post.authorName ? post.authorName : post.authorUsername}
                   </div>
                 </div>
                 <small className="text-sm text-gray-700 text-ellipsis line-clamp-1  hidden sm:flex">
