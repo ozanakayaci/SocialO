@@ -13,7 +13,6 @@ import PropTypes from "prop-types";
 import { Card } from "@mui/material";
 
 function Flow({ OwnPost, profileId }) {
-  console.log("flow");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -42,28 +41,31 @@ function Flow({ OwnPost, profileId }) {
       )
       .then((response) => {
         setPosts(response.data);
-        console.log(response.data);
         setTest(1);
       })
       .catch((error) => {
         if (error.response.status === 401) {
-          let data = new FormData();
-          data.append("refreshToken", sessionStorage.getItem("refreshToken"));
-
-          axios
-            .post(
-              `http://localhost:5211/api/Login/${sessionStorage.getItem(
-                "refreshToken"
-              )}`
-            )
-            .then((response) => {
-              dispatch(login(response.data));
-              setTest(2);
-            })
-            .catch(() => {
-              dispatch(logout());
-              navigate("/");
-            });
+          if (sessionStorage.getItem("refreshToken")) {
+            axios
+              .post(
+                `http://localhost:5211/api/Login/${sessionStorage.getItem(
+                  "refreshToken"
+                )}`
+              )
+              .then((response) => {
+                console.log("response", response.data);
+                dispatch(login(response.data));
+                setTest(2);
+              })
+              .catch(() => {
+                dispatch(logout());
+                navigate("/");
+              });
+          } else {
+            dispatch(logout());
+            navigate("/");
+            setTest(3);
+          }
         }
       });
   }, [test, profileId]);
