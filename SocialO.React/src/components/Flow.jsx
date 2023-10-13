@@ -10,6 +10,7 @@ import { logout, login } from "../redux/socialo/socialoSlice";
 import PostCard from "./PostCard";
 
 import PropTypes from "prop-types";
+import { Card } from "@mui/material";
 
 function Flow({ OwnPost, profileId }) {
   console.log("flow");
@@ -68,13 +69,13 @@ function Flow({ OwnPost, profileId }) {
   }, [test, profileId]);
 
   return (
-    <div className="flex flex-col mt-14 items-center">
+    <Card className="flex flex-col mt-14 items-center sm:min-w-full  ">
       {posts.length < 1 && <div className="text-red-500">{message}</div>}
 
       {posts.map((post) => (
         <PostCard key={post.postId} post={post} />
       ))}
-    </div>
+    </Card>
   );
 }
 
