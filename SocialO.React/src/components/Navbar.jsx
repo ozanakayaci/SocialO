@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 import { logout } from "../redux/socialo/socialoSlice";
 
 function Navbar() {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+  const userName = useSelector((state) => state.socialo.userName);
 
   const [hide, setHide] = useState(true);
 
@@ -45,7 +47,7 @@ function Navbar() {
           </Link>
           {/* Profile */}
           <Link
-            to="/profile"
+            to={`/${userName}`}
             className="h-10 w-10 flex items-center justify-center rounded-lg cursor-pointer fill-blue-500 hover:fill-black text-blue-500 hover:text-gray-950 hover:bg-white  hover:duration-300 hover:ease-linear hover:scale-125 transition duration-300 ease-in-out focus:bg-white"
           >
             <svg
@@ -144,7 +146,7 @@ function Navbar() {
         </Link>
         {/* Profile */}
         <Link
-          to="/profile"
+          to={`/${userName}`}
           className="h-10 w-10 flex items-center justify-center rounded-lg cursor-pointer fill-blue-500 hover:fill-black text-blue-500 hover:text-gray-950 hover:bg-white  hover:duration-300 hover:ease-linear hover:scale-125 transition duration-300 ease-in-out focus:bg-white"
         >
           <svg
