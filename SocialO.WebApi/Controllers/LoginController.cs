@@ -147,7 +147,7 @@ namespace SocialO.WebApi.Controllers
                     SecurityAlgorithms.HmacSha256
                 );
 
-                tokenInstance.TokenExpireDate = DateTime.Now.AddMinutes(5);
+                tokenInstance.TokenExpireDate = DateTime.Now.AddMinutes(1);
 
                 var claims = new List<Claim>
                 {
@@ -260,7 +260,7 @@ namespace SocialO.WebApi.Controllers
                 return response;
             }
 
-            return null;
+            return Unauthorized(new { message = "Invalid token" });
         }
     }
 }
