@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ErrorPage from "./pages/ErrorPage";
 import Profile from "./pages/Profile";
+import Post from "./pages/Post";
 import Search from "./pages/Search";
 import Settings from "./pages/Settings";
 import { useSelector } from "react-redux";
@@ -18,25 +19,28 @@ function App() {
   return (
     <>
       {isAuthenticated && <Navbar />}
-      <Routes>
-        {!isAuthenticated ? (
+      {!isAuthenticated ? (
+        <Routes>
           <>
             <Route path="/" element={<Register />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" exact element={<Login />} />
             <Route path="/*" element={<Navigate to="/" />} />
           </>
-        ) : (
-          <>
+        </Routes>
+      ) : (
+        <div className="flex flex-col justify-center items-center mt-28">
+          <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
-            <Route path="/profile/:username" element={<Profile />} />
+            <Route path="/:username" element={<Profile />} />
+            <Route path="/:username/post/:postId" element={<Post />} />
             <Route path="/search" element={<Search />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="*" element={<ErrorPage />} />
-          </>
-        )}
-      </Routes>
+          </Routes>
+        </div>
+      )}
     </>
   );
 }
