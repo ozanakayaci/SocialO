@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 
 import Flow from "../components/Flow";
-import { Avatar, Button } from "@mui/material";
+import { Avatar } from "@mui/material";
 import { useSelector } from "react-redux";
 
 function Profile() {
@@ -15,14 +15,14 @@ function Profile() {
     about: "undefined",
     dateOfBirth: "undefined",
     dateRegistered: "undefined",
-    favoriteCount: "undefined",
+    favoriteCount: 0,
     firstName: "undefined",
-    followerCount: "undefined",
-    followingCount: "undefined",
+    followerCount: 0,
+    followingCount: 0,
     gender: "undefined",
-    id: "undefined",
+    id: -1,
     lastName: "undefined",
-    postCount: "undefined",
+    postCount: 0,
     username: "undefined",
   });
   const [isFollowed, setIsFollowed] = useState(true);
@@ -35,7 +35,6 @@ function Profile() {
       .then((response) => {
         setProfileData(response.data);
       });
-    console.log(profileData);
   }, []);
 
   function FollowHandler() {
@@ -44,14 +43,16 @@ function Profile() {
   return (
     <>
       <div className="sm:max-w-screen-sm w-full px-5 pb-4 sm:px-24 mt-12 bg-gradient-to-b from-blue-100 rounded-lg	 ">
-        <div className="flex justify-center w-full text-3xl my-10 relative">
-          <div className="absolute bottom-1">
-            <Avatar sx={{ width: 80, height: 80 }}>
+        <div className="flex justify-center w-full text-3xl my-8 relative">
+          <div className="absolute bottom-0">
+            <Avatar
+              sx={{ width: 80, height: 80, border: 2, borderColor: "#e1f5fe" }}
+            >
               {profileData.username[0].toUpperCase()}
             </Avatar>
           </div>
         </div>
-        <div>
+        <div className="mb-5">
           <div>
             <div className="flex flex-row items-center w-full justify-between ">
               <div className="flex flex-row items-center ">
