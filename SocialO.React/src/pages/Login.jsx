@@ -1,4 +1,10 @@
-import { TextField, Button } from "@mui/material";
+import {
+  TextField,
+  Button,
+  CircularProgress,
+  Box,
+  LinearProgress,
+} from "@mui/material";
 
 import { Link, useNavigate } from "react-router-dom";
 
@@ -8,7 +14,7 @@ import * as yup from "yup";
 
 import { toast } from "react-toastify";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/socialo/socialoSlice";
 
 const loginValidation = yup.object({
@@ -30,6 +36,8 @@ const loginValidation = yup.object({
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const pending = useSelector((state) => state.socialo.pending);
 
   const handleLogin = async (values) => {
     const response = await dispatch(
@@ -131,6 +139,17 @@ function Login() {
                 >
                   Sign in
                 </Button>
+                {pending && (
+                  <LinearProgress
+                    className="absolute"
+                    sx={{
+                      marginTop: "-6px",
+                      height: "6px",
+                      borderBottomLeftRadius: "3px",
+                      borderBottomRightRadius: "3px",
+                    }}
+                  />
+                )}
               </div>
             </Form>
           )}
