@@ -13,8 +13,8 @@ namespace SocialO.BL.Concrete
                 .Where(u => u.Username == username)
                 .Include(u => u.UserProfile)
                 .Include(u => u.Posts)
-                .Include(u => u.Followers)
                 .Include(u => u.Following)
+                .Include(u => u.Followers)
                 .Include(u => u.PostFavorites)
                 .FirstOrDefaultAsync();
 
@@ -64,20 +64,45 @@ namespace SocialO.BL.Concrete
         {
 	        var users = await base.repository.dbContext.Users
 		        .Where(x => x.Username.Contains(searchedString))
-		        .Include(u => u.UserProfile).ToListAsync();
+		        .Include(u => u.UserProfile)
+                .Include(u => u.Followers)
+                .Include(u => u.Following)
+                .ToListAsync();
 
 	        var model = new List<UserCardModel>();
 
 	        foreach (var user in users)
 	        {
-		        UserCardModel userModel = new UserCardModel
-				{
-			        Id = user.Id,
-			        Username = user.Username,
-					About = user.UserProfile?.About,
-				};
+                if (user.UserProfile != null)
+                {
+                    UserCardModel userModel = new UserCardModel
+                    {
+                        Id = user.Id,
+                        Username = user.Username,
+                        Name = user.UserProfile.FirstName,
+                        About = user.UserProfile?.About,
+                        FollowerCount = user.Followers.Count,
+                        FollowingCount = user.Following.Count,
+
+                    };
 
 		        model.Add(userModel);
+                }
+                else
+                {
+                    UserCardModel userModel = new UserCardModel
+                    {
+                        Id = user.Id,
+                        Username = user.Username,
+                        FollowerCount = user.Followers.Count,
+                        FollowingCount = user.Following.Count,
+
+                    };
+
+                    model.Add(userModel);
+                }
+               
+
 	        }
 
 			return model;
