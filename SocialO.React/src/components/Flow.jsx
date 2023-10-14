@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import axios from "axios";
 
@@ -96,9 +96,20 @@ function Flow({ OwnPost, profileId }) {
     <div className="flex flex-col mt-14 items-center min-w-full  ">
       {posts.length < 1 && <div className="text-red-500">{message}</div>}
 
-      {posts.map((post) => (
-        <PostCard key={post.postId} post={post} />
-      ))}
+      {posts[0].authorName !== "undefined" ? (
+        posts.map((post) => <PostCard key={post.postId} post={post} />)
+      ) : isOwnPost ? (
+        <div className="mt-20 text-5xl font-semibold text-blue-500 flex flex-row items-center h-36">
+          Start Searching...
+        </div>
+      ) : (
+        <div className="mt-16 m-5 text-5xl font-semibold text-blue-500 flex flex-row items-center h-36">
+          <Link to="/search" className="hover:text-black underline">
+            Find
+          </Link>
+          <div className="ml-3"> someone to follow...</div>
+        </div>
+      )}
     </div>
   );
 }
