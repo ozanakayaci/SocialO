@@ -51,9 +51,7 @@ function PostCard({ post }) {
   useEffect(() => {
     axios
       .get(
-        `${import.meta.env.API_BASE}/PostFavorites/IsLiked?postId=${
-          post.postId
-        }&userId=${userId}`
+        `http://localhost:5211/api/PostFavorites/IsLiked?postId=${post.postId}&userId=${userId}`
       )
       .then((response) => {
         setIsLiked(response.data);
@@ -63,9 +61,7 @@ function PostCard({ post }) {
   const LikeHandler = async () => {
     axios
       .post(
-        `${import.meta.env.API_BASE}/PostFavorites/PostPostFavorite?postId=${
-          post.postId
-        }&userId=${userId}`
+        `http://localhost:5211/api/PostFavorites/PostPostFavorite?postId=${post.postId}&userId=${userId}`
       )
       .then(() => {
         setIsLiked(setIsLiked(!isLiked));

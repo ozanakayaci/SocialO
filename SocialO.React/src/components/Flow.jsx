@@ -40,7 +40,7 @@ function Flow({ OwnPost, profileId }) {
     userId === null && navigate("/login");
     axios
       .get(
-        `${import.meta.env.API_BASE}/Posts/${
+        `http://localhost:5211/api/Posts/${
           isOwnPost ? profileId : userId
         }?page=${page}&pageSize=${pageSize}&isOwnPost=${isOwnPost}`,
         {
@@ -58,7 +58,7 @@ function Flow({ OwnPost, profileId }) {
           if (sessionStorage.getItem("refreshToken")) {
             axios
               .post(
-                `${import.meta.env.API_BASE}/Login/${sessionStorage.getItem(
+                `http://localhost:5211/api/Login/${sessionStorage.getItem(
                   "refreshToken"
                 )}`
               )

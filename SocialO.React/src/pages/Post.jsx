@@ -20,7 +20,7 @@ function Post() {
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.API_BASE}/Posts/GetPost/${postId}`)
+      .get(`http://localhost:5211/api/Posts/GetPost/${postId}`)
       .then((response) => {
         setPost(response.data);
         console.log(response);
