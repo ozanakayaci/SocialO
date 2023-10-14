@@ -50,7 +50,11 @@ function Flow({ OwnPost, profileId }) {
         }
       )
       .then((response) => {
-        setPosts(response.data);
+        if (page === 1) {
+          setPosts(response.data);
+        } else {
+          setPosts([...posts, ...response.data]);
+        }
         setTest(1);
       })
       .catch((error) => {
