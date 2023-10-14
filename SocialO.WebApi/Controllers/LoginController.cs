@@ -25,11 +25,14 @@ namespace SocialO.WebApi.Controllers
         private readonly IFollowerRelationshipManager followerRelationshipManager;
         private readonly SqlDBContext context;
         private readonly IConfiguration configuration;
+        private readonly UserProfileManager _userProfileManager;
 
         public LoginController(IConfiguration configuration)
         {
             userManager = new UserManager();
             followerRelationshipManager = new FollowerRelationshipManager();
+
+            _userProfileManager = new UserProfileManager();
             context = new SqlDBContext();
             this.configuration = configuration;
         }
@@ -70,7 +73,10 @@ namespace SocialO.WebApi.Controllers
                 PasswordHash = passwordHash,
             };
 
+           
+
             int result1 = await userManager.InsertAsync(user);
+            
 
             FollowerRelationship relationship = new FollowerRelationship
             {
@@ -81,8 +87,14 @@ namespace SocialO.WebApi.Controllers
             int result2 = await followerRelationshipManager.InsertAsync(relationship);
 
 
+            UserProfile profile = new UserProfile
+            {
+                FirstName = userRegister.Username.ToLower(),
+                UserId = user.Id
 
 
+            };
+            int result3 = await _userProfileManager.InsertAsync(profile);
             return result1   > 0 ? true : false;
         }
         
