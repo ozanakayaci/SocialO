@@ -100,13 +100,13 @@ function Profile() {
               </div>
               <div className="ml-3 text-slate-400 font-light">
                 <span className="text-black font-bold">
-                  {profileData.followerCount}{" "}
+                  {profileData.followingCount - 1}{" "}
                 </span>
                 Follower
               </div>
               <div className="ml-3 text-slate-400 font-light">
                 <span className="text-black font-bold">
-                  {profileData.followingCount}{" "}
+                  {profileData.followerCount - 1}{" "}
                 </span>
                 Following
               </div>
