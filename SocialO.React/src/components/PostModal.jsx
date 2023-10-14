@@ -1,14 +1,90 @@
 import { FocusTrap } from "@headlessui/react";
 import { Avatar, Button, Modal, TextField } from "@mui/material";
+import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
+async function sendPost(credentials) {
+  return axios
+    .post("http://localhost:5211/api/Posts", credentials, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("token"),
+      },
+    })
+    .then((response) => {
+      console.log(response);
+      return response.data;
+    })
+    .catch((error) => {
+      console.log(error);
+      toast.error(error.response.data.title, {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    });
+}
 
 function PostModal() {
-  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const userId = localStorage.getItem("userId");
 
-  function handlePost() {}
+  const [open, setOpen] = useState(false);
+  const [postText, setPostText] = useState("");
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const handlePost = async () => {
+    const response = sendPost(
+      JSON.stringify({
+        content: postText,
+        authorId: userId,
+      })
+    );
+
+    response
+      .then((data) => {
+        if (data !== undefined) {
+          toast("Post successful..", {
+            position: "bottom-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+          navigate("/");
+        } else {
+          toast.error("Something went wrong", {
+            position: "bottom-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    setPostText("");
+
+    setOpen(false);
+  };
 
   return (
     <>
@@ -56,7 +132,7 @@ function PostModal() {
             Username
           </div>
           <div className="mt-2">
-            <FocusTrap disableRestoreFocus>
+            <FocusTrap disablerestorefocus="true">
               <TextField
                 id="outlined-textarea"
                 placeholder="What's on your mind?"
@@ -64,6 +140,7 @@ function PostModal() {
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm  placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600  sm:text-sm sm:leading-6 "
                 inputProps={{ maxLength: 240 }}
                 autoFocus
+                onChange={(e) => setPostText(e.target.value)}
               />
             </FocusTrap>
             <div className="mt-4">
