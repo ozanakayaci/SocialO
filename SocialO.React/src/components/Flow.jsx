@@ -100,14 +100,14 @@ function Flow({ OwnPost, profileId }) {
         posts.map((post) => <PostCard key={post.postId} post={post} />)
       ) : isOwnPost ? (
         <div className="mt-20 text-5xl font-semibold text-blue-500 flex flex-row items-center h-36">
-          Start Searching...
+          Send Post...
         </div>
       ) : (
-        <div className="mt-16 m-5 text-5xl font-semibold text-blue-500 flex flex-row items-center h-36">
-          <Link to="/search" className="hover:text-black underline">
+        <div className="mt-16 m-5 text-2xl sm:text-5xl font-semibold text-blue-500 flex flex-row items-center h-36">
+          <Link to="/search" className="hover:text-black underline mr-3">
             Find
-          </Link>
-          <div className="ml-3"> someone to follow...</div>
+          </Link>{" "}
+          someone to follow...
         </div>
       )}
     </div>
