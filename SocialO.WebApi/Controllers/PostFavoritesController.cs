@@ -17,13 +17,13 @@ namespace SocialO.WebApi.Controllers
     public class PostFavoritesController : ControllerBase
     {
         private readonly SqlDBContext _context;
-		private readonly IPostFavoriteManager favoriteManager;
+        private readonly IPostFavoriteManager _favoriteManager;
 
-		public PostFavoritesController(SqlDBContext context,IPostFavoriteManager favoriteManager)
+        public PostFavoritesController(SqlDBContext context, IPostFavoriteManager favoriteManager)
         {
             _context = context;
-			this.favoriteManager = favoriteManager;
-		}
+            this._favoriteManager = favoriteManager;
+        }
 
         // GET: api/PostFavorites
         [HttpGet]
@@ -35,44 +35,60 @@ namespace SocialO.WebApi.Controllers
             }
             return await _context.PostFavorites.ToListAsync();
         }
-              
+
 
         // POST: api/PostFavorites
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<bool>> PostPostFavorite([FromForm] FavoriteDto favoriteDto)
+        [HttpPost("[action]")]
+        public async Task<ActionResult<bool>> PostPostFavorite(int postId, int userId)
         {
-            var postId = favoriteManager.GetBy(p => p.PostId == favoriteDto.PostId).Result;
-            var userId = favoriteManager.GetBy(p => p.UserId == favoriteDto.UserId).Result; 
 
             if (postId != null && userId != null)
             {
-				PostFavorite relation = await favoriteManager.GetBy(
-					 p => (p.PostId == favoriteDto.PostId && p.UserId == favoriteDto.UserId)
-				 );
+                PostFavorite relation = await _favoriteManager.GetBy(
+                     p => (p.PostId == postId && p.UserId == userId)
+                 );
 
-				if (relation != null)
-				{
-					favoriteManager.DeleteAsync(relation);
+                if (relation != null)
+                {
+                    _favoriteManager.DeleteAsync(relation);
 
-					return true;
-				}
+                    return Ok(false);
+                }
 
-				PostFavorite followerRelationship = new PostFavorite
-				{
-					PostId = favoriteDto.PostId,
-					UserId = favoriteDto.UserId,
-				};
+                PostFavorite followerRelationship = new PostFavorite
+                {
+                    PostId = postId,
+                    UserId = userId,
+                };
 
-				int result = await favoriteManager.InsertAsync(followerRelationship);
+                int result = await _favoriteManager.InsertAsync(followerRelationship);
 
-				return result > 0 ? true : false;
+                return Ok(true);
 
 
-			}
-            return false;
+            }
+            return BadRequest();
         }
 
-       
+        //username, email var mı
+        [HttpGet("[action]")]
+        public async Task<ActionResult<bool>> IsLiked(int postId,int userId )
+        {
+            
+
+            var favoriteExist = _favoriteManager.GetBy(x=>x.UserId == userId && x.PostId == postId).Result !=null;
+
+            if (!favoriteExist)
+            {
+                return Ok(false);
+            }
+
+
+
+
+            return Ok(true);
+        }
+
     }
 }
