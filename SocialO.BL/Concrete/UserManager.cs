@@ -31,7 +31,7 @@ namespace SocialO.BL.Concrete
                     Username = username,
                     FirstName = user.UserProfile.FirstName,
                     LastName = user.UserProfile.LastName,
-                    Gender = (char)user.UserProfile.Gender,
+                    Gender = user.UserProfile.Gender,
                     About = user.UserProfile.About,
                     DateOfBirth = user.UserProfile.DateOfBirth,
                     DateRegistered = user.DataRegistered,
