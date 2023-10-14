@@ -19,7 +19,18 @@ function Flow({ OwnPost, profileId }) {
 
   const [test, setTest] = useState(0);
   const [message] = useState("Something went wrong");
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState([
+    {
+      authorName: "undefined",
+      authorUsername: "undefined",
+      postId: "undefined",
+      content: "undefined",
+      datePosted: "undefined",
+      authorId: "undefined",
+      commentCount: "undefined",
+      favoriteCount: "undefined",
+    },
+  ]);
   const [page] = useState(1);
   const [pageSize] = useState(10);
   const [isOwnPost] = useState(OwnPost || false);
@@ -29,7 +40,7 @@ function Flow({ OwnPost, profileId }) {
     userId === null && navigate("/login");
     axios
       .get(
-        `http://localhost:5211/api/Posts/${
+        `${import.meta.env.API_BASE}/Posts/${
           isOwnPost ? profileId : userId
         }?page=${page}&pageSize=${pageSize}&isOwnPost=${isOwnPost}`,
         {
@@ -47,7 +58,7 @@ function Flow({ OwnPost, profileId }) {
           if (sessionStorage.getItem("refreshToken")) {
             axios
               .post(
-                `http://localhost:5211/api/Login/${sessionStorage.getItem(
+                `${import.meta.env.API_BASE}/Login/${sessionStorage.getItem(
                   "refreshToken"
                 )}`
               )

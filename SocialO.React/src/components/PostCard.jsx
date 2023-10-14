@@ -1,10 +1,13 @@
 import { Avatar } from "@mui/material";
+import axios from "axios";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 function PostCard({ post }) {
   const [formattedTime, setFormattedTime] = useState("");
+  const [isLiked, setIsLiked] = useState(false);
+  const userId = localStorage.getItem("userId");
 
   useEffect(() => {
     const postDate = new Date(
@@ -45,11 +48,32 @@ function PostCard({ post }) {
     setFormattedTime(formattedDifference);
   }, [post.datePosted]);
 
+  useEffect(() => {
+    axios
+      .get(
+        `${import.meta.env.API_BASE}/PostFavorites/IsLiked?postId=${
+          post.postId
+        }&userId=${userId}`
+      )
+      .then((response) => {
+        setIsLiked(response.data);
+      });
+  });
+
+  const LikeHandler = async () => {
+    axios
+      .post(
+        `${import.meta.env.API_BASE}/PostFavorites/PostPostFavorite?postId=${
+          post.postId
+        }&userId=${userId}`
+      )
+      .then(() => {
+        setIsLiked(setIsLiked(!isLiked));
+      });
+  };
+
   return (
-    <Link
-      to={`/${post.authorUsername}/post/${post.postId}`}
-      className="w-full flex sm:max-w-screen-sm items-center justify-center mt-3"
-    >
+    <div className="w-full flex sm:max-w-screen-sm items-center justify-center mt-3">
       <div className="w-full rounded-md bg-gradient-to-r from-blue-500  to-white pb-1 ">
         <div
           className="h-full w-full bg-white  p-5
@@ -58,7 +82,10 @@ function PostCard({ post }) {
         "
         >
           {/*horizantil margin is just for display*/}
-          <div className="flex items-start px-4 py-4 ">
+          <Link
+            to={`/${post.authorUsername}/post/${post.postId}`}
+            className="flex items-start px-4 py-4 "
+          >
             <Avatar className="w-12 h-12 rounded-full object-cover mr-4 shadow">
               {post.authorUsername[0].toUpperCase()}
             </Avatar>
@@ -86,13 +113,16 @@ function PostCard({ post }) {
                 {post.content}
               </p>
             </div>
-          </div>
+          </Link>
           <div className="mt-4 flex flex-row-reverse items-center  p-4">
-            <div className="flex  mr-2 text-gray-700 text-sm mr-3">
+            <button
+              onClick={LikeHandler}
+              className="flex mr-2 text-gray-700 text-sm z-20"
+            >
               <svg
-                fill="none"
+                fill={isLiked ? "red" : "none"}
                 viewBox="0 0 24 24"
-                className="w-5 h-5 mr-1"
+                className="w-5 h-5 mr-1 hover:fill-red-400"
                 stroke="currentColor"
               >
                 <path
@@ -103,12 +133,12 @@ function PostCard({ post }) {
                 />
               </svg>
               <span>{post.favoriteCount}</span>
-            </div>
-            <div className="flex justify-center mr-2 text-gray-700 text-sm mr-8">
+            </button>
+            <button className="flex justify-center text-gray-700 text-sm mr-8">
               <svg
                 fill="none"
                 viewBox="0 0 24 24"
-                className="w-5 h-5 mr-1"
+                className="w-5 h-5 mr-1 hover:fill-cyan-400"
                 stroke="currentColor"
               >
                 <path
@@ -119,11 +149,11 @@ function PostCard({ post }) {
                 />
               </svg>
               <span>{post.commentCount}</span>
-            </div>
+            </button>
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
 
