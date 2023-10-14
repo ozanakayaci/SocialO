@@ -31,7 +31,7 @@ function Profile() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5211/api/Users/${username}`)
+      .get(`${import.meta.env.API_BASE}/Users/${username}`)
       .then((response) => {
         setProfileData(response.data);
       });
