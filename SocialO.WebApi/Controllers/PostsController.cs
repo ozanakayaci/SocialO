@@ -159,7 +159,7 @@ namespace SocialO.WebApi.Controllers
 
             _postManager.DeleteAsync(post);
 
-            return NoContent();
+            return Ok();
         }
 
         private bool PostExists(int id)
