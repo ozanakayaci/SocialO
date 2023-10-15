@@ -1,12 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SocialO.BL.Abstract;
+﻿using Microsoft.AspNetCore.Mvc;
 using SocialO.BL.Concrete;
 using SocialO.DAL.DBContexts;
-using SocialO.Entities.Concrete;
-using SocialO.WebApi.Models.UserModels.Register;
 using SocialO.WebApi.Models.UserProfile;
 
 namespace SocialO.WebApi.Controllers
@@ -25,6 +19,24 @@ namespace SocialO.WebApi.Controllers
             _userProfileManager = new UserProfileManager();
         }
 
+        [HttpGet]
+        public async Task<ActionResult<EditUserProfileModel>> GetProfile(int userId)
+        {
+            var profile = _userProfileManager.GetBy(up => up.UserId == userId).Result;
+
+            var profileModel = new EditUserProfileModel
+            {
+                FirstName = profile.FirstName,
+                LastName = profile.LastName,
+                About = profile.About,
+                DateOfBirth = profile.DateOfBirth,
+            };
+
+
+            return Ok(profileModel);
+
+
+        }
 
         [HttpPut]
         public async Task<IActionResult> PutProfile([FromBody] EditUserProfileModel userProfileModel)
@@ -44,14 +56,10 @@ namespace SocialO.WebApi.Controllers
             existUserProfile.DateOfBirth = userProfileModel.DateOfBirth;
             existUserProfile.About = userProfileModel.About;
             existUserProfile.DateUpdated = DateTime.Now;
-
-
             
-
-
             int result = _userProfileManager.UpdateAsync(existUserProfile).Result;
 
-            return Ok(result);
+            return Ok();
         }
 
 
