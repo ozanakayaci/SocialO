@@ -3,6 +3,7 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function PostCard({ post }) {
   const [formattedTime, setFormattedTime] = useState("");
@@ -58,13 +59,25 @@ function PostCard({ post }) {
       });
   });
 
-  const LikeHandler = async () => {
+  const handleLike = async () => {
     axios
       .post(
         `http://localhost:5211/api/PostFavorites/PostPostFavorite?postId=${post.postId}&userId=${userId}`
       )
       .then(() => {
         setIsLiked(setIsLiked(!isLiked));
+      });
+  };
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    axios
+      .delete(`https://localhost:7298/api/Posts/${post.postId}`, {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      })
+      .then((res) => {
+        res.status === 200 && toast.success("Post deleted successfully");
       });
   };
 
@@ -78,14 +91,14 @@ function PostCard({ post }) {
         "
         >
           {/*horizantil margin is just for display*/}
-          <Link
+          <div
             to={`/${post.authorUsername}/post/${post.postId}`}
             className="flex items-start px-4 py-4 "
           >
             <Avatar className="w-12 h-12 rounded-full object-cover mr-4 shadow">
               {post.authorUsername[0].toUpperCase()}
             </Avatar>
-            <div className="w-full ">
+            <div className="w-full">
               <div className="flex justify-between items-center">
                 <div className="flex flex-row items-center ">
                   <Link
@@ -99,20 +112,37 @@ function PostCard({ post }) {
                   <div className="ml-1 text-ellipsis line-clamp-1">
                     @{post.authorName ? post.authorName : post.authorUsername}
                   </div>
+                  <small className="text-xs ml-1 text-gray-700 text-ellipsis line-clamp-1 hidden sm:flex">
+                    · {formattedTime}
+                  </small>
                 </div>
-                <small className="text-sm text-gray-700 text-ellipsis line-clamp-1  hidden sm:flex">
-                  {formattedTime}
-                </small>
+                {userId == post.authorId && (
+                  <div className=" flex flex-row-reverse items-center pr-5">
+                    <button
+                      onClick={(e) => handleDelete(e)}
+                      className="flex text-gray-700 text-sm z-20 items-center"
+                    >
+                      <svg
+                        fill={"none"}
+                        viewBox="0 0 24 24"
+                        className="w-4 h-4 mr-1 hover:fill-red-700"
+                        stroke="currentColor"
+                      >
+                        <path d="M 10 2 L 9 3 L 3 3 L 3 5 L 4.109375 5 L 5.8925781 20.255859 L 5.8925781 20.263672 C 6.023602 21.250335 6.8803207 22 7.875 22 L 16.123047 22 C 17.117726 22 17.974445 21.250322 18.105469 20.263672 L 18.107422 20.255859 L 19.890625 5 L 21 5 L 21 3 L 15 3 L 14 2 L 10 2 z M 6.125 5 L 17.875 5 L 16.123047 20 L 7.875 20 L 6.125 5 z"></path>
+                      </svg>
+                    </button>
+                  </div>
+                )}
               </div>
 
-              <p className="mt-3 text-gray-700 text-base  pb-2  w-full">
+              <div className="mt-3 text-gray-700 text-base pb-2 w-10/12 break-all">
                 {post.content}
-              </p>
+              </div>
             </div>
-          </Link>
+          </div>
           <div className="mt-4 flex flex-row-reverse items-center  p-4">
             <button
-              onClick={LikeHandler}
+              onClick={handleLike}
               className="flex mr-2 text-gray-700 text-sm z-20"
             >
               <svg
