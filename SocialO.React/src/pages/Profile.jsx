@@ -5,7 +5,6 @@ import axios from "axios";
 import Flow from "../components/Flow";
 import { Avatar } from "@mui/material";
 import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
 
 function Profile() {
   const username = useParams().username;
@@ -56,10 +55,6 @@ function Profile() {
       )
       .then((response) => {
         if (response.status == 200) {
-          toast("Now you follow jack", {
-            position: "bottom-center",
-            autoClose: 5000,
-          });
           setIsFollowed(!isFollowed);
         }
       })
