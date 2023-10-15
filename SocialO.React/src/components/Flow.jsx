@@ -23,7 +23,7 @@ function Flow({ OwnPost, profileId }) {
     {
       authorName: "undefined",
       authorUsername: "undefined",
-      postId: "undefined",
+      postId: -1,
       content: "undefined",
       datePosted: "undefined",
       authorId: "undefined",
@@ -38,65 +38,71 @@ function Flow({ OwnPost, profileId }) {
   useEffect(() => {
     //redux'a taşıyacağız
     userId === null && navigate("/login");
-    axios
-      .get(
-        `http://localhost:5211/api/Posts/${
-          isOwnPost ? profileId : userId
-        }?page=${page}&pageSize=${pageSize}&isOwnPost=${isOwnPost}`,
-        {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        }
-      )
-      .then((response) => {
-        if (page === 1) {
-          setPosts(response.data);
-        } else {
-          setPosts([...posts, ...response.data]);
-        }
-        setTest(1);
-      })
-      .catch((error) => {
-        if (error.response.status === 401) {
-          if (sessionStorage.getItem("refreshToken")) {
-            axios
-              .post(
-                `http://localhost:5211/api/Login/${sessionStorage.getItem(
-                  "refreshToken"
-                )}`
-              )
-              .then((response) => {
-                console.log("response", response);
-                if (response.data === "") {
-                  setTest(4);
-                } else {
-                  dispatch(login(response.data));
-                }
-                setTest(2);
-              })
-              .catch((error) => {
-                if (error.response.status === 400) {
-                  setTest(5);
-                } else {
-                  dispatch(logout());
-                  navigate("/");
-                }
-              });
-          } else {
-            dispatch(logout());
-            navigate("/");
-            setTest(3);
+    if (
+      (profileId !== -1 && isOwnPost) ||
+      (userId !== undefined && !isOwnPost)
+    ) {
+      axios
+        .get(
+          `http://localhost:5211/api/Posts/${
+            isOwnPost ? profileId : userId
+          }?page=${page}&pageSize=${pageSize}&isOwnPost=${isOwnPost}`,
+          {
+            headers: {
+              Authorization: localStorage.getItem("token"),
+            },
           }
-        }
-      });
+        )
+        .then((response) => {
+          if (page === 1) {
+            setPosts(response.data);
+            console.log(2);
+          } else {
+            setPosts([...posts, ...response.data]);
+          }
+          setTest(1);
+        })
+        .catch((error) => {
+          if (error.response.status === 401) {
+            if (sessionStorage.getItem("refreshToken")) {
+              axios
+                .post(
+                  `http://localhost:5211/api/Login/${sessionStorage.getItem(
+                    "refreshToken"
+                  )}`
+                )
+                .then((response) => {
+                  console.log("response", response);
+                  if (response.data === "") {
+                    setTest(4);
+                  } else {
+                    dispatch(login(response.data));
+                  }
+                  setTest(2);
+                })
+                .catch((error) => {
+                  if (error.response.status === 400) {
+                    setTest(5);
+                  } else {
+                    dispatch(logout());
+                    navigate("/");
+                  }
+                });
+            } else {
+              dispatch(logout());
+              navigate("/");
+              setTest(3);
+            }
+          }
+        });
+    }
   }, [test, profileId]);
 
   return (
     <div className="flex flex-col mt-14 items-center min-w-full  ">
       {posts.length < 1 && <div className="text-red-500">{message}</div>}
 
-      {posts[0].authorName !== "undefined" ? (
+      {posts[0].postId !== -1 ? (
         posts.map((post) => <PostCard key={post.postId} post={post} />)
       ) : isOwnPost ? (
         <div className="mt-20 text-5xl font-semibold text-blue-500 flex flex-row items-center h-36">
