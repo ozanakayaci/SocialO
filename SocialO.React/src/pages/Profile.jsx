@@ -5,6 +5,7 @@ import axios from "axios";
 import Flow from "../components/Flow";
 import { Avatar } from "@mui/material";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 function Profile() {
   const username = useParams().username;
@@ -25,27 +26,55 @@ function Profile() {
     postCount: 0,
     username: "undefined",
   });
-  const [isFollowed, setIsFollowed] = useState(true);
+  const [isFollowed, setIsFollowed] = useState(profileData.isFollowed);
 
   const [OwnPost] = useState(true);
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5211/api/Users/${username}`)
+      .get(`http://localhost:5211/api/Users/${username}`, {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      })
       .then((response) => {
         setProfileData(response.data);
       });
   }, []);
 
   function FollowHandler() {
-    setIsFollowed(!isFollowed);
+    axios
+      .post(
+        `https://localhost:7298/api/FollowerRelationships?followerId=${localStorage.getItem(
+          "userId"
+        )}&userId=${profileData.id}`,
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      )
+      .then((response) => {
+        if (response.status == 200) {
+          toast("Now you follow jack", {
+            position: "bottom-center",
+            autoClose: 5000,
+          });
+          setIsFollowed(!isFollowed);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
+
   return (
     <>
       <div className="sm:max-w-screen-sm w-full px-5 pb-4 sm:px-24 mt-8 bg-gradient-to-b from-blue-100 rounded-lg	 ">
         <div className="flex justify-center w-full text-3xl my-8 relative">
           <div className="absolute bottom-0">
             <Avatar
+              src={profileData.lastName}
               sx={{ width: 80, height: 80, border: 2, borderColor: "#e1f5fe" }}
             >
               {profileData.username[0].toUpperCase()}
@@ -112,8 +141,8 @@ function Profile() {
               </div>
             </div>
             <div>
-              <div className="whitespace-pre-wrap	">
-                {profileData.about ? profileData.about : " tettetteeett"}
+              <div className="whitespace-pre-wrap break-all">
+                {profileData.about ? profileData.about : " "}
               </div>
             </div>
           </div>

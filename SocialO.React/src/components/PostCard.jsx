@@ -52,7 +52,12 @@ function PostCard({ post }) {
   useEffect(() => {
     axios
       .get(
-        `http://localhost:5211/api/PostFavorites/IsLiked?postId=${post.postId}&userId=${userId}`
+        `http://localhost:5211/api/PostFavorites/IsLiked?postId=${post.postId}&userId=${userId}`,
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
       )
       .then((response) => {
         setIsLiked(response.data);
@@ -82,7 +87,7 @@ function PostCard({ post }) {
   };
 
   return (
-    <div className="w-full flex sm:max-w-screen-sm items-center justify-center mt-3">
+    <div className="w-full flex sm:max-w-screen-sm items-center justify-center mt-3 whitespace-pre-line	">
       <div className="w-full rounded-md bg-gradient-to-r from-blue-500  to-white pb-1 ">
         <div
           className="h-full w-full bg-white  p-5
@@ -91,7 +96,7 @@ function PostCard({ post }) {
         "
         >
           {/*horizantil margin is just for display*/}
-          <div
+          <Link
             to={`/${post.authorUsername}/post/${post.postId}`}
             className="flex items-start px-4 py-4 "
           >
@@ -110,7 +115,7 @@ function PostCard({ post }) {
                     </h2>
                   </Link>
                   <div className="ml-1 text-ellipsis line-clamp-1">
-                    @{post.authorName ? post.authorName : post.authorUsername}
+                    @{post.authorUsername}
                   </div>
                   <small className="text-xs ml-1 text-gray-700 text-ellipsis line-clamp-1 hidden sm:flex">
                     · {formattedTime}
@@ -139,8 +144,8 @@ function PostCard({ post }) {
                 {post.content}
               </div>
             </div>
-          </div>
-          <div className="mt-4 flex flex-row-reverse items-center  p-4">
+          </Link>
+          <div className="flex flex-row-reverse items-center p-4 pt-0">
             <button
               onClick={handleLike}
               className="flex mr-2 text-gray-700 text-sm z-20"

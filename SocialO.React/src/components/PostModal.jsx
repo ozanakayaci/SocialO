@@ -14,11 +14,9 @@ async function sendPost(credentials) {
       },
     })
     .then((response) => {
-      console.log(response);
       return response.data;
     })
     .catch((error) => {
-      console.log(error);
       toast.error(error.response.data.title, {
         position: "bottom-center",
         autoClose: 5000,
@@ -78,12 +76,29 @@ function PostModal() {
         }
       })
       .catch((error) => {
-        console.log(error);
+        toast.error(error.message, {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       });
 
     setPostText("");
 
     setOpen(false);
+  };
+
+  const handleChange = (event) => {
+    if (event.key === "Enter") {
+      setPostText(postText + "U+000A");
+    } else {
+      setPostText(event.target.value);
+    }
   };
 
   return (
@@ -140,7 +155,9 @@ function PostModal() {
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm  placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600  sm:text-sm sm:leading-6 "
                 inputProps={{ maxLength: 240 }}
                 autoFocus
-                onChange={(e) => setPostText(e.target.value)}
+                onChange={(e) => {
+                  handleChange(e);
+                }}
               />
             </FocusTrap>
             <div className="mt-4">

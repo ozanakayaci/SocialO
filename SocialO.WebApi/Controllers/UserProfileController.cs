@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SocialO.BL.Concrete;
 using SocialO.DAL.DBContexts;
 using SocialO.WebApi.Models.UserProfile;
@@ -7,6 +8,7 @@ namespace SocialO.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserProfileController : ControllerBase
     {
 

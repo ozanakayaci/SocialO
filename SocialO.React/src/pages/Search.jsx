@@ -23,7 +23,12 @@ function Search() {
         if (searchText.length > 0) {
           axios
             .get(
-              `http://localhost:5211/api/Users/SearchByName?searchedString=${searchText}`
+              `http://localhost:5211/api/Users/SearchByName?searchedString=${searchText}`,
+              {
+                headers: {
+                  Authorization: localStorage.getItem("token"),
+                },
+              }
             )
             .then((response) => {
               setUsersData(response.data);

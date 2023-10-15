@@ -19,7 +19,11 @@ function Settings() {
   useEffect(() => {
     setIsLoading(true);
     axios
-      .get(`https://localhost:7298/api/UserProfile?userId=${userId}`)
+      .get(`https://localhost:7298/api/UserProfile?userId=${userId}`, {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      })
       .then((response) => {
         setUserProfile(response.data);
         setIsLoading(false);
@@ -45,6 +49,7 @@ function Settings() {
     axios
       .put("https://localhost:7298/api/UserProfile", data, {
         headers: {
+          Authorization: localStorage.getItem("token"),
           "Content-Type": "application/json",
         },
       })
@@ -88,7 +93,7 @@ function Settings() {
             <TextField
               className=" w-5/12"
               id="outlined-multiline-flexible"
-              label="Surname"
+              label="Image Base64"
               variant="outlined"
               defaultValue={userProfile.lastName}
               onChange={(e) => setLastName(e.target.value)}

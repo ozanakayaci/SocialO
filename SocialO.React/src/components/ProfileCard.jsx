@@ -1,4 +1,5 @@
 import { Avatar } from "@mui/material";
+import axios from "axios";
 import PropTypes from "prop-types";
 import { useState } from "react";
 
@@ -8,7 +9,25 @@ function ProfileCard({ user }) {
   const [isFollowed, setIsFollowed] = useState(false);
 
   function FollowHandler() {
-    setIsFollowed(!isFollowed);
+    axios
+      .post(
+        `https://localhost:7298/api/FollowerRelationships?followerId=${localStorage.getItem(
+          "userId"
+        )}&userId=${user.id}`,
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      )
+      .then((response) => {
+        if (response.status == 200) {
+          setIsFollowed(!isFollowed);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   return (
@@ -55,7 +74,7 @@ function ProfileCard({ user }) {
                   Following
                 </div>
               </div>
-              <p className="mt-3 text-gray-700 text-sm md:text-base  pb-2  w-full">
+              <p className="mt-3 text-gray-700 text-sm md:text-base pb-2 whitespace-pre-wrap break-all w-full">
                 {user.about}
               </p>
             </div>

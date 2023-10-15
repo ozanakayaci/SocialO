@@ -12,6 +12,7 @@ namespace SocialO.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PostsController : ControllerBase
     {
         private readonly IPostManager _postManager;

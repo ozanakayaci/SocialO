@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SocialO.BL.Concrete;
 using SocialO.BL.Models.UserModels;
@@ -11,6 +12,7 @@ namespace SocialO.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly SqlDBContext _context;
@@ -25,7 +27,6 @@ namespace SocialO.WebApi.Controllers
 
         // GET: api/Users
         [HttpGet]
-        
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
             if (_context.Users == null)
@@ -37,7 +38,6 @@ namespace SocialO.WebApi.Controllers
 
         // GET: api/Users/5
         [HttpGet("{username}")]
-        
         public async Task<ActionResult<UserProfileModel>> GetUser(string username)
         {
 	        var model = await _userManager.GetUserByUsername(username);

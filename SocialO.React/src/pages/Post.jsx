@@ -20,7 +20,11 @@ function Post() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5211/api/Posts/GetPost/${postId}`)
+      .get(`http://localhost:5211/api/Posts/GetPost/${postId}`, {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      })
       .then((response) => {
         setPost(response.data);
         console.log(response);
