@@ -42,7 +42,7 @@ function Profile() {
   }
   return (
     <>
-      <div className="sm:max-w-screen-sm w-full px-5 pb-4 sm:px-24 mt-12 bg-gradient-to-b from-blue-100 rounded-lg	 ">
+      <div className="sm:max-w-screen-sm w-full px-5 pb-4 sm:px-24 mt-8 bg-gradient-to-b from-blue-100 rounded-lg	 ">
         <div className="flex justify-center w-full text-3xl my-8 relative">
           <div className="absolute bottom-0">
             <Avatar

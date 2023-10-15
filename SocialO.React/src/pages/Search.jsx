@@ -38,7 +38,7 @@ function Search() {
 
   return (
     <>
-      <div className="px-4 flex justify-center items-center w-full md:max-w-screen-sm h-16 rounded-xl border-gray-100 bg-white">
+      <div className="px-4 flex justify-center items-center mt-8 w-full md:max-w-screen-sm h-16 rounded-xl border-gray-100 bg-white">
         <TextField
           className="w-full border border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-transparent"
           id="outlined-basic"
