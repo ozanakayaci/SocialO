@@ -17,6 +17,8 @@ function Flow({ OwnPost, profileId }) {
 
   const userId = useSelector((state) => state.socialo.userId);
 
+  const [isLoading, setIsLoading] = useState(true);
+
   const [test, setTest] = useState(0);
   const [message] = useState("Something went wrong");
   const [posts, setPosts] = useState([
@@ -42,6 +44,7 @@ function Flow({ OwnPost, profileId }) {
       (profileId !== -1 && isOwnPost) ||
       (userId !== undefined && !isOwnPost)
     ) {
+      setIsLoading(true);
       axios
         .get(
           `http://localhost:5211/api/Posts/${
@@ -56,11 +59,11 @@ function Flow({ OwnPost, profileId }) {
         .then((response) => {
           if (page === 1) {
             setPosts(response.data);
-            console.log(2);
           } else {
             setPosts([...posts, ...response.data]);
           }
           setTest(1);
+          setIsLoading(false);
         })
         .catch((error) => {
           if (error.response.status === 401) {
@@ -72,7 +75,6 @@ function Flow({ OwnPost, profileId }) {
                   )}`
                 )
                 .then((response) => {
-                  console.log("response", response);
                   if (response.data === "") {
                     setTest(4);
                   } else {
@@ -94,29 +96,36 @@ function Flow({ OwnPost, profileId }) {
               setTest(3);
             }
           }
+          setIsLoading(false);
         });
     }
   }, [test, profileId]);
 
   return (
-    <div className="flex flex-col mt-14 items-center min-w-full  ">
-      {posts.length < 1 && <div className="text-red-500">{message}</div>}
-
-      {posts[0].postId !== -1 ? (
-        posts.map((post) => <PostCard key={post.postId} post={post} />)
-      ) : isOwnPost ? (
-        <div className="mt-20 text-5xl font-semibold text-blue-500 flex flex-row items-center h-36">
-          Send Post...
-        </div>
+    <>
+      {isLoading ? (
+        <div>Loading</div>
       ) : (
-        <div className="mt-16 m-5 text-2xl sm:text-5xl font-semibold text-blue-500 flex flex-row items-center h-36">
-          <Link to="/search" className="hover:text-black underline mr-3">
-            Find
-          </Link>{" "}
-          someone to follow...
+        <div className="flex flex-col mt-14 items-center min-w-full  ">
+          {posts.length < 1 && <div className="text-red-500">{message}</div>}
+
+          {posts[0].postId !== -1 ? (
+            posts.map((post) => <PostCard key={post.postId} post={post} />)
+          ) : isOwnPost ? (
+            <div className="mt-20 text-5xl font-semibold text-blue-500 flex flex-row items-center h-36">
+              Send Post...
+            </div>
+          ) : (
+            <div className="mt-16 m-5 text-2xl sm:text-5xl font-semibold text-blue-500 flex flex-row items-center h-36">
+              <Link to="/search" className="hover:text-black underline mr-3">
+                Find
+              </Link>{" "}
+              someone to follow...
+            </div>
+          )}
         </div>
       )}
-    </div>
+    </>
   );
 }
 
