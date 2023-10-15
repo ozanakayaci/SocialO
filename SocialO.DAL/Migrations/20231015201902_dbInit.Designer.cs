@@ -11,7 +11,7 @@ using SocialO.DAL.DBContexts;
 namespace SocialO.DAL.Migrations
 {
     [DbContext(typeof(SqlDBContext))]
-    [Migration("20230923185344_dbInit")]
+    [Migration("20231015201902_dbInit")]
     partial class dbInit
     {
         /// <inheritdoc />
