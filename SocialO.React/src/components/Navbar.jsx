@@ -79,7 +79,7 @@ function Navbar() {
           className="relative md:inline-block hidden text-left w-24"
           onMouseLeave={() => setHide(true)}
         >
-          <div>
+          <div className="flex justify-center">
             <button
               className="md:flex  flex justify-center"
               onMouseEnter={() => setHide(false)}
@@ -173,7 +173,7 @@ function Navbar() {
         {/* Configuration */}
         {/* Settings */}
         <div
-          className="relative text-left w-24"
+          className="relative text-left w-10"
           onMouseLeave={() => setHide(true)}
         >
           <div>
