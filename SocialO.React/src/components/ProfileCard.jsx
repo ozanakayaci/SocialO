@@ -11,7 +11,7 @@ function ProfileCard({ user }) {
   function FollowHandler() {
     axios
       .post(
-        `https://localhost:7298/api/FollowerRelationships?followerId=${localStorage.getItem(
+        `http://localhost:5211/api/FollowerRelationships?followerId=${localStorage.getItem(
           "userId"
         )}&userId=${user.id}`,
         {
