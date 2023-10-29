@@ -1,8 +1,7 @@
-using System.Linq.Expressions;
 using SocialO.BL.Abstract;
 using SocialO.DAL.Repository.Abstract;
 using SocialO.DAL.Repository.Concrete;
-using SocialO.Entities.Abstract;
+using System.Linq.Expressions;
 
 namespace SocialO.BL.Concrete
 {

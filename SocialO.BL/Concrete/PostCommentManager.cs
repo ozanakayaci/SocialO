@@ -5,6 +5,6 @@ namespace SocialO.BL.Concrete
 {
     public class PostCommentManager : ManagerBase<PostComment>, IPostCommentManager
     {
-        
+
     }
 }

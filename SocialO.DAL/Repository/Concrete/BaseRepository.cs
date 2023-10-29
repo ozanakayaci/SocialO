@@ -1,18 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SocialO.DAL.DBContexts;
 using SocialO.DAL.Repository.Abstract;
-using SocialO.Entities.Abstract;
+using System.Linq.Expressions;
 
 namespace SocialO.DAL.Repository.Concrete
 {
     public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
-	    public SqlDBContext dbContext { get; set; }
+        public SqlDBContext dbContext { get; set; }
 
 
         public BaseRepository()
@@ -23,7 +18,7 @@ namespace SocialO.DAL.Repository.Concrete
 
         public virtual async Task<int> InsertAsync(T entity)
         {
-            
+
             await dbContext.Set<T>().AddAsync(entity);
             return await dbContext.SaveChangesAsync();
         }

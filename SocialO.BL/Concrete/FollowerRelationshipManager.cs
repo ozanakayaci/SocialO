@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using SocialO.BL.Abstract;
-using SocialO.DAL.DBContexts;
 using SocialO.Entities.Concrete;
 
 namespace SocialO.BL.Concrete

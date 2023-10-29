@@ -1,6 +1,4 @@
-﻿using SocialO.Entities.Concrete;
-
-namespace SocialO.WebApi.Models.UserProfile
+﻿namespace SocialO.WebApi.Models.UserProfile
 {
     public class EditUserProfileModel
     {
@@ -10,7 +8,7 @@ namespace SocialO.WebApi.Models.UserProfile
         public DateTime? DateOfBirth { get; set; }
         public string? About { get; set; }
         public int UserId { get; set; }
-        
+
 
     }
 }

@@ -2,12 +2,12 @@
 using Microsoft.IdentityModel.Tokens;
 using SocialO.BL.Abstract;
 using SocialO.Entities.Concrete;
+using SocialO.WebApi.Models.UserModels.Login;
 using SocialO.WebApi.Models.UserModels.Register;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using SocialO.WebApi.Models.UserModels.Login;
 
 namespace SocialO.WebApi.Services
 {

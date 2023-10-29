@@ -6,5 +6,4 @@ public class PostPostDto
 
     //User
     public int AuthorId { get; set; }
-
 }

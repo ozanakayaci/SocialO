@@ -7,61 +7,61 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace SocialO.WebApi.Services
+namespace SocialO.WebApi.Services;
+
+public class TokenService : ITokenService
 {
-    public class TokenService : ITokenService
+    private readonly IConfiguration configuration;
+
+    public TokenService(IConfiguration configuration)
     {
-        readonly IConfiguration configuration;
+        this.configuration = configuration;
+    }
 
-        public TokenService(IConfiguration configuration)
+    public async Task<GenerateTokenResponse> GenerateToken(User user)
+    {
+        var tokenInstance = new GenerateTokenResponse();
+
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Token:SecurityKey"]));
+
+        var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+        tokenInstance.TokenExpireDate = DateTime.Now.AddMinutes(5);
+
+
+        var claims = new List<Claim>
         {
-            this.configuration = configuration;
-        }
+            new(ClaimTypes.Name, user.Username),
+            new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new(ClaimTypes.Role, user.UserType)
+        };
 
-        public async Task<GenerateTokenResponse> GenerateToken(User user)
+        var jwt = new JwtSecurityToken(
+            configuration["Token:Issuer"],
+            configuration["Token:Audience"],
+            claims,
+            DateTime.Now,
+            tokenInstance.TokenExpireDate,
+            signingCredentials
+        );
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+
+        tokenInstance.Token = tokenHandler.WriteToken(jwt);
+
+        tokenInstance.RefreshToken = CreateRefreshToken();
+
+
+        return await Task.FromResult(tokenInstance);
+    }
+
+    public string CreateRefreshToken()
+    {
+        var number = new byte[32];
+        using (var random = RandomNumberGenerator.Create())
         {
-            GenerateTokenResponse tokenInstance = new GenerateTokenResponse();
-
-            SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Token:SecurityKey"]));
-
-            SigningCredentials signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-            tokenInstance.TokenExpireDate = DateTime.Now.AddMinutes(5);
-
-
-            var claims = new List<Claim> {
-                    new Claim(ClaimTypes.Name, user.Username ),
-                    new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
-                    new Claim(ClaimTypes.Role,user.UserType.ToString())
-                    };
-
-            JwtSecurityToken jwt = new JwtSecurityToken(
-                    issuer: configuration["Token:Issuer"],
-                    audience: configuration["Token:Audience"],
-                    claims: claims,
-                    notBefore: DateTime.Now,
-                    expires: tokenInstance.TokenExpireDate,
-                    signingCredentials: signingCredentials
-                );
-
-            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-
-            tokenInstance.Token = tokenHandler.WriteToken(jwt);
-
-            tokenInstance.RefreshToken = CreateRefreshToken();
-
-
-            return await Task.FromResult(tokenInstance);
-        }
-
-        public string CreateRefreshToken()
-        {
-            byte[] number = new byte[32];
-            using (RandomNumberGenerator random = RandomNumberGenerator.Create())
-            {
-                random.GetBytes(number);
-                return Convert.ToBase64String(number);
-            }
+            random.GetBytes(number);
+            return Convert.ToBase64String(number);
         }
     }
 }

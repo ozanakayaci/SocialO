@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SocialO.BL.Abstract;
 using SocialO.BL.Models.PostModels;
-using SocialO.DAL.Repository.Abstract;
 using SocialO.Entities.Concrete;
 
 namespace SocialO.BL.Concrete

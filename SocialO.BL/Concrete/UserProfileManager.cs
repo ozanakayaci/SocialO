@@ -1,7 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using SocialO.BL.Abstract;
-using SocialO.DAL.DBContexts;
-using SocialO.DAL.Repository.Abstract;
 using SocialO.Entities.Concrete;
 using SocialO.WebApi.Models.UserProfile;
 
@@ -9,7 +7,7 @@ namespace SocialO.BL.Concrete
 {
     public class UserProfileManager : ManagerBase<UserProfile>, IUserProfileManager
     {
-      
+
 
         public async Task<EditUserProfileModel> GetUserProfile(int userId)
         {
@@ -32,7 +30,7 @@ namespace SocialO.BL.Concrete
 
         public async Task<bool> UpdateUserProfile(EditUserProfileModel userProfileModel)
         {
-            var existUserProfile = await  base.repository.dbContext.UserProfiles
+            var existUserProfile = await base.repository.dbContext.UserProfiles
                 .FirstOrDefaultAsync(up => up.UserId == userProfileModel.UserId);
 
             if (existUserProfile == null)
@@ -47,7 +45,7 @@ namespace SocialO.BL.Concrete
             existUserProfile.About = userProfileModel.About;
             existUserProfile.DateUpdated = DateTime.Now;
 
-            await  base.repository.dbContext.SaveChangesAsync();
+            await base.repository.dbContext.SaveChangesAsync();
 
             return true;
         }

@@ -1,5 +1,4 @@
 using System.Linq.Expressions;
-using SocialO.Entities.Abstract;
 
 namespace SocialO.BL.Abstract
 {

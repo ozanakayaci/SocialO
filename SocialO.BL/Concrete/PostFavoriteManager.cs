@@ -1,13 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using SocialO.BL.Abstract;
-using SocialO.DAL.DBContexts;
 using SocialO.Entities.Concrete;
 
 namespace SocialO.BL.Concrete
 {
     public class PostFavoriteManager : ManagerBase<PostFavorite>, IPostFavoriteManager
     {
-       
+
 
         public async Task<bool> TogglePostFavorite(int postId, int userId)
         {
@@ -16,7 +15,7 @@ namespace SocialO.BL.Concrete
 
             if (relation != null)
             {
-                 base.repository.dbContext.PostFavorites.Remove(relation);
+                base.repository.dbContext.PostFavorites.Remove(relation);
             }
             else
             {
@@ -25,17 +24,17 @@ namespace SocialO.BL.Concrete
                     PostId = postId,
                     UserId = userId,
                 };
-                 base.repository.dbContext.PostFavorites.Add(relation);
+                base.repository.dbContext.PostFavorites.Add(relation);
             }
 
-            await  base.repository.dbContext.SaveChangesAsync();
+            await base.repository.dbContext.SaveChangesAsync();
 
             return true;
         }
 
         public async Task<bool> IsLiked(int postId, int userId)
         {
-            return await  base.repository.dbContext.PostFavorites.AnyAsync(x => x.UserId == userId && x.PostId == postId);
+            return await base.repository.dbContext.PostFavorites.AnyAsync(x => x.UserId == userId && x.PostId == postId);
         }
     }
 }
