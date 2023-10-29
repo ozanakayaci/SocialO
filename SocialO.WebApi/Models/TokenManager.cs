@@ -1,8 +1,8 @@
+using Microsoft.IdentityModel.Tokens;
+using SocialO.Entities.Concrete;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Cryptography;
 using System.Text;
-using Microsoft.IdentityModel.Tokens;
-using SocialO.Entities.Concrete;
 
 namespace SocialO.WebApi.Models
 {
@@ -22,7 +22,7 @@ namespace SocialO.WebApi.Models
             SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Token:SecurityKey"]));
 
             SigningCredentials signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            
+
             tokenInstance.Expiration = DateTime.Now.AddMinutes(5);
 
             JwtSecurityToken securityToken = new JwtSecurityToken(
@@ -32,7 +32,7 @@ namespace SocialO.WebApi.Models
                 notBefore: DateTime.Now,
                 signingCredentials: signingCredentials
                 );
-            
+
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
 
             tokenInstance.AccessToken = tokenHandler.WriteToken(securityToken);
@@ -40,7 +40,7 @@ namespace SocialO.WebApi.Models
             tokenInstance.RefreshToken = CreateRefreshToken();
             return tokenInstance;
         }
-        
+
         public string CreateRefreshToken()
         {
             byte[] number = new byte[32];

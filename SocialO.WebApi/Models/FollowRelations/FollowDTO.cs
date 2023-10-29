@@ -1,6 +1,4 @@
-﻿using SocialO.Entities.Concrete;
-
-namespace SocialO.WebApi.Models.FollowRelotions;
+﻿namespace SocialO.WebApi.Models.FollowRelotions;
 
 public class FollowDTO
 {

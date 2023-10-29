@@ -1,278 +1,52 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using SocialO.BL.Abstract;
-using SocialO.BL.Concrete;
-using SocialO.DAL.DBContexts;
-using SocialO.Entities.Concrete;
+﻿using Microsoft.AspNetCore.Mvc;
 using SocialO.WebApi.Models.UserModels.Login;
 using SocialO.WebApi.Models.UserModels.Register;
 using SocialO.WebApi.Services;
 
-namespace SocialO.WebApi.Controllers
+namespace SocialO.WebApi.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class LoginController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class LoginController : ControllerBase
+    private readonly AuthService authService;
+
+    public LoginController(AuthService authService)
     {
-        private readonly IUserManager userManager;
-        private readonly IFollowerRelationshipManager followerRelationshipManager;
-        private readonly SqlDBContext context;
-        private readonly IConfiguration configuration;
-        private readonly UserProfileManager _userProfileManager;
+        this.authService = authService;
+    }
 
-        public LoginController(IConfiguration configuration)
-        {
-            userManager = new UserManager();
-            followerRelationshipManager = new FollowerRelationshipManager();
+    [HttpPost("[action]")]
+    public async Task<ActionResult<bool>> SignUp([FromBody] UserRegister userRegister)
+    {
+        var result = await authService.SignUp(userRegister);
+        return result;
+    }
 
-            _userProfileManager = new UserProfileManager();
-            context = new SqlDBContext();
-            this.configuration = configuration;
-        }
+    [HttpGet("[action]")]
+    public async Task<ActionResult<bool>> Available(string input)
+    {
+        var result = await authService.Available(input);
+        return result;
+    }
 
-        //Kullanıcı kayıt
-        [HttpPost("[action]")]
-        public async Task<ActionResult<bool>> SignUp([FromBody] UserRegister userRegister)
-        {
-            bool usernameExist = userManager.GetBy(x => x.Username == userRegister.Username).Result != null ;
-            bool emailExist = userManager.GetBy(x => x.Email == userRegister.Email).Result != null;
+    [HttpPost("[action]")]
+    public async Task<ActionResult<UserLoginResponse>> SignIn([FromBody] UserLoginRequest request)
+    {
+        var response = await authService.SignIn(request);
 
-            if (usernameExist)
-            {
-	            return Conflict(new { message = "That username has been taken. " });
-			}
-			if (emailExist)
-            {
-	            return Conflict(new { message = "Email has already been taken." });
-			}
+        if (response == null) return BadRequest(new { message = "Username or password is wrong!" });
 
-			if (userRegister.Password != userRegister.Repassword)
-			{
-				return BadRequest(new { message = "Passwords do not match." });
-			}
+        return response;
+    }
 
-			//pasword hash
-			PasswordHashHelper.CreatePasswordHash(
-                userRegister.Password,
-                out var passwordHash,
-                out var passwordSalt
-            );
-            
-            User user = new User
-            {
-                Username = userRegister.Username.ToLower(),
-                Email = userRegister.Email.ToLower(),
-                PasswordSalt = passwordSalt,
-                PasswordHash = passwordHash,
-            };
+    [HttpPost("{refreshToken}")]
+    public async Task<ActionResult<UserLoginResponse>> RefreshTokenLogin(string refreshToken)
+    {
+        var response = await authService.RefreshTokenLogin(refreshToken);
 
-           
+        if (response == null) return Unauthorized(new { message = "Invalid token" });
 
-            int result1 = await userManager.InsertAsync(user);
-            
-
-            FollowerRelationship relationship = new FollowerRelationship
-            {
-	            FollowerId = user.Id,
-	            UserId = user.Id
-            };
-
-            int result2 = await followerRelationshipManager.InsertAsync(relationship);
-
-
-            UserProfile profile = new UserProfile
-            {
-                FirstName = userRegister.Username.ToLower(),
-                UserId = user.Id
-
-
-            };
-            int result3 = await _userProfileManager.InsertAsync(profile);
-            return result1   > 0 ? true : false;
-        }
-        
-        //username, email var mı
-        [HttpGet("[action]")]
-        public async Task<ActionResult<bool>> Available(string input)
-        {
-			bool usernameExist = userManager.GetBy(x => x.Username == input).Result != null;
-			bool emailExist = userManager.GetBy(x => x.Email == input).Result != null;
-
-
-			if (usernameExist)
-			{
-				return false;
-			}
-			if (emailExist)
-			{
-				return false;
-			}
-
-
-
-			return true;
-        }
-
-		//Kullanıcı giriş
-		[HttpPost("[action]")]
-        public async Task<ActionResult<UserLoginResponse>> SignIn(
-            [FromBody] UserLoginRequest request
-        )
-        {
-            UserLoginResponse response = new();
-
-            User user = await userManager.GetBy(
-                p =>
-                    (p.Username == request.Username.ToLower())
-                    || (p.Email == request.Username.ToLower())
-            );
-
-            if (string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.Password))
-            {
-                throw new ArgumentNullException(nameof(request));
-            }
-
-            if (
-                user != null
-                && PasswordHashHelper.VerifyPasswordHash(
-                    request.Password,
-                    user.PasswordHash,
-                    user.PasswordSalt
-                )
-            )
-            {
-                GenerateTokenResponse tokenInstance = new GenerateTokenResponse();
-
-                SymmetricSecurityKey securityKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(configuration["Token:SecurityKey"])
-                );
-
-                SigningCredentials signingCredentials = new SigningCredentials(
-                    securityKey,
-                    SecurityAlgorithms.HmacSha256
-                );
-
-                tokenInstance.TokenExpireDate = DateTime.Now.AddMinutes(1);
-
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, user.Username),
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Role, user.UserType.ToString())
-                };
-
-                JwtSecurityToken jwt = new JwtSecurityToken(
-                    issuer: configuration["Token:Issuer"],
-                    audience: configuration["Token:Audience"],
-                    claims: claims,
-                    notBefore: DateTime.Now,
-                    expires: tokenInstance.TokenExpireDate,
-                    signingCredentials: signingCredentials
-                );
-
-                JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-
-                tokenInstance.Token = tokenHandler.WriteToken(jwt);
-
-                byte[] number = new byte[32];
-                RandomNumberGenerator random = RandomNumberGenerator.Create();
-                random.GetBytes(number);
-
-                tokenInstance.RefreshToken = Convert.ToBase64String(number);
-
-                var generatedTokenInformation = tokenInstance;
-
-                response.AuthenticateResult = true;
-                response.AuthToken = generatedTokenInformation.Token;
-                response.AccessTokenExpireDate = generatedTokenInformation.TokenExpireDate;
-                response.RefreshToken = generatedTokenInformation.RefreshToken;
-
-                user.RefreshToken = generatedTokenInformation.RefreshToken;
-                user.RefreshTokenEndDate = generatedTokenInformation.TokenExpireDate.AddHours(5);
-                await userManager.UpdateAsync(user);
-
-                return response;
-            }
-
-
-
-			return BadRequest(new { message = "Username or password is wrong!" });
-		}
-
-        [HttpPost("{refreshToken}")]
-        public async Task<ActionResult<UserLoginResponse>> RefreshTokenLogin( string refreshToken)
-        {
-
-			string decodedRefreshToken = Uri.UnescapeDataString(refreshToken);
-
-			User user = await context.Users.FirstOrDefaultAsync(
-                x => x.RefreshToken == decodedRefreshToken
-			);
-            if (user != null && user?.RefreshTokenEndDate > DateTime.Now)
-            {
-                UserLoginResponse response = new();
-
-                GenerateTokenResponse tokenInstance = new GenerateTokenResponse();
-
-                SymmetricSecurityKey securityKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(configuration["Token:SecurityKey"])
-                );
-
-                SigningCredentials signingCredentials = new SigningCredentials(
-                    securityKey,
-                    SecurityAlgorithms.HmacSha256
-                );
-
-                tokenInstance.TokenExpireDate = DateTime.Now.AddMinutes(5);
-
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, user.Username),
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Role, user.UserType.ToString())
-                };
-
-                JwtSecurityToken jwt = new JwtSecurityToken(
-                    issuer: configuration["Token:Issuer"],
-                    audience: configuration["Token:Audience"],
-                    claims: claims,
-                    notBefore: DateTime.Now,
-                    expires: tokenInstance.TokenExpireDate,
-                    signingCredentials: signingCredentials
-                );
-
-                JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-
-                tokenInstance.Token = tokenHandler.WriteToken(jwt);
-
-                byte[] number = new byte[32];
-                RandomNumberGenerator random = RandomNumberGenerator.Create();
-                random.GetBytes(number);
-
-                tokenInstance.RefreshToken = Convert.ToBase64String(number);
-
-                var generatedTokenInformation = tokenInstance;
-
-                response.AuthenticateResult = true;
-                response.AuthToken = generatedTokenInformation.Token;
-                response.AccessTokenExpireDate = generatedTokenInformation.TokenExpireDate;
-                response.RefreshToken = generatedTokenInformation.RefreshToken;
-
-                user.RefreshToken = generatedTokenInformation.RefreshToken;
-                user.RefreshTokenEndDate = generatedTokenInformation.TokenExpireDate.AddDays(2);
-                await userManager.UpdateAsync(user);
-
-                return response;
-            }
-
-            return Unauthorized(new { message = "Invalid token" });
-        }
+        return response;
     }
 }

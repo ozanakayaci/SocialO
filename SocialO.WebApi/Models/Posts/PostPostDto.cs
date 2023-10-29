@@ -1,12 +1,10 @@
-﻿using SocialO.Entities.Concrete;
-
-namespace SocialO.WebApi.Models.Posts;
+﻿namespace SocialO.WebApi.Models.Posts;
 
 public class PostPostDto
 {
-	public string Content { get; set; }
+    public string Content { get; set; }
 
-	//User
-	public int AuthorId { get; set; }
+    //User
+    public int AuthorId { get; set; }
 
 }

@@ -3,6 +3,9 @@
     <ProjectReference Include="..\SocialO.Entities\SocialO.Entities.csproj" />
     <ProjectReference Include="..\SocialO.DAL\SocialO.DAL.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\" />
+  </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
