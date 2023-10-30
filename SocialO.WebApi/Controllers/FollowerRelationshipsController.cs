@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SocialO.BL.Abstract;
 using SocialO.Entities.Concrete;
 
@@ -6,6 +7,7 @@ namespace SocialO.WebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class FollowerRelationshipsController : ControllerBase
 {
     private readonly IFollowerRelationshipManager _followerManager;

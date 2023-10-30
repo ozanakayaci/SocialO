@@ -67,7 +67,12 @@ function PostCard({ post }) {
   const handleLike = async () => {
     axios
       .post(
-        `http://localhost:5211/api/PostFavorites/PostPostFavorite?postId=${post.postId}&userId=${userId}`
+        `http://localhost:5211/api/PostFavorites/PostPostFavorite?postId=${post.postId}&userId=${userId}`,
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
       )
       .then(() => {
         setIsLiked(setIsLiked(!isLiked));

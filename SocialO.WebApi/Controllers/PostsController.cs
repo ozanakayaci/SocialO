@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SocialO.BL.Abstract;
 using SocialO.BL.Models.PostModels;
 using SocialO.Entities.Concrete;
@@ -6,6 +7,7 @@ using SocialO.WebApi.Models.Posts;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class PostsController : ControllerBase
 {
     private readonly IPostManager _postManager;

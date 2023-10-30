@@ -21,11 +21,7 @@ const loginValidation = yup.object({
       function (value) {
         return new Promise((resolve) => {
           axios
-            .get(`http://localhost:5211/api/Login/Available?input=${value}`, {
-              headers: {
-                Authorization: localStorage.getItem("token"),
-              },
-            })
+            .get(`http://localhost:5211/api/Login/Available?input=${value}`)
             .then((response) => {
               resolve(response.data);
             })
@@ -45,11 +41,7 @@ const loginValidation = yup.object({
       function (value) {
         return new Promise((resolve) => {
           axios
-            .get(`http://localhost:5211/api/Login/Available?input=${value}`, {
-              headers: {
-                Authorization: localStorage.getItem("token"),
-              },
-            })
+            .get(`http://localhost:5211/api/Login/Available?input=${value}`)
             .then((response) => {
               resolve(response.data);
             })

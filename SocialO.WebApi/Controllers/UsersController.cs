@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SocialO.BL.Abstract;
 using SocialO.BL.Models.UserModels;
 using SocialO.Entities.Concrete;
@@ -6,6 +7,7 @@ using SocialO.WebApi.Models.UserModels.Register;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class UsersController : ControllerBase
 {
     private readonly IUserManager _userManager;
