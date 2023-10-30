@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication;
 using SocialO.BL.Abstract;
 using SocialO.BL.Concrete;
 using SocialO.DAL.Repository.Abstract;
@@ -26,6 +27,8 @@ public static class SocialOServices
 
         services.AddScoped<IFollowerRelationshipRepository, FollowerRelationshipRepository>();
         services.AddScoped<IFollowerRelationshipManager, FollowerRelationshipManager>();
+
+        services.AddScoped<AuthService>();
 
         return services;
     }
