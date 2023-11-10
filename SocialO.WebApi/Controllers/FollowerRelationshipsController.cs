@@ -7,7 +7,6 @@ namespace SocialO.WebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
 public class FollowerRelationshipsController : ControllerBase
 {
     private readonly IFollowerRelationshipManager _followerManager;
