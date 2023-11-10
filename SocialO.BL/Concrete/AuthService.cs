@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using SocialO.BL.Abstract;
+using SocialO.BL.Concrete;
 using SocialO.Entities.Concrete;
 using SocialO.WebApi.Models.UserModels.Login;
 using SocialO.WebApi.Models.UserModels.Register;
@@ -13,20 +14,24 @@ namespace SocialO.WebApi.Services
 {
     public class AuthService
     {
-        private readonly IUserManager userManager;
+        private readonly IUserManager _userManager;
+        private readonly IFollowerRelationshipManager _followerRelationshipManager;
+        private readonly IUserProfileManager _userProfileManager;
         private readonly IConfiguration configuration;
 
-        public AuthService(IUserManager userManager, IConfiguration configuration)
+        public AuthService(IUserManager userManager,IFollowerRelationshipManager followerRelationshipManager,IUserProfileManager userProfileManager ,IConfiguration configuration)
         {
-            this.userManager = userManager;
+            _userManager = userManager;
+            _followerRelationshipManager = followerRelationshipManager;
+            _userProfileManager = userProfileManager;
             this.configuration = configuration;
         }
 
         public async Task<bool> SignUp(UserRegister userRegister)
         {
             // Kullanıcı adının veya e-postanın veritabanında mevcut olup olmadığını kontrol et
-            bool usernameExist = await userManager.GetBy(x => x.Username == userRegister.Username) != null;
-            bool emailExist = await userManager.GetBy(x => x.Email == userRegister.Email) != null;
+            bool usernameExist = await _userManager.GetBy(x => x.Username == userRegister.Username) != null;
+            bool emailExist = await _userManager.GetBy(x => x.Email == userRegister.Email) != null;
 
             if (usernameExist)
             {
@@ -54,15 +59,35 @@ namespace SocialO.WebApi.Services
                 PasswordHash = passwordHash,
             };
 
-            int result = await userManager.InsertAsync(user);
+            int result = await _userManager.InsertAsync(user);
+
+            FollowerRelationship relationship = new FollowerRelationship
+            {
+                FollowerId = user.Id,
+                UserId = user.Id
+            };
+
+            int result2 = await _followerRelationshipManager.InsertAsync(relationship);
+
+
+            UserProfile profile = new UserProfile
+            {
+                FirstName = userRegister.Username.ToLower(),
+                UserId = user.Id
+
+
+            };
+            int result3 = await _userProfileManager.InsertAsync(profile);
+
+
             return result > 0; // Kayıt başarılıysa true, aksi takdirde false döner
         }
 
         public async Task<bool> Available(string input)
         {
             // Kullanıcı adının veya e-postanın veritabanında mevcut olup olmadığını kontrol et
-            bool usernameExist = await userManager.GetBy(x => x.Username == input) != null;
-            bool emailExist = await userManager.GetBy(x => x.Email == input) != null;
+            bool usernameExist = await _userManager.GetBy(x => x.Username == input) != null;
+            bool emailExist = await _userManager.GetBy(x => x.Email == input) != null;
 
             // Eğer kullanıcı adı veya e-posta mevcutsa, false döner; aksi takdirde true döner
             return !usernameExist && !emailExist;
@@ -70,7 +95,7 @@ namespace SocialO.WebApi.Services
 
         public async Task<UserLoginResponse> SignIn(UserLoginRequest request)
         {
-            User user = await userManager.GetBy(p => (p.Username == request.Username.ToLower()) || (p.Email == request.Username.ToLower()));
+            User user = await _userManager.GetBy(p => (p.Username == request.Username.ToLower()) || (p.Email == request.Username.ToLower()));
 
             if (user == null || !PasswordHashHelper.VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))
             {
@@ -87,7 +112,7 @@ namespace SocialO.WebApi.Services
             string decodedRefreshToken = Uri.UnescapeDataString(refreshToken);
 
             // Kullanıcıyı refresh token ile veritabanından bul
-            User user = await userManager.GetBy(x => x.RefreshToken == decodedRefreshToken);
+            User user = await _userManager.GetBy(x => x.RefreshToken == decodedRefreshToken);
 
             if (user != null && user.RefreshTokenEndDate > DateTime.Now)
             {
@@ -104,7 +129,7 @@ namespace SocialO.WebApi.Services
             SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Token:SecurityKey"]));
             SigningCredentials signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            DateTime tokenExpireDate = DateTime.Now.AddMinutes(1); // Token süresini belirleyin
+            DateTime tokenExpireDate = DateTime.Now.AddMinutes(60); // Token süresini belirleyin
             DateTime refreshTokenExpireDate = tokenExpireDate.AddHours(5); // Refresh token süresini belirleyin
 
             var claims = new List<Claim>
