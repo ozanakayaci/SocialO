@@ -84,7 +84,7 @@ public class UsersController : ControllerBase
     {
         var users = await _userManager.SearchUsersByName(searchedString);
 
-        if (users == null) return NotFound();
+        if (users.Count() < 1 ) return NotFound();
 
         return Ok(users);
     }
