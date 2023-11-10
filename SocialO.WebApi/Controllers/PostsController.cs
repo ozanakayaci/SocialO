@@ -7,7 +7,6 @@ using SocialO.WebApi.Models.Posts;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
 public class PostsController : ControllerBase
 {
     private readonly IPostManager _postManager;
