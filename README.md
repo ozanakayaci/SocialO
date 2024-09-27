@@ -49,7 +49,7 @@ dotnet build
 3. cd into the api and run the backend
 
 ```sh
-cd SocialO.API
+cd SocialO.WebApi
 
 dotnet run
 ```
